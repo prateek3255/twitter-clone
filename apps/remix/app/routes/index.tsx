@@ -1,3 +1,5 @@
+import { Button } from "ui";
+
 export default function Index() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
@@ -22,9 +24,7 @@ export default function Index() {
           </a>
         </li>
         <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
+          <Button />
         </li>
       </ul>
     </div>
