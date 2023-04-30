@@ -1,7 +1,8 @@
 import "./global.css";
 import localFont from "next/font/local";
-import { Home, Profile, TwitterLogo } from "ui/icons";
+import { Home, Profile, ThreeDots, TwitterLogo } from "ui/icons";
 import { Button } from "ui";
+import Image from "next/image";
 
 const chirp = localFont({
   src: [
@@ -62,6 +63,26 @@ export default function RootLayout({
               </NavItem>
             </nav>
             <Button variant="primary">Tweet</Button>
+            <button className="flex justify-between w-64 items-center p-3 rounded-full hover:bg-gray-100/10">
+              <div className="flex gap-3 items-center">
+                <Image
+                  src="https://pbs.twimg.com/profile_images/1608754757967183872/GJO7c_03_x96.jpg"
+                  className="rounded-full object-contain max-h-[40px]"
+                  width={40}
+                  height={40}
+                  alt="Prateek's profile image"
+                />
+                <div className="flex flex-col items-start text-white">
+                  <span className="font-semibold text-base">
+                    Prateek Surana
+                  </span>
+                  <span className="text-gray-500 text-sm">@psuranas</span>
+                </div>
+              </div>
+              <div className=" text-white">
+                <ThreeDots />
+              </div>
+            </button>
           </header>
           <main className="flex-1">{children}</main>
         </div>
