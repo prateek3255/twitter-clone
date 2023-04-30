@@ -7,7 +7,11 @@ module.exports = {
     "./node_modules/ui/*.{js,ts,jsx,tsx}"
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['var(--font-chirp)'],
+      }
+    },
   },
   plugins: [],
 }
