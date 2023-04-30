@@ -10,6 +10,15 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['var(--font-chirp)'],
+      },
+      colors: {
+        primary: {
+          default: 'rgb(29, 155, 240)',
+          hover: 'rgb(26, 140, 216)',
+        }
+      },
+      dropShadow: {
+        'button-base': 'rgba(0, 0, 0, 0.08) 0px 8px 28px'
       }
     },
   },

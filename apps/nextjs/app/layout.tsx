@@ -1,6 +1,7 @@
 import "./global.css";
 import localFont from "next/font/local";
-import { Home, Profile, TwitterLogo } from "./AllIcons";
+import { Home, Profile, TwitterLogo } from "ui/icons";
+import { Button } from "ui";
 
 const chirp = localFont({
   src: [
@@ -21,7 +22,15 @@ const chirp = localFont({
   display: "swap",
 });
 
-const NavItem = ({ children, icon, href }: { children: React.ReactNode, icon: React.ReactNode, href: string }) => (
+const NavItem = ({
+  children,
+  icon,
+  href,
+}: {
+  children: React.ReactNode;
+  icon: React.ReactNode;
+  href: string;
+}) => (
   <a
     href={href}
     className="flex p-3 gap-5 items-center rounded-full text-xl text-white hover:bg-gray-100/10"
@@ -52,6 +61,7 @@ export default function RootLayout({
                 Profile
               </NavItem>
             </nav>
+            <Button variant="primary">Tweet</Button>
           </header>
           <main className="flex-1">{children}</main>
         </div>
