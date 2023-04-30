@@ -1,5 +1,6 @@
 import "./global.css";
 import localFont from "next/font/local";
+import { Home, Profile, TwitterLogo } from "./AllIcons";
 
 const chirp = localFont({
   src: [
@@ -16,9 +17,19 @@ const chirp = localFont({
       weight: "900",
     },
   ],
-  variable: '--font-chirp',
+  variable: "--font-chirp",
   display: "swap",
 });
+
+const NavItem = ({ children, icon, href }: { children: React.ReactNode, icon: React.ReactNode, href: string }) => (
+  <a
+    href={href}
+    className="flex p-3 gap-5 items-center rounded-full text-xl text-white hover:bg-gray-100/10"
+  >
+    {icon}
+    {children}
+  </a>
+);
 
 export default function RootLayout({
   children,
@@ -29,9 +40,17 @@ export default function RootLayout({
     <html lang="en" className={`${chirp.variable}`}>
       <body className="bg-black">
         <div className="flex w-full">
-          <header className="flex w-full items-end">
-            <nav className="flex flex-col w-[275px] text-white text-base">
-              <a href="/">Home</a>
+          <header className="w-full items-end text-white">
+            <h1>
+              <TwitterLogo />
+            </h1>
+            <nav>
+              <NavItem href="/" icon={<Home />}>
+                Home
+              </NavItem>
+              <NavItem href="/profile" icon={<Profile />}>
+                Profile
+              </NavItem>
             </nav>
           </header>
           <main className="flex-1">{children}</main>
