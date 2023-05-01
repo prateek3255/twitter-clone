@@ -34,7 +34,7 @@ const NavItem = ({
 }) => (
   <a
     href={href}
-    className="flex p-3 gap-5 items-center rounded-full text-xl text-white hover:bg-gray-100/10"
+    className="flex p-3 gap-5 items-center rounded-full text-xl text-white hover:bg-gray-100/10 w-fit pr-4"
   >
     {icon}
     {children}
@@ -78,7 +78,7 @@ export default function RootLayout({
               <button className="flex justify-between w-full items-center p-3 rounded-full hover:bg-gray-100/10">
                 <div className="flex gap-3 items-center">
                   <Image
-                    src="https://pbs.twimg.com/profile_images/1608754757967183872/GJO7c_03_x96.jpg"
+                    src="https://pbs.twimg.com/profile_images/1608754757967183872/GJO7c_03_400x400.jpg"
                     className="rounded-full object-contain max-h-[40px]"
                     width={40}
                     height={40}
