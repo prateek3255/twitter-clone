@@ -47,44 +47,57 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${chirp.variable}`}>
-      <body className="bg-black">
-        <div className="flex w-full">
-          <header className="w-full items-end text-white">
-            <h1>
-              <TwitterLogo />
-            </h1>
-            <nav>
-              <NavItem href="/" icon={<Home />}>
-                Home
-              </NavItem>
-              <NavItem href="/profile" icon={<Profile />}>
-                Profile
-              </NavItem>
-            </nav>
-            <Button variant="primary">Tweet</Button>
-            <button className="flex justify-between w-64 items-center p-3 rounded-full hover:bg-gray-100/10">
-              <div className="flex gap-3 items-center">
-                <Image
-                  src="https://pbs.twimg.com/profile_images/1608754757967183872/GJO7c_03_x96.jpg"
-                  className="rounded-full object-contain max-h-[40px]"
-                  width={40}
-                  height={40}
-                  alt="Prateek's profile image"
-                />
-                <div className="flex flex-col items-start text-white">
-                  <span className="font-semibold text-base">
-                    Prateek Surana
-                  </span>
-                  <span className="text-gray-500 text-sm">@psuranas</span>
+    <html lang="en" className={`${chirp.variable} h-full`}>
+      <body className="bg-black h-full">
+        <div className="flex w-full h-full">
+          <header className="w-full h-full flex-[4] flex flex-col items-end text-white pb-3 pt-2 px-2 border-r border-solid border-gray-700">
+            <div className="w-full max-w-[256px] h-full flex flex-col justify-between">
+              <div>
+                <h1>
+                  <a
+                    href="/"
+                    className=" h-[50px] w-[50px] rounded-full flex justify-center items-center hover:bg-gray-100/10"
+                  >
+                    <TwitterLogo aria-label="Twitter logo" />
+                  </a>
+                </h1>
+                <nav className="mt-1">
+                  <NavItem href="/" icon={<Home />}>
+                    Home
+                  </NavItem>
+                  <NavItem href="/profile" icon={<Profile />}>
+                    Profile
+                  </NavItem>
+                </nav>
+                <div className=" w-[90%]">
+                <Button className="mt-3 w-full" variant="primary">
+                  Tweet
+                </Button>
                 </div>
               </div>
-              <div className=" text-white">
-                <ThreeDots />
-              </div>
-            </button>
+              <button className="flex justify-between w-full items-center p-3 rounded-full hover:bg-gray-100/10">
+                <div className="flex gap-3 items-center">
+                  <Image
+                    src="https://pbs.twimg.com/profile_images/1608754757967183872/GJO7c_03_x96.jpg"
+                    className="rounded-full object-contain max-h-[40px]"
+                    width={40}
+                    height={40}
+                    alt="Prateek's profile image"
+                  />
+                  <div className="flex flex-col items-start text-white">
+                    <span className="font-semibold text-base">
+                      Prateek Surana
+                    </span>
+                    <span className="text-gray-500 text-sm">@psuranas</span>
+                  </div>
+                </div>
+                <div className=" text-white">
+                  <ThreeDots />
+                </div>
+              </button>
+            </div>
           </header>
-          <main className="flex-1">{children}</main>
+          <main className="flex-[8] w-full">{children}</main>
         </div>
       </body>
     </html>
