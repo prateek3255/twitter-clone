@@ -44,11 +44,33 @@ const TwitterLogo = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 const ThreeDots = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18" fill="currentColor" {...props}>
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    width="18"
+    height="18"
+    fill="currentColor"
+    {...props}
+  >
     <g>
       <path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"></path>
     </g>
   </svg>
 );
 
-export { Home, TwitterLogo, Profile, ThreeDots };
+const BackButton = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    width="20"
+    height="20"
+    fill="currentColor"
+    {...props}
+  >
+    <g>
+      <path d="M7.414 13l5.043 5.04-1.414 1.42L3.586 12l7.457-7.46 1.414 1.42L7.414 11H21v2H7.414z"></path>
+    </g>
+  </svg>
+);
+
+export { Home, TwitterLogo, Profile, ThreeDots, BackButton };
