@@ -97,7 +97,7 @@ export default function RootLayout({
               </button>
             </div>
           </header>
-          <main className="flex-[8] w-full">{children}</main>
+          <main className="flex-[8] w-full overflow-y-auto">{children}</main>
         </div>
       </body>
     </html>

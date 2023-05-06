@@ -38,7 +38,7 @@ const TabItem = ({
 
 export default function Profile() {
   return (
-    <div className="w-full h-full max-w-[600px] border-r border-solid border-gray-700">
+    <div className="w-full min-h-full max-w-[600px] border-r border-solid border-gray-700">
       {/* Header */}
       <div className="h-14 w-full px-4 flex items-center">
         <div className=" min-w-[56px] flex items-center">
@@ -103,6 +103,8 @@ export default function Profile() {
       </div>
       {/** Tweets */}
       <div>
+        <Tweet />
+        <Tweet />
         <Tweet />
         <Tweet />
         <Tweet />
