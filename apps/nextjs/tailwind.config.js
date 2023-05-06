@@ -13,8 +13,10 @@ module.exports = {
       },
       colors: {
         primary: {
-          default: 'rgb(29, 155, 240)',
-          hover: 'rgb(26, 140, 216)',
+          "blue": 'rgb(29, 155, 240)',
+          "red": "rgb(249, 24, 128)",
+          "green": "rgb(0, 186, 124)",
+          "blue-hover": 'rgb(26, 140, 216)',
         }
       },
       dropShadow: {
