@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id      Int      @id @default(autoincrement())
+  email   String   @unique
+  username String   @unique
+  name    String?
+  bio     String?
+  passwordHash String
+  tweets Tweet[]
+  followers User[] @relation("UserFollows")
+  following User[] @relation("UserFollows")
+  createdAt DateTime @default(now())
+  likes Like[]
+}
+
+model Tweet {
+  id    Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  content String
+  author User @relation(fields: [authorId], references: [id])
+  authorId Int
+  likes Like[]
+  replyId Int?
+  replyTo Tweet? @relation("TweetReplies", fields: [replyId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  replies Tweet[] @relation("TweetReplies")
+  retweetId Int?
+  retweetOf Tweet? @relation("TweetRetweets", fields: [retweetId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  retweets Tweet[] @relation("TweetRetweets")
+
+  @@index([authorId])
+  @@index([replyId])
+  @@index([retweetId])
+}
+
+model Like {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  tweet Tweet @relation(fields: [tweetId], references: [id])
+  tweetId Int
+
+  @@index([userId])
+  @@index([tweetId])
+}
