@@ -1,7 +1,7 @@
 import { BackButton } from "ui/icons";
-import { Button } from "ui";
+import { ButtonOrLink } from "components/ButtonOrLink";
 import Image from "next/image";
-import Tweet from "../../components/Tweet";
+import Tweet from "../../../components/Tweet";
 
 const FollowCount = ({ count, label }: { count: number; label: string }) => (
   <a href="/psuranas/followers" className="hover:underline decoration-white">
@@ -70,7 +70,7 @@ export default function Profile() {
           />
         </div>
         <div className=" h-[67px] flex w-full justify-end">
-          <Button variant="teritary">Edit profile</Button>
+          <ButtonOrLink variant="teritary">Edit profile</ButtonOrLink>
         </div>
         {/* Name */}
         <div className="flex flex-col mb-3">
