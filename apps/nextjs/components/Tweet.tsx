@@ -38,7 +38,7 @@ const TweetAction = ({ type, count }: { type: ActionType; count: number }) => {
   );
 };
 
-const Tweet = () => {
+export const Tweet = () => {
   return (
     <article className="p-4 border-b border-solid border-gray-700">
       <div className="flex gap-3">
@@ -72,5 +72,3 @@ const Tweet = () => {
     </article>
   );
 };
-
-export default Tweet;

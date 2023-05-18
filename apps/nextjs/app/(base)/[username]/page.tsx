@@ -1,7 +1,7 @@
 import { BackButton } from "ui/icons";
 import { ButtonOrLink } from "components/ButtonOrLink";
 import Image from "next/image";
-import Tweet from "../../../components/Tweet";
+import { Tweet } from "../../../components/Tweet";
 
 const FollowCount = ({ count, label }: { count: number; label: string }) => (
   <a href="/psuranas/followers" className="hover:underline decoration-white">
@@ -56,6 +56,7 @@ export default function Profile() {
         src="https://pbs.twimg.com/profile_banners/723196595722809345/1682895978/1500x500"
         width={600}
         height={200}
+        priority
         alt="cover image"
       />
       {/* Profile Image */}
@@ -66,11 +67,12 @@ export default function Profile() {
             className="rounded-full object-contain max-h-[134px] border-4 border-solid border-black"
             width={134}
             height={134}
+            priority
             alt="Prateek's profile image"
           />
         </div>
-        <div className=" h-[67px] flex w-full justify-end">
-          <ButtonOrLink variant="teritary">Edit profile</ButtonOrLink>
+        <div className=" h-[67px] flex w-full justify-end items-start">
+          <ButtonOrLink variant="tertiary">Edit profile</ButtonOrLink>
         </div>
         {/* Name */}
         <div className="flex flex-col mb-3">

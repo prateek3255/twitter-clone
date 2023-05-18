@@ -48,7 +48,7 @@ export default function RootLayout({
                 </NavItem>
               </nav>
               <div className="w-[90%]">
-                <ButtonOrLink className="mt-3 w-full" variant="primary">
+                <ButtonOrLink className="mt-3 w-full" size="large" variant="primary">
                   Tweet
                 </ButtonOrLink>
               </div>
@@ -91,7 +91,7 @@ export default function RootLayout({
             </div>
             <div className="flex items-center gap-3">
               <ButtonOrLink variant="tertiary-light">Log in</ButtonOrLink>
-              <ButtonOrLink variant="secondary">Sign up</ButtonOrLink>
+              <ButtonOrLink as="link" href="/signup" variant="secondary">Sign up</ButtonOrLink>
             </div>
           </div>
         </div>
