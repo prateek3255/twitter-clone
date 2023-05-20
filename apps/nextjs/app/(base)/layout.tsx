@@ -90,7 +90,7 @@ export default function RootLayout({
               </span>
             </div>
             <div className="flex items-center gap-3">
-              <ButtonOrLink variant="tertiary-light">Log in</ButtonOrLink>
+              <ButtonOrLink as="link" href="/signin" variant="tertiary-light">Log in</ButtonOrLink>
               <ButtonOrLink as="link" href="/signup" variant="secondary">Sign up</ButtonOrLink>
             </div>
           </div>
