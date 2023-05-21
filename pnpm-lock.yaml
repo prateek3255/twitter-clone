@@ -15,30 +15,42 @@ importers:
   apps/nextjs:
     specifiers:
       '@babel/core': ^7.0.0
+      '@types/bcryptjs': ^2.4.2
       '@types/node': ^17.0.12
+      '@types/qs': ^6.9.7
       '@types/react': ^18.0.22
       '@types/react-dom': ^18.0.7
       autoprefixer: ^10.4.13
+      bcryptjs: ^2.4.3
       class-variance-authority: ^0.6.0
+      database: workspace:*
       eslint: 7.32.0
       eslint-config-custom: workspace:*
       next: 13.4.3
       postcss: ^8.4.18
+      qs: ^6.11.2
       react: 18.2.0
       react-dom: 18.2.0
       tailwindcss: ^3.2.2
       tsconfig: workspace:*
       typescript: ^4.5.3
       ui: workspace:*
+      zod: ^3.21.4
     dependencies:
+      bcryptjs: 2.4.3
       class-variance-authority: 0.6.0_typescript@4.8.4
+      database: link:../../packages/database
       next: 13.4.3_mqvh5p7ejg4taogoj6tpk3gd5a
+      qs: 6.11.2
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       ui: link:../../packages/ui
+      zod: 3.21.4
     devDependencies:
       '@babel/core': 7.20.2
+      '@types/bcryptjs': 2.4.2
       '@types/node': 17.0.45
+      '@types/qs': 6.9.7
       '@types/react': 18.0.25
       '@types/react-dom': 18.0.8
       autoprefixer: 10.4.13_postcss@8.4.18
@@ -2031,6 +2043,10 @@ packages:
     resolution: {integrity: sha512-HnYpAE1Y6kRyKM/XkEuiRQhTHvkzMBurTHnpFLYLBGPIylZNPs9jJcuOOYWxPLJCSEtmZT0Y8rHDokKN7rRTig==}
     dev: true
 
+  /@types/bcryptjs/2.4.2:
+    resolution: {integrity: sha512-LiMQ6EOPob/4yUL66SZzu6Yh77cbzJFYll+ZfaPiPPFswtIlA/Fs1MzdKYA7JApHU49zQTbJGX3PDmCpIdDBRQ==}
+    dev: true
+
   /@types/cacheable-request/6.0.2:
     resolution: {integrity: sha512-B3xVo+dlKM6nnKTcmm5ZtY/OL8bOAOd2Olee9M1zft65ox50OzjEHW91sDiU9j6cvW8Ejg1/Qkf4xd2kugApUA==}
     dependencies:
@@ -2118,6 +2134,10 @@ packages:
 
   /@types/prop-types/15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
+    dev: true
+
+  /@types/qs/6.9.7:
+    resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==}
     dev: true
 
   /@types/react-dom/18.0.8:
@@ -2713,6 +2733,10 @@ packages:
     dependencies:
       safe-buffer: 5.1.2
     dev: true
+
+  /bcryptjs/2.4.3:
+    resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==}
+    dev: false
 
   /big.js/5.2.2:
     resolution: {integrity: sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==}
@@ -7296,6 +7320,13 @@ packages:
     dependencies:
       side-channel: 1.0.4
     dev: true
+
+  /qs/6.11.2:
+    resolution: {integrity: sha512-tDNIz22aBzCDxLtVH++VnTfzxlfeK5CbqohpSqpJgj1Wg/cQbStNAz3NuqCs5vV+pjBsK4x4pN9HlVh7rcYRiA==}
+    engines: {node: '>=0.6'}
+    dependencies:
+      side-channel: 1.0.4
+    dev: false
 
   /queue-microtask/1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}

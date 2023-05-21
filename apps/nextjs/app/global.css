@@ -26,6 +26,10 @@
     @apply text-primary-blue;
 }
 
+.floating-input[aria-invalid="true"]:focus + label {
+    @apply text-red-500;
+}
+
 .floating-input::placeholder {
     opacity: 0;
     transition: inherit;

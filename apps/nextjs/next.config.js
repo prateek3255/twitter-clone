@@ -6,6 +6,7 @@ module.exports = {
     domains: ["pbs.twimg.com"],
   },
   experimental: {
+    serverActions: true,
     appDir: true,
   },
 };
