@@ -4,11 +4,13 @@ import FloatingInput from "components/FloatingInput";
 import { prisma } from "utils/db";
 import { z } from "zod";
 import { redirect } from "next/navigation";
+
 import {
   decodeValueAndErrors,
   encodeValueAndErrors,
   getFlattenedZodErrors,
   hashPassword,
+  setAuthCookie,
 } from "../auth";
 
 export default function SearchParams({
@@ -86,12 +88,16 @@ export default function SearchParams({
 
     const { password, ...rest } = parsedUser.data;
     const passwordHash = await hashPassword(password);
-    await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         ...rest,
         passwordHash,
       },
     });
+    setAuthCookie({
+      userId: newUser.id,
+    })
+    return redirect("/");
   }
 
   const { fieldErrors, fieldValues } = decodeValueAndErrors({

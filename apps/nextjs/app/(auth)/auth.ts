@@ -1,6 +1,8 @@
 import { ZodError } from "zod";
 import qs from "qs";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
 
 const getFlattenedZodErrors = (error: ZodError): Record<string, string> => {
   const fieldErrors = Object.entries(error.flatten().fieldErrors ?? {}).reduce(
@@ -53,8 +55,49 @@ const decodeValueAndErrors = ({
 };
 
 const hashPassword = async (password: string) => {
-    const hash = await bcrypt.hash(password, 10)
-    return hash;
+  const hash = await bcrypt.hash(password, 10);
+  return hash;
+};
+
+const setAuthCookie = ({
+  userId,
+}: {
+  userId: number;
+}) => {
+  const signedToken = jwt.sign(
+    { userId },
+    process.env.COOKIE_SECRET ?? "",
+    {
+      expiresIn: "7d",
+    }
+  );
+
+  cookies().set({
+    name: "auth",
+    value: signedToken,
+    // @ts-expect-error Not sure why Next.js is erroring out here
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    path: "/",
+  });
+};
+
+const isAuthenticated = () => {
+  try {
+    const cookie = cookies().get("auth")?.value ?? '';
+    jwt.verify(cookie, process.env.COOKIE_SECRET ?? "");
+    return true;
+  } catch (error) {
+    return false;
+  }
 }
 
-export { getFlattenedZodErrors, encodeValueAndErrors, decodeValueAndErrors, hashPassword };
+export {
+  getFlattenedZodErrors,
+  encodeValueAndErrors,
+  decodeValueAndErrors,
+  hashPassword,
+  setAuthCookie,
+  isAuthenticated,
+};
