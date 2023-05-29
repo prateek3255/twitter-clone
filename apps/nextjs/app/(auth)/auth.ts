@@ -59,23 +59,19 @@ const hashPassword = async (password: string) => {
   return hash;
 };
 
-const setAuthCookie = ({
-  userId,
-}: {
-  userId: number;
-}) => {
-  const signedToken = jwt.sign(
-    { userId },
-    process.env.COOKIE_SECRET ?? "",
-    {
-      expiresIn: "7d",
-    }
-  );
+const comparePassword = async (password: string, hashedPassword: string) => {
+  const isValid = await bcrypt.compare(password, hashedPassword);
+  return isValid;
+};
+
+const setAuthCookie = ({ userId }: { userId: number }) => {
+  const signedToken = jwt.sign({ userId }, process.env.COOKIE_SECRET ?? "", {
+    expiresIn: "7d",
+  });
 
   cookies().set({
     name: "auth",
     value: signedToken,
-    // @ts-expect-error Not sure why Next.js is erroring out here
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
@@ -85,13 +81,13 @@ const setAuthCookie = ({
 
 const isAuthenticated = () => {
   try {
-    const cookie = cookies().get("auth")?.value ?? '';
+    const cookie = cookies().get("auth")?.value ?? "";
     jwt.verify(cookie, process.env.COOKIE_SECRET ?? "");
     return true;
   } catch (error) {
     return false;
   }
-}
+};
 
 export {
   getFlattenedZodErrors,
@@ -100,4 +96,5 @@ export {
   hashPassword,
   setAuthCookie,
   isAuthenticated,
+  comparePassword,
 };

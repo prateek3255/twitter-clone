@@ -12,8 +12,9 @@ import {
   hashPassword,
   setAuthCookie,
 } from "../auth";
+import { SubmitButton } from "../SubmitButton";
 
-export default function SearchParams({
+export default function Signup({
   searchParams,
 }: {
   searchParams: Record<string, string>;
@@ -35,6 +36,9 @@ export default function SearchParams({
       username: z
         .string()
         .trim()
+        .regex(/^[a-zA-Z0-9_]{1,15}$/, {
+          message: "Username can only contain letters, numbers and underscores",
+        })
         .min(2, { message: "Username must be at least 2 characters long" }),
       email: z.string().email({ message: "Invalid email address" }),
       password: z
@@ -110,7 +114,6 @@ export default function SearchParams({
       <h1 className="font-bold text-3xl text-white mb-7">
         Create your account
       </h1>
-      {/** @ts-expect-error This isn't supported in TypeScript yet */}
       <form action={signup}>
         <div className="flex flex-col gap-4 mb-10">
           <div className="flex w-full gap-4">
@@ -130,6 +133,7 @@ export default function SearchParams({
               id="username"
               name="username"
               minLength={2}
+              pattern="^[a-zA-Z0-9_]{1,15}$"
               placeholder="johndoe"
               defaultValue={fieldValues?.username}
               error={fieldErrors?.username}
@@ -150,15 +154,14 @@ export default function SearchParams({
             label="Password"
             id="password"
             name="password"
+            required
             placeholder="********"
             defaultValue={fieldValues?.password}
             error={fieldErrors?.password}
           />
         </div>
 
-        <ButtonOrLink type="submit" size="large" className="w-full">
-          Sign Up
-        </ButtonOrLink>
+        <SubmitButton>Sign Up</SubmitButton>
 
         <ButtonOrLink variant="secondary" size="large" className="w-full mt-4">
           Sign Up with a burner account

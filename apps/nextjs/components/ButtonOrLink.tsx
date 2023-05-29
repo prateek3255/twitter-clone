@@ -20,10 +20,15 @@ const buttonOrLink = cva(
         large: "min-w-[52px] min-h-[52px] px-8 text-base",
         small: "min-w-[36px] min-h-[36px] px-4 text-sm",
       },
+      disabled: {
+        true: "opacity-50 pointer-events-none",
+        false: "",
+      }
     },
     defaultVariants: {
       variant: "primary",
       size: "small",
+      disabled: false,
     },
   }
 );
@@ -49,6 +54,7 @@ export const ButtonOrLink = (props: ButtonOrLinkProps) => {
   const classNames = `${buttonOrLink({
     variant: props.variant,
     size: props.size,
+    disabled: props.disabled,
   })} ${props.className ?? ""}`;
 
   if (props.as === "link") {
