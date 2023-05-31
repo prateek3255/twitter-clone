@@ -18,6 +18,7 @@ model User {
   name    String?
   bio     String?
   passwordHash String
+  profileImage String?
   tweets Tweet[]
   followers User[] @relation("UserFollows")
   following User[] @relation("UserFollows")
