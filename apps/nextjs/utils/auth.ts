@@ -3,6 +3,7 @@ import qs from "qs";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import 'server-only';
 
 const getFlattenedZodErrors = (error: ZodError): Record<string, string> => {
   const fieldErrors = Object.entries(error.flatten().fieldErrors ?? {}).reduce(
@@ -89,6 +90,15 @@ const isAuthenticated = () => {
   }
 };
 
+const getUserId = () => {
+  const cookie = cookies().get("auth")?.value ?? "";
+  const decodedToken = jwt.decode(cookie);
+  if (typeof decodedToken === "string" || typeof decodedToken?.userId !== 'number') {
+    throw new Error("Invalid token");
+  }
+  return decodedToken?.userId;
+}
+
 export {
   getFlattenedZodErrors,
   encodeValueAndErrors,
@@ -97,4 +107,5 @@ export {
   setAuthCookie,
   isAuthenticated,
   comparePassword,
+  getUserId,
 };

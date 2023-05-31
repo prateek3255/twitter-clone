@@ -1,6 +1,6 @@
 import React from "react";
 import { TwitterLogo } from "ui/icons";
-import { isAuthenticated } from "./auth";
+import { isAuthenticated } from "../../utils/auth";
 import { redirect } from "next/navigation";
 
 export default function AuthLayout({
@@ -8,6 +8,7 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
+  console.log('here');
   if (isAuthenticated()) {
     redirect("/");
   }

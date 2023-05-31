@@ -11,7 +11,7 @@ import {
   getFlattenedZodErrors,
   hashPassword,
   setAuthCookie,
-} from "../auth";
+} from "utils/auth";
 import { SubmitButton } from "../SubmitButton";
 
 export default function Signup({

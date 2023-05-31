@@ -5,7 +5,7 @@ import {
   comparePassword,
   encodeValueAndErrors,
   setAuthCookie
-} from "../auth";
+} from "utils/auth";
 import { SubmitButton } from "../SubmitButton";
 import { prisma } from "utils/db";
 import { isEmail } from "utils/common";

@@ -17,6 +17,7 @@
     "qs": "^6.11.2",
     "react": "experimental",
     "react-dom": "experimental",
+    "server-only": "^0.0.1",
     "ui": "workspace:*",
     "zod": "^3.21.4"
   },
