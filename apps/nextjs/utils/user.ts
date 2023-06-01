@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { prisma } from "./db";
+import 'server-only';
 
 export const getUser = cache(async (userId: number) => {
   const user = await prisma.user.findUnique({

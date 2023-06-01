@@ -8,7 +8,7 @@ export default function Error({
 }) {
   return (
     <div className="flex flex-col gap-8 items-center">
-      <h2 className="font-bold text-3xl text-white">Something went wrong!</h2>
+      <h1 className="font-bold text-3xl text-white">Something went wrong!</h1>
       <ButtonOrLink
         size="large"
         className="w-full"
