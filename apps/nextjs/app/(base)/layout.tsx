@@ -3,6 +3,7 @@ import { ButtonOrLink } from "components/ButtonOrLink";
 import Image from "next/image";
 import { getUserId, isAuthenticated } from "utils/auth";
 import { getUser } from "utils/user";
+import { TweetButton } from "./TweetButton";
 
 const NavItem = ({
   children,
@@ -102,13 +103,7 @@ export default function RootLayout({
                 </NavItem>
               </nav>
               <div className="w-[90%]">
-                <ButtonOrLink
-                  className="mt-3 w-full"
-                  size="large"
-                  variant="primary"
-                >
-                  Tweet
-                </ButtonOrLink>
+                <TweetButton />
               </div>
             </div>
             {/* @ts-expect-error Async Server Component */}
