@@ -3,7 +3,7 @@ import { ButtonOrLink } from "components/ButtonOrLink";
 import Image from "next/image";
 import { getUserId, isAuthenticated } from "utils/auth";
 import { getUser } from "utils/user";
-import { TweetButton } from "./TweetButton";
+import { TweetButton } from "./TweetButtonWithModal";
 
 const NavItem = ({
   children,

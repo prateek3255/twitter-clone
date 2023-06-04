@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
-import { experimental_useFormStatus as useFormStatus } from "react-dom";
 import Image from "next/image";
 import { Dialog, Transition } from "@headlessui/react";
 import { ButtonOrLink } from "components/ButtonOrLink";
 import { Cross } from "ui/icons";
 import { createTweet } from "app/actions";
+import { TweetCTA } from "./TweetCTA";
 
 export const TweetButton = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -90,7 +90,7 @@ export const TweetButton = () => {
                       />
                     </div>
                     <div className="flex mt-3 border-t border-solid border-gray-700 pt-3 justify-end w-full">
-                      <ModalTweetCTA />
+                      <TweetCTA />
                     </div>
                   </form>
                 </Dialog.Panel>
@@ -100,20 +100,5 @@ export const TweetButton = () => {
         </Dialog>
       </Transition>
     </>
-  );
-};
-
-const ModalTweetCTA = () => {
-  const { pending } = useFormStatus();
-
-  return (
-    <ButtonOrLink
-      variant="primary"
-      size="small"
-      type="submit"
-      disabled={pending}
-    >
-      Tweet
-    </ButtonOrLink>
   );
 };
