@@ -133,6 +133,21 @@ const Cross = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+const ChevronDown = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    width="24"
+    height="18"
+    fill="currentColor"
+    {...props}
+  >
+    <g>
+      <path d="M22 17H2L12 6l10 11z"></path>
+    </g>
+  </svg>
+);
+
 export {
   Home,
   TwitterLogo,
@@ -143,4 +158,5 @@ export {
   Retweet,
   Like,
   Cross,
+  ChevronDown,
 };

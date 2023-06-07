@@ -99,6 +99,16 @@ const getUserId = () => {
   return decodedToken?.userId;
 }
 
+const clearAuthCookie = () => {
+  cookies().set({
+    name: "auth",
+    value: "",
+    httpOnly: true,
+    path: "/",
+    expires: new Date('2016-10-05')
+  });
+};
+
 export {
   getFlattenedZodErrors,
   encodeValueAndErrors,
@@ -108,4 +118,5 @@ export {
   isAuthenticated,
   comparePassword,
   getUserId,
+  clearAuthCookie
 };

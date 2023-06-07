@@ -1,9 +1,9 @@
-import { Home, Profile, ThreeDots, TwitterLogo } from "ui/icons";
+import { Home, Profile, TwitterLogo } from "ui/icons";
 import { ButtonOrLink } from "components/ButtonOrLink";
-import Image from "next/image";
-import { getUserId, isAuthenticated } from "utils/auth";
+import { getUserId, isAuthenticated, clearAuthCookie } from "utils/auth";
 import { getUser } from "utils/user";
 import { TweetButton } from "./TweetButtonWithModal";
+import { ProfileButton } from "./ProfileButton";
 
 const NavItem = ({
   children,
@@ -49,29 +49,16 @@ const LoggedOutFooter = () => (
   </div>
 );
 
-const ProfileButton = async () => {
+const ProfileButtonWrapper = async () => {
   const userId = getUserId();
   const user = await getUser(userId);
-  return (
-    <button className="flex justify-between w-full items-center p-3 rounded-full hover:bg-gray-100/10">
-      <div className="flex gap-3 items-center">
-        <Image
-          src="https://pbs.twimg.com/profile_images/1608754757967183872/GJO7c_03_400x400.jpg"
-          className="rounded-full object-contain max-h-[40px]"
-          width={40}
-          height={40}
-          alt="Prateek's profile image"
-        />
-        <div className="flex flex-col items-start text-white">
-          <span className="font-semibold text-base">{user.name}</span>
-          <span className="text-gray-500 text-sm">@{user.username}</span>
-        </div>
-      </div>
-      <div className=" text-white">
-        <ThreeDots />
-      </div>
-    </button>
-  );
+
+  const logOut = async () => {
+    'use server';
+    clearAuthCookie();
+  }
+
+  return <ProfileButton name={user.name ?? ''} username={user.username} logOut={logOut} />;
 };
 
 export default function RootLayout({
@@ -107,7 +94,7 @@ export default function RootLayout({
               </div>
             </div>
             {/* @ts-expect-error Async Server Component */}
-            {isLoggedIn && <ProfileButton />}
+            {isLoggedIn && <ProfileButtonWrapper />}
           </div>
         </header>
         <main className="flex-[8] w-full overflow-y-auto">{children}</main>
