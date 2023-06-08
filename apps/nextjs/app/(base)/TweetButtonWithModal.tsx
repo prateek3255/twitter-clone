@@ -7,7 +7,11 @@ import { Cross } from "ui/icons";
 import { createTweet } from "app/actions";
 import { TweetCTA } from "./TweetCTA";
 
-export const TweetButton = () => {
+export const TweetButton = ({
+  profileImage,
+}: {
+  profileImage: string;
+}) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
@@ -74,7 +78,7 @@ export const TweetButton = () => {
                   >
                     <div className="flex mt-4">
                       <Image
-                        src="https://pbs.twimg.com/profile_images/1608754757967183872/GJO7c_03_400x400.jpg"
+                        src={profileImage}
                         className="rounded-full object-contain max-h-[48px]"
                         width={48}
                         height={48}

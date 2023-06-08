@@ -1,9 +1,10 @@
 import { Home, Profile, TwitterLogo } from "ui/icons";
 import { ButtonOrLink } from "components/ButtonOrLink";
-import { getUserId, isAuthenticated, clearAuthCookie } from "utils/auth";
-import { getUser } from "utils/user";
+import { clearAuthCookie } from "utils/auth";
+import { getCurrentLoggedInUser } from "utils/user";
 import { TweetButton } from "./TweetButtonWithModal";
 import { ProfileButton } from "./ProfileButton";
+import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 
 const NavItem = ({
   children,
@@ -49,24 +50,19 @@ const LoggedOutFooter = () => (
   </div>
 );
 
-const ProfileButtonWrapper = async () => {
-  const userId = getUserId();
-  const user = await getUser(userId);
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const user = await getCurrentLoggedInUser();
+  const isLoggedIn = !!user;
 
   const logOut = async () => {
     'use server';
     clearAuthCookie();
   }
 
-  return <ProfileButton name={user.name ?? ''} username={user.username} logOut={logOut} />;
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const isLoggedIn = isAuthenticated();
   return (
     <>
       <div className="flex w-full h-full">
@@ -90,11 +86,10 @@ export default function RootLayout({
                 </NavItem>
               </nav>
               <div className="w-[90%]">
-                <TweetButton />
+                {isLoggedIn && <TweetButton profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE} />}
               </div>
             </div>
-            {/* @ts-expect-error Async Server Component */}
-            {isLoggedIn && <ProfileButtonWrapper />}
+            {isLoggedIn && <ProfileButton name={user.name ?? ''} username={user.username} profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE} logOut={logOut} />}
           </div>
         </header>
         <main className="flex-[8] w-full overflow-y-auto">{children}</main>

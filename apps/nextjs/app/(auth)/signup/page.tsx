@@ -96,6 +96,8 @@ export default function Signup({
       data: {
         ...rest,
         passwordHash,
+        // Generate a deterministic profile image using a random number and save it in the database
+        profileImage: `https://api.dicebear.com/6.x/big-ears-neutral/png?seed=${Math.random().toString(36).substring(2)}`
       },
     });
     setAuthCookie({

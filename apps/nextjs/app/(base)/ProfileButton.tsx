@@ -9,9 +9,11 @@ const ProfileButton = ({
   name,
   username,
   logOut,
+    profileImage,
 }: {
   name: string;
   username: string;
+  profileImage: string;
   logOut: () => Promise<void>;
 }) => {
   const router = useRouter();
@@ -21,7 +23,7 @@ const ProfileButton = ({
       <Popover.Button className="flex justify-between w-full items-center p-3 rounded-full hover:bg-gray-100/10">
         <div className="flex gap-3 items-center">
           <Image
-            src="https://pbs.twimg.com/profile_images/1608754757967183872/GJO7c_03_400x400.jpg"
+            src={profileImage}
             className="rounded-full object-contain max-h-[40px]"
             width={40}
             height={40}
