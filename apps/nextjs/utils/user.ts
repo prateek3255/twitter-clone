@@ -26,3 +26,21 @@ export const getCurrentLoggedInUser = async () => {
   }
   return null;
 };
+
+export const getUserProfile = async (username: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      username,
+    },
+    include: {
+      _count: {
+        select: {
+          followers: true,
+          following: true,
+          tweets: true,
+        }
+      }
+    }
+  });
+  return user;
+}
