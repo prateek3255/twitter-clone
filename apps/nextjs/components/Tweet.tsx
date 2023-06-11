@@ -1,6 +1,8 @@
 import React from "react";
 import Image from "next/image";
+import { formatDistanceToNowStrict } from "date-fns";
 import { Reply, Retweet, Like } from "ui/icons";
+import { formatDistanceForTweet } from "utils/common";
 
 type ActionType = "reply" | "retweet" | "like";
 
@@ -13,7 +15,8 @@ const TweetActionDetails = {
   retweet: {
     icon: <Retweet />,
     activeColor: "text-primary-green",
-    hoverBg: "hover:text-primary-green [&_>_div_>_div]:hover:bg-primary-green/10",
+    hoverBg:
+      "hover:text-primary-green [&_>_div_>_div]:hover:bg-primary-green/10",
   },
   like: {
     icon: <Like />,
@@ -38,30 +41,41 @@ const TweetAction = ({ type, count }: { type: ActionType; count: number }) => {
   );
 };
 
-export const Tweet = () => {
+export const Tweet = ({
+  username,
+  name,
+  profileImage,
+  content,
+  timestamp,
+}: {
+  username: string;
+  name: string;
+  profileImage: string;
+  content: string;
+  timestamp: Date;
+}) => {
   return (
     <article className="p-4 border-b border-solid border-gray-700">
-      <div className="flex gap-3">
+      <div className="flex gap-3 w-full">
         <Image
-          src="https://pbs.twimg.com/profile_images/1608754757967183872/GJO7c_03_400x400.jpg"
+          src={profileImage}
           width={48}
           height={48}
           className="rounded-full max-h-[48px]"
-          alt="Prateek Surana"
+          alt={`${username}'s profile image`}
         />
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full">
           <div className="flex items-center gap-1">
-            <span className="text-white font-bold text-sm">Prateek Surana</span>
-            <span className="text-gray-500 text-sm">@psuranas</span>
+            <span className="text-white font-bold text-sm">{name}</span>
+            <span className="text-gray-500 text-sm">@{username}</span>
             <span className="text-gray-500 text-sm">·</span>
-            <span className="text-gray-500 text-sm">1h</span>
+            <span className="text-gray-500 text-sm">{formatDistanceForTweet(formatDistanceToNowStrict(timestamp))}</span>
           </div>
           <div className="flex flex-col gap-3">
             <span className="text-white text-sm">
-              The next version of Google&apos;s phone will not take good
-              pictures since it will Pixel 8
+              {content}
             </span>
-            <div className="flex max-w-[310px] justify-between">
+            <div className="flex max-w-[310px] w-full justify-between">
               <TweetAction type="reply" count={6} />
               <TweetAction type="retweet" count={2} />
               <TweetAction type="like" count={18} />

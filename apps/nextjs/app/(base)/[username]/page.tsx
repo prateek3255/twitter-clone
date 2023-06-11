@@ -1,4 +1,7 @@
-import { Tweet } from "../../../components/Tweet";
+import { Tweet } from "components/Tweet";
+import { DEFAULT_PROFILE_IMAGE } from "constants/user";
+import { getTweetsByUsername } from "utils/tweet";
+import { getUserProfile } from "utils/user";
 
 const TabItem = ({
   isActive = false,
@@ -26,8 +29,15 @@ const TabItem = ({
   </a>
 );
 
-
-export default async function Profile() {
+export default async function Profile({
+  params: { username },
+}: {
+  params: { username: string };
+}) {
+  const [userProfile, tweets] = await Promise.all([
+    getUserProfile(username),
+    getTweetsByUsername(username),
+  ]);
   return (
     <>
       {/** Tab bars */}
@@ -42,11 +52,16 @@ export default async function Profile() {
       </div>
       {/** Tweets */}
       <div>
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
+        {tweets.map((tweet) => (
+          <Tweet
+            key={tweet.id}
+            username={username}
+            name={userProfile?.name ?? ""}
+            content={tweet.content}
+            profileImage={userProfile?.profileImage ?? DEFAULT_PROFILE_IMAGE}
+            timestamp={tweet.createdAt}
+          />
+        ))}
       </div>
     </>
   );

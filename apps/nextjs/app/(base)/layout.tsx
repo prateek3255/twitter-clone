@@ -1,4 +1,5 @@
 import { Home, Profile, TwitterLogo } from "ui/icons";
+import Link from "next/link";
 import { ButtonOrLink } from "components/ButtonOrLink";
 import { clearAuthCookie } from "utils/auth";
 import { getCurrentLoggedInUser } from "utils/user";
@@ -15,13 +16,13 @@ const NavItem = ({
   icon: React.ReactNode;
   href: string;
 }) => (
-  <a
+  <Link
     href={href}
-    className="flex p-3 gap-5 items-center rounded-full text-xl text-white hover:bg-gray-100/10 w-fit pr-4"
+    className="flex p-3 gap-5 items-center rounded-full text-xl text-white hover:bg-gray-100/10 w-fit pr-5"
   >
     {icon}
     {children}
-  </a>
+  </Link>
 );
 
 const LoggedOutFooter = () => (
@@ -59,9 +60,9 @@ export default async function RootLayout({
   const isLoggedIn = !!user;
 
   const logOut = async () => {
-    'use server';
+    "use server";
     clearAuthCookie();
-  }
+  };
 
   return (
     <>
@@ -81,15 +82,28 @@ export default async function RootLayout({
                 <NavItem href="/" icon={<Home />}>
                   Home
                 </NavItem>
-                <NavItem href="/profile" icon={<Profile />}>
-                  Profile
-                </NavItem>
+                {isLoggedIn && (
+                  <NavItem href={`/${user.username}`} icon={<Profile />}>
+                    Profile
+                  </NavItem>
+                )}
               </nav>
               <div className="w-[90%]">
-                {isLoggedIn && <TweetButton profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE} />}
+                {isLoggedIn && (
+                  <TweetButton
+                    profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE}
+                  />
+                )}
               </div>
             </div>
-            {isLoggedIn && <ProfileButton name={user.name ?? ''} username={user.username} profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE} logOut={logOut} />}
+            {isLoggedIn && (
+              <ProfileButton
+                name={user.name ?? ""}
+                username={user.username}
+                profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE}
+                logOut={logOut}
+              />
+            )}
           </div>
         </header>
         <main className="flex-[8] w-full overflow-y-auto">{children}</main>
