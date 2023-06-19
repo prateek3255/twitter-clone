@@ -1,7 +1,7 @@
 import { BackButton } from "ui/icons";
 import { ButtonOrLink } from "components/ButtonOrLink";
 import Image from "next/image";
-import { getUserProfile } from "utils/user";
+import { getCurrentLoggedInUser, getUserProfile } from "utils/user";
 import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 
 const FollowCount = ({ count, label }: { count: number; label: string }) => (
@@ -36,7 +36,10 @@ export default async function Profile({
   params: { username: string };
   children: React.ReactNode;
 }) {
-  const user = await getUserProfile(username);
+  const [user, currentLoggedInUser] = await Promise.all([
+    getUserProfile(username),
+    getCurrentLoggedInUser(),
+  ]);
   const doesUserExist = user !== null;
   return (
     <div className="w-full min-h-full max-w-[600px] border-r border-solid border-gray-700">
@@ -82,9 +85,12 @@ export default async function Profile({
           )}
         </div>
         <div className=" h-[67px] flex w-full justify-end items-start">
-          {doesUserExist && (
-            <ButtonOrLink variant="tertiary">Edit profile</ButtonOrLink>
-          )}
+          {doesUserExist &&
+            (currentLoggedInUser?.username === user.username ? (
+              <ButtonOrLink variant="tertiary">Edit profile</ButtonOrLink>
+            ) : (
+              <ButtonOrLink variant="secondary">Follow</ButtonOrLink>
+            ))}
         </div>
         {/* Name */}
         <div className="flex flex-col mb-3">

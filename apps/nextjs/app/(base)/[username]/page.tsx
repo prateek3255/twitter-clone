@@ -1,7 +1,7 @@
-import { Tweet } from "components/Tweet";
 import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 import { getTweetsByUsername } from "utils/tweet";
 import { getUserProfile } from "utils/user";
+import { InfiniteUserTweets } from "./InfiniteUserTweets";
 
 const TabItem = ({
   isActive = false,
@@ -52,16 +52,12 @@ export default async function Profile({
       </div>
       {/** Tweets */}
       <div>
-        {tweets.map((tweet) => (
-          <Tweet
-            key={tweet.id}
-            username={username}
-            name={userProfile?.name ?? ""}
-            content={tweet.content}
-            profileImage={userProfile?.profileImage ?? DEFAULT_PROFILE_IMAGE}
-            timestamp={tweet.createdAt}
-          />
-        ))}
+        <InfiniteUserTweets
+          username={username}
+          profileImage={userProfile?.profileImage ?? DEFAULT_PROFILE_IMAGE}
+          name={userProfile?.name}
+          initialTweets={tweets}
+        />
       </div>
     </>
   );

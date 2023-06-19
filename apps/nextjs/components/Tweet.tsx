@@ -41,19 +41,21 @@ const TweetAction = ({ type, count }: { type: ActionType; count: number }) => {
   );
 };
 
+export interface TweetProps {
+  username: string;
+  name: string;
+  profileImage: string;
+  content: string;
+  timestamp: Date;
+}
+
 export const Tweet = ({
   username,
   name,
   profileImage,
   content,
   timestamp,
-}: {
-  username: string;
-  name: string;
-  profileImage: string;
-  content: string;
-  timestamp: Date;
-}) => {
+}: TweetProps) => {
   return (
     <article className="p-4 border-b border-solid border-gray-700">
       <div className="flex gap-3 w-full">
@@ -69,12 +71,12 @@ export const Tweet = ({
             <span className="text-white font-bold text-sm">{name}</span>
             <span className="text-gray-500 text-sm">@{username}</span>
             <span className="text-gray-500 text-sm">·</span>
-            <span className="text-gray-500 text-sm">{formatDistanceForTweet(formatDistanceToNowStrict(timestamp))}</span>
+            <span className="text-gray-500 text-sm">
+              {formatDistanceForTweet(formatDistanceToNowStrict(timestamp))}
+            </span>
           </div>
           <div className="flex flex-col gap-3">
-            <span className="text-white text-sm">
-              {content}
-            </span>
+            <span className="text-white text-sm">{content}</span>
             <div className="flex max-w-[310px] w-full justify-between">
               <TweetAction type="reply" count={6} />
               <TweetAction type="retweet" count={2} />

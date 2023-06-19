@@ -148,6 +148,31 @@ const ChevronDown = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+const LoadingIndicator = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg height="100%" viewBox="0 0 32 32" width="100%" {...props}>
+    <circle
+      cx="16"
+      cy="16"
+      fill="none"
+      r="14"
+      stroke-width="4"
+      style={{ stroke: "rgb(29, 155, 240)", opacity: 0.2 }}
+    ></circle>
+    <circle
+      cx="16"
+      cy="16"
+      fill="none"
+      r="14"
+      stroke-width="4"
+      style={{
+        stroke: "rgb(29, 155, 240)",
+        strokeDasharray: 80,
+        strokeDashoffset: 60,
+      }}
+    ></circle>
+  </svg>
+);
+
 export {
   Home,
   TwitterLogo,
@@ -159,4 +184,5 @@ export {
   Like,
   Cross,
   ChevronDown,
+  LoadingIndicator,
 };

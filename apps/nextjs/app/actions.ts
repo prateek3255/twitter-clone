@@ -1,6 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
 import { getUserId } from "utils/auth";
+import { getTweetsByUsername } from "utils/tweet";
 import { prisma } from "utils/db";
 
 export const logout = async () => {
@@ -21,4 +22,9 @@ export const createTweet = async (formData: FormData) => {
       authorId: userId,
     }
   })
+}
+
+export const fetchNextUserTweetsPage = async (username: string, cursor?: number) => {
+  const tweets = await getTweetsByUsername(username, cursor);
+  return tweets;
 }
