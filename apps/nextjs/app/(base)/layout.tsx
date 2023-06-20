@@ -1,29 +1,12 @@
-import { Home, Profile, TwitterLogo } from "ui/icons";
-import Link from "next/link";
+import { Home, HomeFilled, Profile, ProfileFilled, TwitterLogo } from "ui/icons";
 import { ButtonOrLink } from "components/ButtonOrLink";
 import { clearAuthCookie } from "utils/auth";
 import { getCurrentLoggedInUser } from "utils/user";
+import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 import { TweetButton } from "./TweetButtonWithModal";
 import { ProfileButton } from "./ProfileButton";
-import { DEFAULT_PROFILE_IMAGE } from "constants/user";
+import { NavItem } from "./NavItem";
 
-const NavItem = ({
-  children,
-  icon,
-  href,
-}: {
-  children: React.ReactNode;
-  icon: React.ReactNode;
-  href: string;
-}) => (
-  <Link
-    href={href}
-    className="flex p-3 gap-5 items-center rounded-full text-xl text-white hover:bg-gray-100/10 w-fit pr-5"
-  >
-    {icon}
-    {children}
-  </Link>
-);
 
 const LoggedOutFooter = () => (
   <div className="fixed flex bottom-0 left-0 right-0 h-[4.5rem] bg-primary-blue">
@@ -52,7 +35,7 @@ const LoggedOutFooter = () => (
 );
 
 export default async function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {
@@ -79,11 +62,11 @@ export default async function RootLayout({
                 </a>
               </h1>
               <nav className="mt-1">
-                <NavItem href="/" icon={<Home />}>
+                <NavItem href="/" icon={<Home />} activeIcon={<HomeFilled />}>
                   Home
                 </NavItem>
                 {isLoggedIn && (
-                  <NavItem href={`/${user.username}`} icon={<Profile />}>
+                  <NavItem href={`/${user.username}`} icon={<Profile />} activeIcon={<ProfileFilled />}>
                     Profile
                   </NavItem>
                 )}
