@@ -185,7 +185,7 @@ const LoadingIndicator = (props: React.SVGProps<SVGSVGElement>) => (
       cy="16"
       fill="none"
       r="14"
-      stroke-width="4"
+      strokeWidth="4"
       style={{ stroke: "rgb(29, 155, 240)", opacity: 0.2 }}
     ></circle>
     <circle
@@ -193,7 +193,7 @@ const LoadingIndicator = (props: React.SVGProps<SVGSVGElement>) => (
       cy="16"
       fill="none"
       r="14"
-      stroke-width="4"
+      strokeWidth="4"
       style={{
         stroke: "rgb(29, 155, 240)",
         strokeDasharray: 80,
