@@ -12,6 +12,7 @@ export default async function Profile({
     getUserProfile(username),
     getTweetsByUsername(username),
   ]);
+
   return (
     <>
       {/** Tweets */}

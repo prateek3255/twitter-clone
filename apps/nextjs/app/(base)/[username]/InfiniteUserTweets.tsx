@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Tweet } from "components/Tweet";
-import { Tweet as TweetType } from "database";
+import type { TweetWithMeta as TweetType } from "utils/tweet";
 import { useIntersectionObserver } from "hooks/useIntesectionObserver";
 import { fetchNextUserTweetsPage } from "app/actions";
 import { Spinner } from "components/Spinner";
@@ -24,6 +24,13 @@ export const InfiniteUserTweets = ({
   const entry = useIntersectionObserver(endOfTweetsRef, {});
   const isVisible = !!entry?.isIntersecting;
   const lastTweetId = tweets[tweets.length - 1]?.id;
+
+  const [prevInitialTweets, setPrevInitialTweets] = React.useState(initialTweets);
+  if (prevInitialTweets !== initialTweets && initialTweets.length > 0) {
+    const newTweet = initialTweets[0];
+    setPrevInitialTweets(initialTweets);
+    setTweets((tweets) => [newTweet, ...tweets]);
+  }
 
   React.useEffect(() => {
     const updateTweets = async () => {
@@ -53,6 +60,9 @@ export const InfiniteUserTweets = ({
           content={tweet.content}
           profileImage={profileImage}
           timestamp={tweet.createdAt}
+          likes={tweet._count.likes}
+          replies={tweet._count.replies}
+          retweets={tweet._count.retweets}
         />
       ))}
       <div className="h-1" ref={endOfTweetsRef} />
