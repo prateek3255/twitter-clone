@@ -1,4 +1,5 @@
 import { prisma } from "./db";
+import 'server-only';
 
 export const getTweetsByUsername = async (username: string, cursor?: number) => {
   const tweets = await prisma.tweet.findMany({
@@ -6,6 +7,15 @@ export const getTweetsByUsername = async (username: string, cursor?: number) => 
       author: {
         username,
       },
+    },
+    include: {
+      _count: {
+        select: {
+          likes: true,
+          replies: true,
+          retweets: true,
+        }  
+      }
     },
     take: 4,
     skip: typeof cursor === 'number' ? 1 : 0,
@@ -18,3 +28,5 @@ export const getTweetsByUsername = async (username: string, cursor?: number) => 
   });
   return tweets;
 };
+
+export type TweetWithMeta = Awaited<ReturnType<typeof getTweetsByUsername>>[0];

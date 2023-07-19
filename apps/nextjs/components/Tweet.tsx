@@ -47,6 +47,9 @@ export interface TweetProps {
   profileImage: string;
   content: string;
   timestamp: Date;
+  likes: number;
+  replies: number;
+  retweets: number;
 }
 
 export const Tweet = ({
@@ -55,6 +58,9 @@ export const Tweet = ({
   profileImage,
   content,
   timestamp,
+  likes,
+  replies,
+  retweets,
 }: TweetProps) => {
   return (
     <article className="p-4 border-b border-solid border-gray-700">
@@ -78,9 +84,9 @@ export const Tweet = ({
           <div className="flex flex-col gap-3">
             <span className="text-white text-sm">{content}</span>
             <div className="flex max-w-[310px] w-full justify-between">
-              <TweetAction type="reply" count={6} />
-              <TweetAction type="retweet" count={2} />
-              <TweetAction type="like" count={18} />
+              <TweetAction type="reply" count={replies} />
+              <TweetAction type="retweet" count={retweets} />
+              <TweetAction type="like" count={likes} />
             </div>
           </div>
         </div>

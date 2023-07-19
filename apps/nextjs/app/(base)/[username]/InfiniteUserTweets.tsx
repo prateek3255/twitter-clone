@@ -6,6 +6,38 @@ import { useIntersectionObserver } from "hooks/useIntesectionObserver";
 import { fetchNextUserTweetsPage } from "app/actions";
 import { Spinner } from "components/Spinner";
 
+type State = {
+  tweets: Array<TweetType>;
+  isLastPage: boolean;
+}
+
+type Action = {
+  type: "add_tweets";
+  newTweets: Array<TweetType>;
+} | {
+  type: "update_latest_tweet";
+  newInitialTweets: Array<TweetType>;
+}
+
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case "add_tweets":
+      return {
+        ...state,
+        tweets: [...state.tweets, ...action.newTweets],
+        isLastPage: action.newTweets.length === 0,
+      };
+    case "update_latest_tweet":
+      const newTweet = action.newInitialTweets[0];
+      return {
+        ...state,
+        tweets: [newTweet, ...state.tweets],
+      };
+    default:
+      return state;
+  }
+}
+
 export const InfiniteUserTweets = ({
   initialTweets,
   username,
@@ -17,9 +49,11 @@ export const InfiniteUserTweets = ({
   profileImage: string;
   name?: string | null;
 }) => {
-  const [tweets, setTweets] = React.useState(initialTweets);
+  const [{ tweets, isLastPage }, dispatch] = React.useReducer(reducer, {
+    tweets: initialTweets,
+    isLastPage: false,
+  });
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isLastPage, setIsLastPage] = React.useState(false);
   const endOfTweetsRef = React.useRef<HTMLDivElement>(null);
   const entry = useIntersectionObserver(endOfTweetsRef, {});
   const isVisible = !!entry?.isIntersecting;
@@ -27,9 +61,8 @@ export const InfiniteUserTweets = ({
 
   const [prevInitialTweets, setPrevInitialTweets] = React.useState(initialTweets);
   if (prevInitialTweets !== initialTweets && initialTweets.length > 0) {
-    const newTweet = initialTweets[0];
     setPrevInitialTweets(initialTweets);
-    setTweets((tweets) => [newTweet, ...tweets]);
+    dispatch({ type: "update_latest_tweet", newInitialTweets: initialTweets });
   }
 
   React.useEffect(() => {
@@ -40,10 +73,7 @@ export const InfiniteUserTweets = ({
       setIsLoading(true);
       const nextTweets = await fetchNextUserTweetsPage(username, lastTweetId);
       setIsLoading(false);
-      setTweets((tweets) => [...tweets, ...nextTweets]);
-      if (nextTweets.length === 0) {
-        setIsLastPage(true);
-      }
+      dispatch({ type: "add_tweets", newTweets: nextTweets });
     };
     if (isVisible) {
       updateTweets();
