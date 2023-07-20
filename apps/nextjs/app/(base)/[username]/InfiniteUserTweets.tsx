@@ -17,6 +17,10 @@ type Action = {
 } | {
   type: "update_latest_tweet";
   newInitialTweets: Array<TweetType>;
+} | {
+  type: "like_or_unlike_tweet";
+  tweetId: number;
+  currentLoggedInUserId: number;
 }
 
 const reducer = (state: State, action: Action): State => {
@@ -35,6 +39,25 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         tweets: [...newTweets, ...state.tweets],
       };
+    case "like_or_unlike_tweet":
+      return {
+        ...state,
+        tweets: state.tweets.map((tweet) => {
+          if (tweet.id === action.tweetId) {
+            return {
+              ...tweet,
+              likes: tweet.likes.length > 0 ? [] : [{ userId: action.currentLoggedInUserId }],
+              _count: {
+                ...tweet._count,
+                likes: tweet.likes.length > 0
+                  ? tweet._count.likes - 1
+                  : tweet._count.likes + 1,
+              },
+            };
+          }
+          return tweet;
+        }),
+      };
     default:
       return state;
   }
@@ -45,11 +68,13 @@ export const InfiniteUserTweets = ({
   username,
   profileImage,
   name,
+  currentLoggedInUserId,
 }: {
   initialTweets: Array<TweetType>;
   username: string;
   profileImage: string;
   name?: string | null;
+  currentLoggedInUserId?: number;
 }) => {
   const [{ tweets, isLastPage }, dispatch] = React.useReducer(reducer, {
     tweets: initialTweets,
@@ -97,6 +122,13 @@ export const InfiniteUserTweets = ({
           retweets={tweet._count.retweets}
           tweetId={tweet.id}
           hasLiked={tweet.likes.length > 0}
+          onLikeClick={(tweetId) => {
+            dispatch({
+              type: "like_or_unlike_tweet",
+              tweetId,
+              currentLoggedInUserId: currentLoggedInUserId ?? 0,
+            });
+          }}
         />
       ))}
       <div className="h-1" ref={endOfTweetsRef} />

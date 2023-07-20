@@ -4,7 +4,7 @@ import { startTransition } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import { Reply, Retweet, Like, LikeFilled } from "ui/icons";
 import { formatDistanceForTweet } from "utils/common";
-import { likeTweet } from "app/actions";
+import { likeOrUnlikeTweet } from "app/actions";
 
 type ActionType = "reply" | "retweet" | "like";
 
@@ -74,7 +74,7 @@ export interface TweetProps {
   replies: number;
   retweets: number;
   tweetId: number;
-  onLike?: () => void;
+  onLikeClick?: (tweetId: number) => void;
   hasLiked?: boolean;
 }
 
@@ -88,7 +88,7 @@ export const Tweet = ({
   replies,
   retweets,
   tweetId,
-  onLike,
+  onLikeClick,
   hasLiked,
 }: TweetProps) => {
   return (
@@ -121,9 +121,9 @@ export const Tweet = ({
                 count={likes}
                 action={() => {
                   startTransition(() => {
-                    likeTweet(tweetId);
+                    likeOrUnlikeTweet(tweetId, !hasLiked);
                   });
-                  onLike?.();
+                  onLikeClick?.(tweetId);
                 }}
               />
             </div>

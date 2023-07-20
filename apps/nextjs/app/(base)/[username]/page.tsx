@@ -2,6 +2,7 @@ import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 import { getTweetsByUsername } from "utils/tweet";
 import { getUserProfile } from "utils/user";
 import { InfiniteUserTweets } from "./InfiniteUserTweets";
+import { getUserId, isAuthenticated } from "utils/auth";
 
 export default async function Profile({
   params: { username },
@@ -13,11 +14,17 @@ export default async function Profile({
     getTweetsByUsername(username),
   ]);
 
+  let currentLoggedInUserId: undefined | number = undefined;
+  if(isAuthenticated()) {
+    currentLoggedInUserId = getUserId();
+  }
+
   return (
     <>
       {/** Tweets */}
       <div>
         <InfiniteUserTweets
+          currentLoggedInUserId={currentLoggedInUserId}
           username={username}
           profileImage={userProfile?.profileImage ?? DEFAULT_PROFILE_IMAGE}
           name={userProfile?.name}

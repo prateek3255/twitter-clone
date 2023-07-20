@@ -23,7 +23,7 @@ model User {
   followers User[] @relation("UserFollows")
   following User[] @relation("UserFollows")
   createdAt DateTime @default(now())
-  likes Like[]
+  likes TweetLike[]
 }
 
 model Tweet {
@@ -32,7 +32,7 @@ model Tweet {
   content String @db.VarChar(300)
   author User @relation(fields: [authorId], references: [id])
   authorId Int
-  likes Like[]
+  likes TweetLike[]
   replyId Int?
   replyTo Tweet? @relation("TweetReplies", fields: [replyId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   replies Tweet[] @relation("TweetReplies")
@@ -45,13 +45,13 @@ model Tweet {
   @@index([retweetId])
 }
 
-model Like {
-  id Int @id @default(autoincrement())
+model TweetLike {
   createdAt DateTime @default(now())
   user User @relation(fields: [userId], references: [id])
   userId Int
   tweet Tweet @relation(fields: [tweetId], references: [id])
   tweetId Int
+  @@id([userId, tweetId])
 
   @@index([userId])
   @@index([tweetId])

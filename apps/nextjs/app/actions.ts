@@ -21,23 +21,35 @@ export const createTweet = async (formData: FormData) => {
     data: {
       content: tweet,
       authorId: userId,
-    }
-  })
+    },
+  });
   // TODO: Make this dynamic
-  revalidatePath("/wolverine")
-}
+  revalidatePath("/wolverine");
+};
 
-export const fetchNextUserTweetsPage = async (username: string, cursor?: number) => {
+export const fetchNextUserTweetsPage = async (
+  username: string,
+  cursor?: number
+) => {
   const tweets = await getTweetsByUsername(username, cursor);
   return tweets;
-}
+};
 
-export const likeTweet = async (tweetId: number) => {
+export const likeOrUnlikeTweet = async (tweetId: number, hasLiked: boolean) => {
   const userId = getUserId();
-  await prisma.like.create({
-    data: {
-      tweetId,
-      userId,
-    }
-  })
+  if (hasLiked) {
+    await prisma.tweetLike.create({
+      data: {
+        tweetId,
+        userId,
+      },
+    });
+  } else {
+    await prisma.tweetLike.deleteMany({
+      where: {
+        tweetId,
+        userId,
+      },
+    });
+  }
 };
