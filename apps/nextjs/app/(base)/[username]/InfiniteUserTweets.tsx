@@ -28,10 +28,12 @@ const reducer = (state: State, action: Action): State => {
         isLastPage: action.newTweets.length === 0,
       };
     case "update_latest_tweet":
-      const newTweet = action.newInitialTweets[0];
+      const newTweets = action.newInitialTweets.filter(
+        (tweet) => !state.tweets.some((t) => t.id === tweet.id)
+      );
       return {
         ...state,
-        tweets: [newTweet, ...state.tweets],
+        tweets: [...newTweets, ...state.tweets],
       };
     default:
       return state;
