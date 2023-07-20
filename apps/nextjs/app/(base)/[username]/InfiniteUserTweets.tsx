@@ -93,6 +93,8 @@ export const InfiniteUserTweets = ({
           likes={tweet._count.likes}
           replies={tweet._count.replies}
           retweets={tweet._count.retweets}
+          tweetId={tweet.id}
+          hasLiked={tweet.likes.length > 0}
         />
       ))}
       <div className="h-1" ref={endOfTweetsRef} />
