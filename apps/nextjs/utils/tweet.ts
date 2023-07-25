@@ -12,6 +12,14 @@ export const getTweetsByUsername = async (username: string, cursor?: number) => 
       author: {
         username,
       },
+      NOT: {
+        // Hide user's own retweets from their profile
+        retweetOf: {
+          author: {
+            username,
+          }
+        }
+      }
     },
     include: {
       _count: {
@@ -20,6 +28,52 @@ export const getTweetsByUsername = async (username: string, cursor?: number) => 
           replies: true,
           retweets: true,
         }  
+      },
+      retweetOf: {
+        select: {
+          id: true,
+          content: true,
+          createdAt: true,
+          author: {
+            select: {
+              id: true,
+              username: true,
+              name: true,
+              profileImage: true,
+            }
+          },
+          _count: {
+            select: {
+              likes: true,
+              replies: true,
+              retweets: true,
+            }
+          },
+          likes: {
+            where: {
+              userId,
+            },
+            select: {
+              userId: true,
+            }
+          },
+          retweets: {
+            where: {
+              authorId: userId,
+            },
+            select: {
+              authorId: true,
+            }
+          },
+        },
+      },
+      retweets: {
+        where: {
+          authorId: userId,
+        },
+        select: {
+          authorId: true,
+        }
       },
       likes: {
         where: {
