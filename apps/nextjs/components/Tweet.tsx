@@ -101,6 +101,12 @@ export const Tweet = ({
 }: TweetProps) => {
   return (
     <article className="p-4 border-b border-solid border-gray-700">
+      {hasRetweeted && (
+        <div className="flex items-center gap-3 text-gray-500 text-xs ml-6 mb-1 font-bold mt-[-4px]">
+          <Retweet className="w-4 h-4" />
+          <span>You Retweeted</span>
+        </div>
+      )}
       <div className="flex gap-3 w-full">
         <Image
           src={profileImage}

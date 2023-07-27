@@ -25,7 +25,7 @@ const mapToTweet = (
         replies: tweet.retweetOf._count.replies,
         retweets: tweet.retweetOf._count.retweets,
         hasLiked: tweet.retweetOf.likes.length > 0,
-        hasRetweeted: tweet.retweets.length > 0,
+        hasRetweeted: tweet.retweetOf.retweets.length > 0,
       };
     }
 
