@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { CreateTweetHomePage } from "./CreateTweetHomePage";
+import { CreateTweetHomePage } from "./components/CreateTweetHomePage";
 import { getCurrentLoggedInUser } from "utils/user";
 import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 

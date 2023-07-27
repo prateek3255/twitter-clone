@@ -12,7 +12,7 @@ import {
   hashPassword,
   setAuthCookie,
 } from "utils/auth";
-import { SubmitButton } from "../SubmitButton";
+import { SubmitButton } from "../components/SubmitButton";
 
 export default function Signup({
   searchParams,

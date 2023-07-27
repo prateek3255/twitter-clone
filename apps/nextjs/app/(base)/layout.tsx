@@ -3,9 +3,9 @@ import { ButtonOrLink } from "components/ButtonOrLink";
 import { clearAuthCookie } from "utils/auth";
 import { getCurrentLoggedInUser } from "utils/user";
 import { DEFAULT_PROFILE_IMAGE } from "constants/user";
-import { TweetButton } from "./TweetButtonWithModal";
-import { ProfileButton } from "./ProfileButton";
-import { NavItem } from "./NavItem";
+import { TweetButton } from "./components/TweetButtonWithModal";
+import { ProfileButton } from "./components/ProfileButton";
+import { NavItem } from "./components/NavItem";
 
 
 const LoggedOutFooter = () => (

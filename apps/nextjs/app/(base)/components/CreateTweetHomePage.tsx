@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { createTweet } from "../actions";
+import { createTweet } from "../../actions";
 import { TweetCTA } from "./TweetCTA";
 
 export const CreateTweetHomePage = () => {

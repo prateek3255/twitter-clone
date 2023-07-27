@@ -1,7 +1,7 @@
 import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 import { getTweetsByUsername } from "utils/tweet";
 import { getUserProfile } from "utils/user";
-import { InfiniteUserTweets } from "./InfiniteUserTweets";
+import { InfiniteUserTweets } from "./components/InfiniteUserTweets";
 import { getUserId, isAuthenticated } from "utils/auth";
 
 export default async function Profile({

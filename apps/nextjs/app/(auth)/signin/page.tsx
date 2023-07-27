@@ -6,7 +6,7 @@ import {
   encodeValueAndErrors,
   setAuthCookie
 } from "utils/auth";
-import { SubmitButton } from "../SubmitButton";
+import { SubmitButton } from "../components/SubmitButton";
 import { prisma } from "utils/db";
 import { isEmail } from "utils/common";
 
