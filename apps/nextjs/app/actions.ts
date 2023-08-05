@@ -35,7 +35,13 @@ export const fetchNextUserTweetsPage = async (
   return tweets;
 };
 
-export const toggleTweetLike = async (tweetId: number, hasLiked: boolean) => {
+export const toggleTweetLike = async ({
+  tweetId,
+  hasLiked,
+}: {
+  tweetId: number;
+  hasLiked: boolean;
+}) => {
   const userId = getUserId();
   if (hasLiked) {
     await prisma.tweetLike.create({
@@ -54,7 +60,13 @@ export const toggleTweetLike = async (tweetId: number, hasLiked: boolean) => {
   }
 };
 
-export const toggleTweetRetweet = async (tweetId: number, hasRetweeted: boolean) => {
+export const toggleTweetRetweet = async ({
+  tweetId,
+  hasRetweeted,
+}: {
+  tweetId: number;
+  hasRetweeted: boolean;
+}) => {
   const userId = getUserId();
   if (hasRetweeted) {
     await prisma.tweet.create({
@@ -62,14 +74,14 @@ export const toggleTweetRetweet = async (tweetId: number, hasRetweeted: boolean)
         content: "",
         authorId: userId,
         retweetId: tweetId,
-      }
-    })
+      },
+    });
   } else {
     await prisma.tweet.deleteMany({
       where: {
         authorId: userId,
         retweetId: tweetId,
-      }
-    })
+      },
+    });
   }
-}
+};

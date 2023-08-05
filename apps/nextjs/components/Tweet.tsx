@@ -2,71 +2,10 @@ import React from "react";
 import Image from "next/image";
 import { startTransition } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
-import { Reply, Retweet, RetweetFilled, Like, LikeFilled } from "ui/icons";
+import { Retweet } from "ui/icons";
 import { formatDistanceForTweet } from "utils/common";
 import { toggleTweetLike, toggleTweetRetweet } from "app/actions";
-
-type ActionType = "reply" | "retweet" | "like";
-
-const TweetActionDetails = {
-  reply: {
-    icon: <Reply />,
-    activeIcon: <Reply />,
-    activeColor: "text-primary-blue",
-    hoverBg: "hover:text-primary-blue [&_>_div_>_div]:hover:bg-primary-blue/10",
-  },
-  retweet: {
-    icon: <Retweet />,
-    activeIcon: <RetweetFilled />,
-    activeColor: "text-primary-green",
-    hoverBg:
-      "hover:text-primary-green [&_>_div_>_div]:hover:bg-primary-green/10",
-  },
-  like: {
-    icon: <Like />,
-    activeIcon: <LikeFilled />,
-    activeColor: "text-primary-red",
-    hoverBg: "hover:text-primary-red [&_>_div_>_div]:hover:bg-primary-red/10",
-  },
-};
-
-const ActiveLabel: Record<ActionType, string> = {
-  reply: "Replied",
-  retweet: "Retweeted",
-  like: "Liked",
-};
-
-const TweetAction = ({
-  type,
-  count,
-  action,
-  active = false,
-}: {
-  type: ActionType;
-  count: number;
-  action: () => void;
-  active?: boolean;
-}) => {
-  const { icon, hoverBg, activeColor, activeIcon } = TweetActionDetails[type];
-  return (
-    <button
-      aria-label={type}
-      className={`flex items-center gap-3 ${
-        active ? activeColor : "text-gray-500"
-      } transition-colors ${hoverBg}`}
-      onClick={action}
-    >
-      <div className="relative">
-        <div className="absolute top-0 left-0 right-0 bottom-0 rounded-full m-[-8px] transition-colors"></div>
-        {active ? activeIcon : icon}
-      </div>
-      <span className="text-xs">{count}</span>
-      <span className="sr-only">{`${count} ${type}s. ${
-        active ? ActiveLabel[type] : ""
-      }`}</span>
-    </button>
-  );
-};
+import { TweetAction } from "components/TweetAction";
 
 export interface TweetProps {
   username: string;
@@ -127,25 +66,35 @@ export const Tweet = ({
           <div className="flex flex-col gap-3">
             <span className="text-white text-sm">{content}</span>
             <div className="flex max-w-[310px] w-full justify-between">
-              <TweetAction type="reply" count={replies} action={() => {}} />
               <TweetAction
+                size="compact"
+                type="reply"
+                count={replies}
+                action={() => {}}
+              />
+              <TweetAction
+                size="compact"
                 type="retweet"
                 active={hasRetweeted}
                 count={retweets}
                 action={() => {
                   startTransition(() => {
-                    toggleTweetRetweet(id, !hasRetweeted);
+                    toggleTweetRetweet({
+                      tweetId: id,
+                      hasRetweeted: !hasRetweeted,
+                    });
                   });
                   onRetweetClick?.(id);
                 }}
               />
               <TweetAction
+                size="compact"
                 active={hasLiked}
                 type="like"
                 count={likes}
                 action={() => {
                   startTransition(() => {
-                    toggleTweetLike(id, !hasLiked);
+                    toggleTweetLike({ tweetId: id, hasLiked: !hasLiked });
                   });
                   onLikeClick?.(id);
                 }}
