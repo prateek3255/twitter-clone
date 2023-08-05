@@ -6,11 +6,12 @@ import { Retweet } from "ui/icons";
 import { formatDistanceForTweet } from "utils/common";
 import { toggleTweetLike, toggleTweetRetweet } from "app/actions";
 import { TweetAction } from "components/TweetAction";
+import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 
 export interface TweetProps {
   username: string;
   name: string;
-  profileImage: string;
+  profileImage?: string | null;
   content: string;
   createdAt: Date;
   likes: number;
@@ -48,7 +49,7 @@ export const Tweet = ({
       )}
       <div className="flex gap-3 w-full">
         <Image
-          src={profileImage}
+          src={profileImage ?? DEFAULT_PROFILE_IMAGE}
           width={48}
           height={48}
           className="rounded-full max-h-[48px]"

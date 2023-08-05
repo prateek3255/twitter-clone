@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
 import { Tweet } from "components/Tweet";
-import type { TweetWithMeta } from "utils/tweet";
+import type { UserTweetsWithMeta } from "utils/tweet";
 import { useIntersectionObserver } from "hooks/useIntesectionObserver";
 import { fetchNextUserTweetsPage } from "app/actions";
 import { Spinner } from "components/Spinner";
 
 const mapToTweet = (
-  tweets: Array<TweetWithMeta>,
+  tweets: Array<UserTweetsWithMeta>,
   userInfo: { name?: string | null; profileImage: string; username: string }
 ) => {
   return tweets.map((tweet) => {
@@ -19,7 +19,7 @@ const mapToTweet = (
         content: tweet.retweetOf.content,
         createdAt: tweet.retweetOf.createdAt,
         name: tweet.retweetOf.author.name ?? "",
-        profileImage: tweet.retweetOf.author.profileImage ?? "",
+        profileImage: tweet.retweetOf.author.profileImage,
         username: tweet.retweetOf.author.username,
         likes: tweet.retweetOf._count.likes,
         replies: tweet.retweetOf._count.replies,
@@ -130,7 +130,7 @@ export const InfiniteUserTweets = ({
   name,
   currentLoggedInUserId,
 }: {
-  initialTweets: Array<TweetWithMeta>;
+  initialTweets: Array<UserTweetsWithMeta>;
   username: string;
   profileImage: string;
   name?: string | null;

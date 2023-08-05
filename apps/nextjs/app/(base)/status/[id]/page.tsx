@@ -1,22 +1,69 @@
 import { BackButton } from "ui/icons";
 import Image from "next/image";
+import { Retweet } from "ui/icons";
+import { format } from "date-fns";
 import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 import { TweetActions } from "./components/TweetActions";
+import { getTweetWithID, TweetWithMeta } from "utils/tweet";
+import { notFound } from "next/navigation";
 
-const TweetStat = ({
-  label,
-  count
-}: {
-  label: string;
-  count: number;
-}) => (
+const TweetStat = ({ label, count }: { label: string; count: number }) => (
   <div className="flex gap-1">
     <span className="text-white font-bold text-sm">{count}</span>
     <span className="text-gray-500 text-sm">{label}</span>
   </div>
-)
+);
 
-export default async function Web() {
+const getTweetInfo = (tweet: TweetWithMeta) => {
+  if (tweet.retweetOf) {
+    return {
+      id: tweet.retweetOf.id,
+      content: tweet.retweetOf.content,
+      createdAt: tweet.retweetOf.createdAt,
+      name: tweet.retweetOf.author.name ?? "",
+      profileImage: tweet.retweetOf.author.profileImage,
+      username: tweet.retweetOf.author.username,
+      likes: tweet.retweetOf._count.likes,
+      replies: tweet.retweetOf._count.replies,
+      retweets: tweet.retweetOf._count.retweets,
+      hasLiked: tweet.retweetOf.likes.length > 0,
+      hasRetweeted: tweet.retweetOf.retweets.length > 0,
+      isRetweet: true,
+      retweetAuthor: tweet.author,
+    };
+  }
+
+  return {
+    id: tweet.id,
+    content: tweet.content,
+    createdAt: tweet.createdAt,
+    name: tweet.author.name ?? "",
+    profileImage: tweet.author.profileImage,
+    username: tweet.author.username,
+    likes: tweet._count.likes,
+    replies: tweet._count.replies,
+    retweets: tweet._count.retweets,
+    hasLiked: tweet.likes.length > 0,
+    hasRetweeted: tweet.retweets.length > 0,
+    isRetweet: false,
+  };
+};
+
+export default async function TweetStatus({
+  params: { id },
+}: {
+  params: { id: string };
+}) {
+  const tweetId = parseInt(id);
+
+  const tweet = await getTweetWithID(tweetId);
+
+  if (!tweet) {
+    notFound();
+  }
+
+  const tweetInfo = getTweetInfo(tweet);
+
   return (
     <div className="w-full min-h-full max-w-[600px] border-r border-solid border-gray-700">
       {/* Header */}
@@ -30,37 +77,48 @@ export default async function Web() {
       </div>
       {/* Tweet large */}
       <article className="px-4">
+        {tweetInfo.isRetweet && (
+          <div className="flex items-center gap-3 text-gray-500 text-xs ml-6 mb-1 font-bold mt-[-4px]">
+            <Retweet className="w-4 h-4" />
+            <span>
+              {tweetInfo.retweetAuthor?.name ??
+                tweetInfo.retweetAuthor?.username}{" "}
+              Retweeted
+            </span>
+          </div>
+        )}
         <div className="flex gap-3 w-full items-center pt-3 pb-2">
           <Image
-            src={DEFAULT_PROFILE_IMAGE}
+            src={tweetInfo.profileImage ?? DEFAULT_PROFILE_IMAGE}
             width={48}
             height={48}
             className="rounded-full max-h-[48px]"
             alt={`{username}'s profile image`}
           />
           <div className="flex flex-col w-full">
-            <span className="text-white font-bold text-sm">Prateek Surana</span>
-            <span className="text-gray-500 text-sm">@prateek_2412</span>
+            <span className="text-white font-bold text-sm">
+              {tweetInfo.name}
+            </span>
+            <span className="text-gray-500 text-sm">@{tweetInfo.username}</span>
           </div>
         </div>
         <div className="flex flex-col mt-2">
-          <p className="text-white text-base">
-            Released the long-due v3 for @devfolio react-otp-input. This update
-            is a complete rewrite of the library and offers: - Smaller bundle
-            size (~60% smaller!) - More customizability, with consumers now able
-            to choose what to render - Full type safety for added peace of mind
-          </p>
+          <p className="text-white text-base">{tweetInfo.content}</p>
           <div className="py-4 text-gray-500 text-sm border-b border-solid border-gray-700">
-            <time dateTime="2023-03-27T03:58:58.000Z">
-              9:28 AM · Mar 27, 2023
+            <time dateTime={`${tweetInfo.createdAt.toISOString()}`}>
+              {format(tweetInfo.createdAt, "h:mm a · MMM d, yyyy")}
             </time>
           </div>
         </div>
         <div className="py-4 flex gap-5 border-b border-solid border-gray-700">
-          <TweetStat label="Likes" count={10} />
-          <TweetStat label="Retweets" count={10} />
+          <TweetStat label="Likes" count={tweetInfo.likes} />
+          <TweetStat label="Retweets" count={tweetInfo.retweets} />
         </div>
-        <TweetActions />
+        <TweetActions
+          hasLiked={tweetInfo.hasLiked}
+          hasRetweeted={tweetInfo.hasRetweeted}
+          tweetId={tweetInfo.id}
+        />
       </article>
     </div>
   );

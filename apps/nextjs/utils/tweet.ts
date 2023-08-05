@@ -1,8 +1,11 @@
 import { prisma } from "./db";
 import { getUserId, isAuthenticated } from "./auth";
-import 'server-only';
+import "server-only";
 
-export const getTweetsByUsername = async (username: string, cursor?: number) => {
+export const getTweetsByUsername = async (
+  username: string,
+  cursor?: number
+) => {
   let userId = undefined;
   if (isAuthenticated()) {
     userId = getUserId();
@@ -17,9 +20,9 @@ export const getTweetsByUsername = async (username: string, cursor?: number) => 
         retweetOf: {
           author: {
             username,
-          }
-        }
-      }
+          },
+        },
+      },
     },
     include: {
       _count: {
@@ -27,7 +30,7 @@ export const getTweetsByUsername = async (username: string, cursor?: number) => 
           likes: true,
           replies: true,
           retweets: true,
-        }  
+        },
       },
       retweetOf: {
         select: {
@@ -40,14 +43,14 @@ export const getTweetsByUsername = async (username: string, cursor?: number) => 
               username: true,
               name: true,
               profileImage: true,
-            }
+            },
           },
           _count: {
             select: {
               likes: true,
               replies: true,
               retweets: true,
-            }
+            },
           },
           likes: {
             where: {
@@ -55,7 +58,7 @@ export const getTweetsByUsername = async (username: string, cursor?: number) => 
             },
             select: {
               userId: true,
-            }
+            },
           },
           retweets: {
             where: {
@@ -63,7 +66,7 @@ export const getTweetsByUsername = async (username: string, cursor?: number) => 
             },
             select: {
               authorId: true,
-            }
+            },
           },
         },
       },
@@ -73,7 +76,7 @@ export const getTweetsByUsername = async (username: string, cursor?: number) => 
         },
         select: {
           authorId: true,
-        }
+        },
       },
       likes: {
         where: {
@@ -81,14 +84,17 @@ export const getTweetsByUsername = async (username: string, cursor?: number) => 
         },
         select: {
           userId: true,
-        }
-      }
+        },
+      },
     },
     take: 4,
-    skip: typeof cursor === 'number' ? 1 : 0,
-    cursor: typeof cursor === 'number' ? {
-      id: cursor,
-    } : undefined,
+    skip: typeof cursor === "number" ? 1 : 0,
+    cursor:
+      typeof cursor === "number"
+        ? {
+            id: cursor,
+          }
+        : undefined,
     orderBy: {
       createdAt: "desc",
     },
@@ -96,4 +102,92 @@ export const getTweetsByUsername = async (username: string, cursor?: number) => 
   return tweets;
 };
 
-export type TweetWithMeta = Awaited<ReturnType<typeof getTweetsByUsername>>[0];
+export const getTweetWithID = async (id: number) => {
+  let userId = undefined;
+  if (isAuthenticated()) {
+    userId = getUserId();
+  }
+
+  const tweet = await prisma.tweet.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      _count: {
+        select: {
+          likes: true,
+          replies: true,
+          retweets: true,
+        },
+      },
+      retweetOf: {
+        select: {
+          id: true,
+          content: true,
+          createdAt: true,
+          author: {
+            select: {
+              id: true,
+              username: true,
+              name: true,
+              profileImage: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+              replies: true,
+              retweets: true,
+            },
+          },
+          likes: {
+            where: {
+              userId,
+            },
+            select: {
+              userId: true,
+            },
+          },
+          retweets: {
+            where: {
+              authorId: userId,
+            },
+            select: {
+              authorId: true,
+            },
+          },
+        },
+      },
+      author: {
+        select: {
+          id: true,
+          username: true,
+          name: true,
+          profileImage: true,
+        },
+      },
+      retweets: {
+        where: {
+          authorId: userId,
+        },
+        select: {
+          authorId: true,
+        },
+      },
+      likes: {
+        where: {
+          userId,
+        },
+        select: {
+          userId: true,
+        },
+      },
+    },
+  });
+
+  return tweet;
+};
+
+export type UserTweetsWithMeta = Awaited<ReturnType<typeof getTweetsByUsername>>[0];
+
+export type TweetWithMeta = NonNullable<Awaited<ReturnType<typeof getTweetWithID>>>;
