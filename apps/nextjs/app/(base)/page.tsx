@@ -6,7 +6,7 @@ import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 export default async function Web() {
   const user = await getCurrentLoggedInUser();
   return (
-    <div className="w-full min-h-full max-w-[600px] border-r border-solid border-gray-700">
+    <>
       <div className="p-4 border-b border-solid border-gray-700 w-full">
         <h1 className="text-white font-bold text-xl">Home</h1>
       </div>
@@ -24,6 +24,6 @@ export default async function Web() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

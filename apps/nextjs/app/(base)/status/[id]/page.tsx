@@ -65,7 +65,7 @@ export default async function TweetStatus({
   const tweetInfo = getTweetInfo(tweet);
 
   return (
-    <div className="w-full min-h-full max-w-[600px] border-r border-solid border-gray-700">
+    <>
       {/* Header */}
       <div className="h-14 w-full px-4 flex items-center">
         <div className="min-w-[56px] flex items-center">
@@ -120,7 +120,7 @@ export default async function TweetStatus({
           tweetId={tweetInfo.id}
         />
       </article>
-    </div>
+    </>
   );
 }
 

@@ -1,4 +1,10 @@
-import { Home, HomeFilled, Profile, ProfileFilled, TwitterLogo } from "ui/icons";
+import {
+  Home,
+  HomeFilled,
+  Profile,
+  ProfileFilled,
+  TwitterLogo,
+} from "ui/icons";
 import { ButtonOrLink } from "components/ButtonOrLink";
 import { clearAuthCookie } from "utils/auth";
 import { getCurrentLoggedInUser } from "utils/user";
@@ -6,7 +12,6 @@ import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 import { TweetButton } from "./components/TweetButtonWithModal";
 import { ProfileButton } from "./components/ProfileButton";
 import { NavItem } from "./components/NavItem";
-
 
 const LoggedOutFooter = () => (
   <div className="fixed flex bottom-0 left-0 right-0 h-[4.5rem] bg-primary-blue">
@@ -35,7 +40,7 @@ const LoggedOutFooter = () => (
 );
 
 export default async function RootLayout({
-  children
+  children,
 }: {
   children: React.ReactNode;
 }) {
@@ -66,7 +71,11 @@ export default async function RootLayout({
                   Home
                 </NavItem>
                 {isLoggedIn && (
-                  <NavItem href={`/${user.username}`} icon={<Profile />} activeIcon={<ProfileFilled />}>
+                  <NavItem
+                    href={`/${user.username}`}
+                    icon={<Profile />}
+                    activeIcon={<ProfileFilled />}
+                  >
                     Profile
                   </NavItem>
                 )}
@@ -89,7 +98,11 @@ export default async function RootLayout({
             )}
           </div>
         </header>
-        <main className="flex-[8] w-full overflow-y-auto">{children}</main>
+        <main className="flex-[8] w-full overflow-y-auto">
+          <div className="w-full min-h-full max-w-[600px] border-r border-solid border-gray-700">
+            {children}
+          </div>
+        </main>
       </div>
       {!isLoggedIn && <LoggedOutFooter />}
     </>
