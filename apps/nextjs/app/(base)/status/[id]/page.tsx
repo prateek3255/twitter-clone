@@ -123,3 +123,5 @@ export default async function TweetStatus({
     </div>
   );
 }
+
+export const dynamic = 'force-dynamic'

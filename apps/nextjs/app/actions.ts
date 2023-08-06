@@ -23,8 +23,7 @@ export const createTweet = async (formData: FormData) => {
       authorId: userId,
     },
   });
-  // TODO: Make this dynamic
-  revalidatePath("/wolverine");
+  revalidatePath("/[username]");
 };
 
 export const fetchNextUserTweetsPage = async (
@@ -58,6 +57,7 @@ export const toggleTweetLike = async ({
       },
     });
   }
+  revalidatePath("status/[id]");
 };
 
 export const toggleTweetRetweet = async ({
@@ -84,4 +84,7 @@ export const toggleTweetRetweet = async ({
       },
     });
   }
+  // Sleep for 2 seconds
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  revalidatePath("status/[id]");
 };
