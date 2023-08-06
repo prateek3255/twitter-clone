@@ -47,11 +47,6 @@ export default async function RootLayout({
   const user = await getCurrentLoggedInUser();
   const isLoggedIn = !!user;
 
-  const logOut = async () => {
-    "use server";
-    clearAuthCookie();
-  };
-
   return (
     <>
       <div className="flex w-full h-full">
@@ -93,7 +88,6 @@ export default async function RootLayout({
                 name={user.name ?? ""}
                 username={user.username}
                 profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE}
-                logOut={logOut}
               />
             )}
           </div>

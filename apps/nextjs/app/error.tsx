@@ -1,13 +1,11 @@
 "use client"; // Error components must be Client Components
 import { useTransition } from "react";
-import { useRouter } from "next/navigation";
 import { ButtonOrLink } from "components/ButtonOrLink";
 import { TwitterLogo } from "ui/icons";
 import { logout } from "./actions";
 
 export default function Error() {
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
   return (
     <main className="flex h-full w-full justify-center items-center">
       <div className="max-w-md w-full border border-solid border-gray-400 rounded-xl px-10 pt-5 pb-8">
@@ -23,10 +21,9 @@ export default function Error() {
             className="w-full"
             disabled={isPending}
             onClick={() => {
-              startTransition(() => {
-                logout();
+              startTransition(async () => {
+                await logout();
               });
-              router.push("/signin");
             }}
           >
             Try again

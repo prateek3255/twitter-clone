@@ -1,17 +1,21 @@
 "use server";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { getUserId } from "utils/auth";
 import { getTweetsByUsername } from "utils/tweet";
 import { prisma } from "utils/db";
 import { revalidatePath } from "next/cache";
 
 export const logout = async () => {
+  // Sleep for 200 ms
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   cookies().set({
     name: "auth",
     value: "",
     expires: new Date("2016-10-05"),
     path: "/", // For all paths
   });
+  redirect("/signin");
 };
 
 export const createTweet = async (formData: FormData) => {

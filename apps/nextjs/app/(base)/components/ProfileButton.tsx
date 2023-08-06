@@ -1,23 +1,20 @@
 "use client";
-import React from "react";
+import React, { startTransition } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { ThreeDots, ChevronDown } from "ui/icons";
 import { Popover } from "@headlessui/react";
+import { logout } from "../../actions";
 
 const ProfileButton = ({
   name,
   username,
-  logOut,
     profileImage,
 }: {
   name: string;
   username: string;
   profileImage: string;
-  logOut: () => Promise<void>;
 }) => {
-  const router = useRouter();
-
+  const [_, startTransition] = React.useTransition();
   return (
     <Popover className="relative">
       <Popover.Button className="flex justify-between w-full items-center p-3 rounded-full hover:bg-gray-100/10">
@@ -41,9 +38,10 @@ const ProfileButton = ({
       <Popover.Panel className="bg-black rounded-2xl absolute z-10 transform left-0 bottom-[84px] py-2 w-[300px] shadow-[rgba(255,_255,_255,_0.2)_0px_0px_15px,_rgba(255,_255,_255,_0.15)_0px_0px_3px_1px]">
         <button
           className="text-white text-left text-base rounded-lg font-bold w-full hover:bg-gray-100/10 py-3 px-4"
-          onClick={async () => {
-            await logOut();
-            router.push("/signin");
+          onClick={() => {
+            startTransition(async () => {
+               await logout();
+            })
           }}
         >
           Log out @{username}
