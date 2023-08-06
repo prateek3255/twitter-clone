@@ -13,6 +13,7 @@ export const TweetButton = ({
   profileImage: string;
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [_, startTransition] = React.useTransition();
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
   function closeModal() {
@@ -71,9 +72,11 @@ export const TweetButton = ({
                     <Cross aria-label="Close modal" />
                   </button>
                   <form
-                    action={async (formData) => {
-                      await createTweet(formData);
-                      closeModal();
+                    action={(formData) => {
+                      startTransition(async () => {
+                        await createTweet(formData);
+                        closeModal();
+                      })
                     }}
                   >
                     <div className="flex mt-4">
