@@ -3,7 +3,7 @@ import { prisma } from "./db";
 import { getUserId, isAuthenticated } from "./auth";
 import "server-only";
 
-export const getUser = cache(async (userId: number) => {
+export const getUser = cache(async (userId: string) => {
   const user = await prisma.user.findUnique({
     where: {
       id: userId,

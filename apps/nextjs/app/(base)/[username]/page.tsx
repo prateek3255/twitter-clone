@@ -14,7 +14,7 @@ export default async function Profile({
     getTweetsByUsername(username),
   ]);
 
-  let currentLoggedInUserId: undefined | number = undefined;
+  let currentLoggedInUserId: undefined | string = undefined;
   if(isAuthenticated()) {
     currentLoggedInUserId = getUserId();
   }

@@ -54,9 +54,7 @@ export default async function TweetStatus({
 }: {
   params: { id: string };
 }) {
-  const tweetId = parseInt(id);
-
-  const tweet = await getTweetWithID(tweetId);
+  const tweet = await getTweetWithID(id);
 
   if (!tweet) {
     notFound();

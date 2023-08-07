@@ -19,6 +19,9 @@
     "lint": {
       "outputs": []
     },
+    "typecheck": {
+      "outputs": []
+    },
     "dev": {
       "dependsOn": [
         "^db:generate"

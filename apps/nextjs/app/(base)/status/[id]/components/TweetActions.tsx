@@ -14,7 +14,7 @@ const TweetActions = ({
 }: {
   hasLiked: boolean;
   hasRetweeted: boolean;
-  tweetId: number;
+  tweetId: string;
 }) => {
   // TODO: Figure out why this does not work
   const [optimisticHasLiked, toggleOptimisticHasLiked] = useOptimistic(

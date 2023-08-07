@@ -8,7 +8,7 @@ import { logout } from "../../actions";
 const ProfileButton = ({
   name,
   username,
-    profileImage,
+  profileImage,
 }: {
   name: string;
   username: string;
@@ -40,8 +40,8 @@ const ProfileButton = ({
           className="text-white text-left text-base rounded-lg font-bold w-full hover:bg-gray-100/10 py-3 px-4"
           onClick={() => {
             startTransition(async () => {
-               await logout();
-            })
+              await logout();
+            });
           }}
         >
           Log out @{username}

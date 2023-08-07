@@ -17,10 +17,10 @@ export interface TweetProps {
   likes: number;
   replies: number;
   retweets: number;
-  id: number;
-  onLikeClick?: (tweetId: number) => void;
+  id: string;
+  onLikeClick?: (tweetId: string) => void;
   hasLiked?: boolean;
-  onRetweetClick?: (tweetId: number) => void;
+  onRetweetClick?: (tweetId: string) => void;
   hasRetweeted?: boolean;
 }
 

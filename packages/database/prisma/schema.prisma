@@ -12,7 +12,7 @@ datasource db {
 }
 
 model User {
-  id      Int      @id @default(autoincrement())
+  id      String      @id @default(uuid())
   email   String   @unique
   username String   @unique
   name    String?
@@ -27,30 +27,30 @@ model User {
 }
 
 model Tweet {
-  id    Int @id @default(autoincrement())
+  id    String @id @default(uuid())
   createdAt DateTime @default(now())
   content String @db.VarChar(300)
   author User @relation(fields: [authorId], references: [id])
-  authorId Int
+  authorId String
   likes TweetLike[]
-  replyId Int?
-  replyTo Tweet? @relation("TweetReplies", fields: [replyId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  replyToId String?
+  replyTo Tweet? @relation("TweetReplies", fields: [replyToId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   replies Tweet[] @relation("TweetReplies")
-  retweetId Int?
-  retweetOf Tweet? @relation("TweetRetweets", fields: [retweetId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  retweetOfId String?
+  retweetOf Tweet? @relation("TweetRetweets", fields: [retweetOfId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   retweets Tweet[] @relation("TweetRetweets")
 
   @@index([authorId])
-  @@index([replyId])
-  @@index([retweetId])
+  @@index([replyToId])
+  @@index([retweetOfId])
 }
 
 model TweetLike {
   createdAt DateTime @default(now())
   user User @relation(fields: [userId], references: [id])
-  userId Int
+  userId String
   tweet Tweet @relation(fields: [tweetId], references: [id])
-  tweetId Int
+  tweetId String
   @@id([userId, tweetId])
 
   @@index([userId])

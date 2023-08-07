@@ -63,13 +63,13 @@ type Action =
     }
   | {
       type: "toggle_tweet_like";
-      tweetId: number;
-      currentLoggedInUserId: number;
+      tweetId: string;
+      currentLoggedInUserId: string;
     }
   | {
       type: "toggle_tweet_retweet";
-      tweetId: number;
-      currentLoggedInUserId: number;
+      tweetId: string;
+      currentLoggedInUserId: string;
     };
 
 const reducer = (state: State, action: Action): State => {
@@ -134,7 +134,7 @@ export const InfiniteUserTweets = ({
   username: string;
   profileImage: string;
   name?: string | null;
-  currentLoggedInUserId?: number;
+  currentLoggedInUserId?: string;
 }) => {
   const [{ tweets, isLastPage }, dispatch] = React.useReducer(reducer, {
     tweets: mapToTweet(initialTweets, { name, profileImage, username }),
@@ -196,14 +196,14 @@ export const InfiniteUserTweets = ({
             dispatch({
               type: "toggle_tweet_retweet",
               tweetId,
-              currentLoggedInUserId: currentLoggedInUserId ?? 0,
+              currentLoggedInUserId: currentLoggedInUserId ?? '',
             });
           }}
           onLikeClick={(tweetId) => {
             dispatch({
               type: "toggle_tweet_like",
               tweetId,
-              currentLoggedInUserId: currentLoggedInUserId ?? 0,
+              currentLoggedInUserId: currentLoggedInUserId ?? '',
             });
           }}
         />

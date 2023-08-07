@@ -32,7 +32,7 @@ export const createTweet = async (formData: FormData) => {
 
 export const fetchNextUserTweetsPage = async (
   username: string,
-  cursor?: number
+  cursor?: string
 ) => {
   const tweets = await getTweetsByUsername(username, cursor);
   return tweets;
@@ -42,7 +42,7 @@ export const toggleTweetLike = async ({
   tweetId,
   hasLiked,
 }: {
-  tweetId: number;
+  tweetId: string;
   hasLiked: boolean;
 }) => {
   const userId = getUserId();
@@ -68,7 +68,7 @@ export const toggleTweetRetweet = async ({
   tweetId,
   hasRetweeted,
 }: {
-  tweetId: number;
+  tweetId: string;
   hasRetweeted: boolean;
 }) => {
   const userId = getUserId();
@@ -77,14 +77,14 @@ export const toggleTweetRetweet = async ({
       data: {
         content: "",
         authorId: userId,
-        retweetId: tweetId,
+        retweetOfId: tweetId,
       },
     });
   } else {
     await prisma.tweet.deleteMany({
       where: {
         authorId: userId,
-        retweetId: tweetId,
+        retweetOfId: tweetId,
       },
     });
   }

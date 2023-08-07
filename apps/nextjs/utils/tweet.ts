@@ -4,7 +4,7 @@ import "server-only";
 
 export const getTweetsByUsername = async (
   username: string,
-  cursor?: number
+  cursor?: string
 ) => {
   let userId = undefined;
   if (isAuthenticated()) {
@@ -88,9 +88,9 @@ export const getTweetsByUsername = async (
       },
     },
     take: 4,
-    skip: typeof cursor === "number" ? 1 : 0,
+    skip: typeof cursor === "string" ? 1 : 0,
     cursor:
-      typeof cursor === "number"
+      typeof cursor === "string"
         ? {
             id: cursor,
           }
@@ -102,7 +102,7 @@ export const getTweetsByUsername = async (
   return tweets;
 };
 
-export const getTweetWithID = async (id: number) => {
+export const getTweetWithID = async (id: string) => {
   let userId = undefined;
   if (isAuthenticated()) {
     userId = getUserId();

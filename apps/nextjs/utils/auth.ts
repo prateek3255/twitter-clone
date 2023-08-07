@@ -65,7 +65,7 @@ const comparePassword = async (password: string, hashedPassword: string) => {
   return isValid;
 };
 
-const setAuthCookie = ({ userId }: { userId: number }) => {
+const setAuthCookie = ({ userId }: { userId: string }) => {
   const signedToken = jwt.sign({ userId }, process.env.COOKIE_SECRET ?? "", {
     expiresIn: "7d",
   });
@@ -93,7 +93,7 @@ const isAuthenticated = () => {
 const getUserId = () => {
   const cookie = cookies().get("auth")?.value ?? "";
   const decodedToken = jwt.decode(cookie);
-  if (typeof decodedToken === "string" || typeof decodedToken?.userId !== 'number') {
+  if (typeof decodedToken === "string" || typeof decodedToken?.userId !== 'string') {
     throw new Error("Invalid token");
   }
   return decodedToken?.userId;
