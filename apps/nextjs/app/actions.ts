@@ -20,6 +20,9 @@ export const logout = async () => {
 
 export const createTweet = async (formData: FormData) => {
   const userId = getUserId();
+  if (!userId) {
+    throw new Error("User not found");
+  }
   const tweet = formData.get("tweet") as string;
   await prisma.tweet.create({
     data: {
@@ -46,6 +49,9 @@ export const toggleTweetLike = async ({
   hasLiked: boolean;
 }) => {
   const userId = getUserId();
+  if (!userId) {
+    throw new Error("User not found");
+  }
   if (hasLiked) {
     await prisma.tweetLike.create({
       data: {
@@ -72,6 +78,9 @@ export const toggleTweetRetweet = async ({
   hasRetweeted: boolean;
 }) => {
   const userId = getUserId();
+  if (!userId) {
+    throw new Error("User not found");
+  }
   if (hasRetweeted) {
     await prisma.tweet.create({
       data: {

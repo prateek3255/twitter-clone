@@ -94,7 +94,7 @@ const getUserId = () => {
   const cookie = cookies().get("auth")?.value ?? "";
   const decodedToken = jwt.decode(cookie);
   if (typeof decodedToken === "string" || typeof decodedToken?.userId !== 'string') {
-    throw new Error("Invalid token");
+    return null;
   }
   return decodedToken?.userId;
 }

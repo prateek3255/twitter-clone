@@ -1,6 +1,6 @@
 import { cache } from "react";
 import { prisma } from "./db";
-import { getUserId, isAuthenticated } from "./auth";
+import { getUserId } from "./auth";
 import "server-only";
 
 export const getUser = cache(async (userId: string) => {
@@ -18,9 +18,8 @@ export const getUser = cache(async (userId: string) => {
 });
 
 export const getCurrentLoggedInUser = async () => {
-  const isLoggedIn = isAuthenticated();
-  if (isLoggedIn) {
-    const userId = getUserId();
+  const userId = getUserId();
+  if (userId) {
     const user = await getUser(userId);
     return user;
   }

@@ -134,7 +134,7 @@ export const InfiniteUserTweets = ({
   username: string;
   profileImage: string;
   name?: string | null;
-  currentLoggedInUserId?: string;
+  currentLoggedInUserId?: string | null;
 }) => {
   const [{ tweets, isLastPage }, dispatch] = React.useReducer(reducer, {
     tweets: mapToTweet(initialTweets, { name, profileImage, username }),

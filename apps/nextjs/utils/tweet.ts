@@ -1,15 +1,12 @@
 import { prisma } from "./db";
-import { getUserId, isAuthenticated } from "./auth";
+import { getUserId } from "./auth";
 import "server-only";
 
 export const getTweetsByUsername = async (
   username: string,
   cursor?: string
 ) => {
-  let userId = undefined;
-  if (isAuthenticated()) {
-    userId = getUserId();
-  }
+  const userId = getUserId();
   const tweets = await prisma.tweet.findMany({
     where: {
       author: {
@@ -54,7 +51,7 @@ export const getTweetsByUsername = async (
           },
           likes: {
             where: {
-              userId,
+              userId: userId ?? undefined,
             },
             select: {
               userId: true,
@@ -62,7 +59,7 @@ export const getTweetsByUsername = async (
           },
           retweets: {
             where: {
-              authorId: userId,
+              authorId: userId ?? undefined,
             },
             select: {
               authorId: true,
@@ -72,7 +69,7 @@ export const getTweetsByUsername = async (
       },
       retweets: {
         where: {
-          authorId: userId,
+          authorId: userId ?? undefined,
         },
         select: {
           authorId: true,
@@ -80,7 +77,7 @@ export const getTweetsByUsername = async (
       },
       likes: {
         where: {
-          userId,
+          userId: userId ?? undefined,
         },
         select: {
           userId: true,
@@ -103,10 +100,7 @@ export const getTweetsByUsername = async (
 };
 
 export const getTweetWithID = async (id: string) => {
-  let userId = undefined;
-  if (isAuthenticated()) {
-    userId = getUserId();
-  }
+  const userId = getUserId();
 
   const tweet = await prisma.tweet.findUnique({
     where: {
@@ -142,7 +136,7 @@ export const getTweetWithID = async (id: string) => {
           },
           likes: {
             where: {
-              userId,
+              userId: userId ?? undefined,
             },
             select: {
               userId: true,
@@ -150,7 +144,7 @@ export const getTweetWithID = async (id: string) => {
           },
           retweets: {
             where: {
-              authorId: userId,
+              authorId: userId ?? undefined,
             },
             select: {
               authorId: true,
@@ -168,7 +162,7 @@ export const getTweetWithID = async (id: string) => {
       },
       retweets: {
         where: {
-          authorId: userId,
+          authorId: userId ?? undefined,
         },
         select: {
           authorId: true,
@@ -176,7 +170,7 @@ export const getTweetWithID = async (id: string) => {
       },
       likes: {
         where: {
-          userId,
+          userId: userId ?? undefined,
         },
         select: {
           userId: true,
