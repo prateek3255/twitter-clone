@@ -1,5 +1,6 @@
 import { BackButton } from "ui/icons";
 import Image from "next/image";
+import Link from "next/link";
 import { Retweet } from "ui/icons";
 import { format } from "date-fns";
 import { DEFAULT_PROFILE_IMAGE } from "constants/user";
@@ -94,9 +95,9 @@ export default async function TweetStatus({
             alt={`{username}'s profile image`}
           />
           <div className="flex flex-col w-full">
-            <span className="text-white font-bold text-sm">
+            <Link href={`/${tweetInfo.username}`} className="text-white font-bold text-sm hover:underline">
               {tweetInfo.name}
-            </span>
+            </Link>
             <span className="text-gray-500 text-sm">@{tweetInfo.username}</span>
           </div>
         </div>

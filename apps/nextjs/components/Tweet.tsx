@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { startTransition } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
@@ -40,17 +41,19 @@ export const Tweet = ({
   onRetweetClick,
   hasRetweeted,
 }: TweetProps) => {
-
   const router = useRouter();
 
   const handleTweetClick = () => {
     const isTextSelected = window.getSelection()?.toString();
     if (isTextSelected) return;
     router.push(`/status/${id}`);
-  }
+  };
 
   return (
-    <article onClick={handleTweetClick} className="p-4 border-b border-solid border-gray-700 cursor-pointer">
+    <article
+      onClick={handleTweetClick}
+      className="p-4 border-b border-solid border-gray-700 cursor-pointer"
+    >
       {hasRetweeted && (
         <div className="flex items-center gap-3 text-gray-500 text-xs ml-6 mb-1 font-bold mt-[-4px]">
           <Retweet className="w-4 h-4" />
@@ -67,7 +70,15 @@ export const Tweet = ({
         />
         <div className="flex flex-col w-full">
           <div className="flex items-center gap-1">
-            <span className="text-white font-bold text-sm">{name}</span>
+            <Link
+              href={`/${username}`}
+              onClick={(event) => {
+                event.stopPropagation();
+              }}
+              className="text-white font-bold text-sm hover:underline"
+            >
+              {name}
+            </Link>
             <span className="text-gray-500 text-sm">@{username}</span>
             <span className="text-gray-500 text-sm">·</span>
             <span className="text-gray-500 text-sm">
