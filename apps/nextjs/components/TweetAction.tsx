@@ -58,7 +58,10 @@ const TweetAction = (props: TweetActionProps) => {
       className={`flex items-center gap-3 ${
         props.active ? activeColor : "text-gray-500"
       } transition-colors ${hoverBg}`}
-      onClick={props.action}
+      onClick={(event) => {
+        event.stopPropagation();
+        props.action();
+      }}
     >
       <div className={`relative ${props.size === 'normal' ? '[&_>_svg]:w-6 [&_>_svg]:h-6' : ''}`}>
         <div className="absolute top-0 left-0 right-0 bottom-0 rounded-full m-[-8px] transition-colors"></div>

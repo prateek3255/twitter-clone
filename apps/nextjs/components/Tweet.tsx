@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { startTransition } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import { Retweet } from "ui/icons";
@@ -39,8 +40,17 @@ export const Tweet = ({
   onRetweetClick,
   hasRetweeted,
 }: TweetProps) => {
+
+  const router = useRouter();
+
+  const handleTweetClick = () => {
+    const isTextSelected = window.getSelection()?.toString();
+    if (isTextSelected) return;
+    router.push(`/status/${id}`);
+  }
+
   return (
-    <article className="p-4 border-b border-solid border-gray-700">
+    <article onClick={handleTweetClick} className="p-4 border-b border-solid border-gray-700 cursor-pointer">
       {hasRetweeted && (
         <div className="flex items-center gap-3 text-gray-500 text-xs ml-6 mb-1 font-bold mt-[-4px]">
           <Retweet className="w-4 h-4" />
