@@ -82,6 +82,8 @@ export const toggleTweetRetweet = async ({
     throw new Error("User not found");
   }
   if (hasRetweeted) {
+    // When creating a retweet original tweet id is passed creating
+    // a new tweet
     await prisma.tweet.create({
       data: {
         content: "",
@@ -90,10 +92,39 @@ export const toggleTweetRetweet = async ({
       },
     });
   } else {
+    // Check if current user is author of the original tweet
+    // and the current tweet is not a retweet
+    const originalTweet = await prisma.tweet.findFirst({
+      where: {
+        id: tweetId,
+        authorId: userId,
+      },
+      select: {
+        retweetOfId: true,
+      }
+    });
+
+    const isCurrentTweetOriginal = typeof originalTweet?.retweetOfId !== "string";
+
+    // If the current user is author of the tweet, delete
+    // all retweet of the tweet by the author
+    if (isCurrentTweetOriginal) {
+      const hadRetweeted = await prisma.tweet.deleteMany({
+        where: {
+          retweetOfId: tweetId,
+          authorId: userId,
+        },
+      });
+      if (hadRetweeted.count > 0) {
+        return;
+      }
+    }
+
+    // When deleting a retweet, the tweet id of the retweet is passed
+    // so we use it to delete the retweet
     await prisma.tweet.deleteMany({
       where: {
-        authorId: userId,
-        retweetOfId: tweetId,
+        id: tweetId,
       },
     });
   }

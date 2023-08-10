@@ -15,7 +15,7 @@ const mapToTweet = (
     // original tweet to the tweet object.
     if (tweet.retweetOf) {
       return {
-        id: tweet.retweetOf.id,
+        id: tweet.id,
         content: tweet.retweetOf.content,
         createdAt: tweet.retweetOf.createdAt,
         name: tweet.retweetOf.author.name ?? "",

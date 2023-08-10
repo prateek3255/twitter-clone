@@ -92,7 +92,7 @@ export default async function TweetStatus({
             width={48}
             height={48}
             className="rounded-full max-h-[48px]"
-            alt={`{username}'s profile image`}
+            alt={`${tweetInfo.username}'s profile image`}
           />
           <div className="flex flex-col w-full">
             <Link href={`/${tweetInfo.username}`} className="text-white font-bold text-sm hover:underline">
