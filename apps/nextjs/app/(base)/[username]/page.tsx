@@ -13,17 +13,12 @@ export default async function Profile({
     getUserProfile(username),
     getTweetsByUsername(username),
   ]);
-
   
-  const currentLoggedInUserId = getUserId();
-  
-
   return (
     <>
       {/** Tweets */}
       <div>
         <InfiniteUserTweets
-          currentLoggedInUserId={currentLoggedInUserId}
           username={username}
           profileImage={userProfile?.profileImage ?? DEFAULT_PROFILE_IMAGE}
           name={userProfile?.name}
