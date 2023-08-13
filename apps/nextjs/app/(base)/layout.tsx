@@ -79,6 +79,7 @@ export default async function RootLayout({
                 {isLoggedIn && (
                   <TweetButton
                     profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE}
+                    loggedInUserName={user.name ?? user.username}
                   />
                 )}
               </div>

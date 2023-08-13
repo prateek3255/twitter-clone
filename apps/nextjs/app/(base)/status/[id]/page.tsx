@@ -7,6 +7,8 @@ import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 import { TweetActions } from "./components/TweetActions";
 import { getTweetWithID, TweetWithMeta } from "utils/tweet";
 import { notFound } from "next/navigation";
+import { getUserId } from "utils/auth";
+import { getCurrentLoggedInUser } from "utils/user";
 
 const TweetStat = ({ label, count }: { label: string; count: number }) => (
   <div className="flex gap-1">
@@ -62,6 +64,7 @@ export default async function TweetStatus({
   }
 
   const tweetInfo = getTweetInfo(tweet);
+  const user = await getCurrentLoggedInUser();
 
   return (
     <>
@@ -95,7 +98,10 @@ export default async function TweetStatus({
             alt={`${tweetInfo.username}'s profile image`}
           />
           <div className="flex flex-col w-full">
-            <Link href={`/${tweetInfo.username}`} className="text-white font-bold text-sm hover:underline">
+            <Link
+              href={`/${tweetInfo.username}`}
+              className="text-white font-bold text-sm hover:underline"
+            >
               {tweetInfo.name}
             </Link>
             <span className="text-gray-500 text-sm">@{tweetInfo.username}</span>
@@ -116,11 +122,28 @@ export default async function TweetStatus({
         <TweetActions
           hasLiked={tweetInfo.hasLiked}
           hasRetweeted={tweetInfo.hasRetweeted}
-          tweetId={tweetInfo.id}
+          tweetInfo={{
+            id: tweetInfo.id,
+            content: tweetInfo.content,
+            createdAt: tweetInfo.createdAt,
+            name: tweetInfo.name,
+            profileImage: tweetInfo.profileImage,
+            username: tweetInfo.username,
+          }}
+          currentLoggedInUser={
+            user
+              ? {
+                  id: user?.id,
+                  name: user?.name ?? undefined,
+                  username: user?.username,
+                  profileImage: user?.profileImage,
+                }
+              : undefined
+          }
         />
       </article>
     </>
   );
 }
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";

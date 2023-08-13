@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { createTweet } from "../../actions";
-import { TweetCTA } from "./TweetCTA";
+import { TweetCTA } from "components/TweetCTA";
 
 export const CreateTweetHomePage = () => {
   const formRef = React.useRef<HTMLFormElement>(null);

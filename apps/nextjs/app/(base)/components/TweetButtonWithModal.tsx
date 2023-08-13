@@ -5,13 +5,9 @@ import { Dialog, Transition } from "@headlessui/react";
 import { ButtonOrLink } from "components/ButtonOrLink";
 import { Cross } from "ui/icons";
 import { createTweet } from "app/actions";
-import { TweetCTA } from "./TweetCTA";
+import { TweetCTA } from "components/TweetCTA";
 
-export const TweetButton = ({
-  profileImage,
-}: {
-  profileImage: string;
-}) => {
+export const TweetButton = ({ profileImage, loggedInUserName }: { profileImage: string, loggedInUserName: string }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [_, startTransition] = React.useTransition();
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
@@ -76,7 +72,7 @@ export const TweetButton = ({
                       startTransition(async () => {
                         await createTweet(formData);
                         closeModal();
-                      })
+                      });
                     }}
                   >
                     <div className="flex mt-4">
@@ -85,10 +81,14 @@ export const TweetButton = ({
                         className="rounded-full object-contain max-h-[48px]"
                         width={48}
                         height={48}
-                        alt="Prateek's profile image"
+                        alt={`${loggedInUserName}'s profile image`}
                       />
+                      <label htmlFor="tweet" className="sr-only">
+                        Create a tweet
+                      </label>
                       <textarea
                         ref={textAreaRef}
+                        id="tweet"
                         name="tweet"
                         required
                         maxLength={280}

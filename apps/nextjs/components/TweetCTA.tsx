@@ -2,7 +2,7 @@
 import { experimental_useFormStatus as useFormStatus } from "react-dom";
 import { ButtonOrLink } from "components/ButtonOrLink";
 
-export const TweetCTA = () => {
+export const TweetCTA = ({ label }: { label?: string }) => {
   const { pending } = useFormStatus();
 
   return (
@@ -12,7 +12,7 @@ export const TweetCTA = () => {
       type="submit"
       disabled={pending}
     >
-      Tweet
+      {label ?? "Tweet"}
     </ButtonOrLink>
   );
 };

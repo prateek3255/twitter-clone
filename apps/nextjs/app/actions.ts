@@ -33,6 +33,27 @@ export const createTweet = async (formData: FormData) => {
   revalidatePath("/[username]");
 };
 
+export const replyToTweet = async ({
+  replyToTweetId,
+  content,
+}: {
+  replyToTweetId: string;
+  content: string;
+}) => {
+  const userId = getUserId();
+  if (!userId) {
+    throw new Error("User not found");
+  }
+  await prisma.tweet.create({
+    data: {
+      content,
+      authorId: userId,
+      replyToId: replyToTweetId,
+    },
+  });
+  revalidatePath("status/[id]");
+};
+
 export const fetchNextUserTweetsPage = async (
   username: string,
   cursor?: string
@@ -101,10 +122,11 @@ export const toggleTweetRetweet = async ({
       },
       select: {
         retweetOfId: true,
-      }
+      },
     });
 
-    const isCurrentTweetOriginal = typeof originalTweet?.retweetOfId !== "string";
+    const isCurrentTweetOriginal =
+      typeof originalTweet?.retweetOfId !== "string";
 
     // If the current user is author of the tweet, delete
     // all retweet of the tweet by the author
