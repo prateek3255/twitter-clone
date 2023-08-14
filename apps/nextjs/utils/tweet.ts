@@ -68,6 +68,14 @@ export const getTweetsByUsername = async (
           },
         },
       },
+      author: {
+        select: {
+          id: true,
+          username: true,
+          name: true,
+          profileImage: true,
+        },
+      },
       retweets: {
         where: {
           authorId: userId ?? undefined,
@@ -160,7 +168,7 @@ export const getTweetWithID = async (id: string) => {
           name: true,
           profileImage: true,
         },
-      },
+      }, 
       retweets: {
         where: {
           authorId: userId ?? undefined,
@@ -234,6 +242,14 @@ export const getTweetReplies = async (id: string, cursor?: string) => {
               authorId: true,
             },
           },
+        },
+      },
+      author: {
+        select: {
+          id: true,
+          username: true,
+          name: true,
+          profileImage: true,
         },
       },
       retweets: {

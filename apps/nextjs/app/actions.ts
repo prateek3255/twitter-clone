@@ -54,14 +54,6 @@ export const replyToTweet = async ({
   revalidatePath("status/[id]");
 };
 
-export const fetchNextUserTweetsPage = async (
-  username: string,
-  cursor?: string
-) => {
-  const tweets = await getTweetsByUsername(username, cursor);
-  return tweets;
-};
-
 export const toggleTweetLike = async ({
   tweetId,
   hasLiked,

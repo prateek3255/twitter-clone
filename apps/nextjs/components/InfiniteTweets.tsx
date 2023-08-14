@@ -3,14 +3,10 @@ import React from "react";
 import { Tweet } from "components/Tweet";
 import type { UserTweetsWithMeta } from "utils/tweet";
 import { useIntersectionObserver } from "hooks/useIntesectionObserver";
-import { fetchNextUserTweetsPage } from "app/actions";
 import { Spinner } from "components/Spinner";
 import { LoggedInUserBaseInfo } from "types/common";
 
-const mapToTweet = (
-  tweets: Array<UserTweetsWithMeta>,
-  userInfo: { name?: string | null; profileImage: string; username: string }
-) => {
+const mapToTweet = (tweets: Array<UserTweetsWithMeta>) => {
   return tweets.map((tweet) => {
     // In case of retweeted tweet, we add the info related to the
     // original tweet to the tweet object.
@@ -34,9 +30,9 @@ const mapToTweet = (
       id: tweet.id,
       content: tweet.content,
       createdAt: tweet.createdAt,
-      name: userInfo.name ?? "",
-      profileImage: userInfo.profileImage,
-      username: userInfo.username,
+      name: tweet.author.name ?? "",
+      profileImage: tweet.author.profileImage,
+      username: tweet.author.username,
       likes: tweet._count.likes,
       replies: tweet._count.replies,
       retweets: tweet._count.retweets,
@@ -71,9 +67,9 @@ type Action =
       tweetId: string;
     }
   | {
-    type: "add_reply";
-    tweetId: string;
-  }
+      type: "add_reply";
+      tweetId: string;
+    };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -139,21 +135,17 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-export const InfiniteUserTweets = ({
+export const InfiniteTweets = ({
   initialTweets,
-  username,
-  profileImage,
-  name,
   currentLoggedInUser,
+  fetchNextPage
 }: {
   initialTweets: Array<UserTweetsWithMeta>;
-  username: string;
-  profileImage: string;
-  name?: string | null;
-  currentLoggedInUser?: LoggedInUserBaseInfo
+  currentLoggedInUser?: LoggedInUserBaseInfo;
+  fetchNextPage: (cursor: string) => Promise<Array<UserTweetsWithMeta>>;
 }) => {
   const [{ tweets, isLastPage }, dispatch] = React.useReducer(reducer, {
-    tweets: mapToTweet(initialTweets, { name, profileImage, username }),
+    tweets: mapToTweet(initialTweets),
     isLastPage: false,
   });
   const [isLoading, setIsLoading] = React.useState(false);
@@ -168,11 +160,7 @@ export const InfiniteUserTweets = ({
     setPrevInitialTweets(initialTweets);
     dispatch({
       type: "update_latest_tweet",
-      newInitialTweets: mapToTweet(initialTweets, {
-        name,
-        profileImage,
-        username,
-      }),
+      newInitialTweets: mapToTweet(initialTweets),
     });
   }
 
@@ -182,25 +170,17 @@ export const InfiniteUserTweets = ({
         return;
       }
       setIsLoading(true);
-      const nextTweets = await fetchNextUserTweetsPage(username, lastTweetId);
+      const nextTweets = await fetchNextPage(lastTweetId);
       setIsLoading(false);
       dispatch({
         type: "add_tweets",
-        newTweets: mapToTweet(nextTweets, { name, profileImage, username }),
+        newTweets: mapToTweet(nextTweets),
       });
     };
     if (isVisible) {
       updateTweets();
     }
-  }, [
-    isVisible,
-    username,
-    lastTweetId,
-    isLoading,
-    isLastPage,
-    name,
-    profileImage,
-  ]);
+  }, [isVisible, lastTweetId, isLoading, isLastPage, fetchNextPage]);
 
   return (
     <>
