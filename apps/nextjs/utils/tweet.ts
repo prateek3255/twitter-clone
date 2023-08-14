@@ -12,6 +12,7 @@ export const getTweetsByUsername = async (
       author: {
         username,
       },
+      replyToId: null,
       NOT: {
         // Hide user's own retweets from their profile
         retweetOf: {

@@ -1,6 +1,6 @@
 import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 import { getTweetsByUsername } from "utils/tweet";
-import { getUserProfile } from "utils/user";
+import { getCurrentLoggedInUser, getUserProfile } from "utils/user";
 import { InfiniteUserTweets } from "./components/InfiniteUserTweets";
 
 export default async function Profile({
@@ -8,11 +8,12 @@ export default async function Profile({
 }: {
   params: { username: string };
 }) {
-  const [userProfile, tweets] = await Promise.all([
+  const [userProfile, tweets, currentLoggedInUser] = await Promise.all([
     getUserProfile(username),
     getTweetsByUsername(username),
+    getCurrentLoggedInUser(),
   ]);
-  
+
   return (
     <>
       {/** Tweets */}
@@ -22,6 +23,16 @@ export default async function Profile({
           profileImage={userProfile?.profileImage ?? DEFAULT_PROFILE_IMAGE}
           name={userProfile?.name}
           initialTweets={tweets}
+          currentLoggedInUser={
+            currentLoggedInUser
+              ? {
+                  id: currentLoggedInUser.id,
+                  username: currentLoggedInUser.username,
+                  name: currentLoggedInUser.name ?? undefined,
+                  profileImage: currentLoggedInUser.profileImage,
+                }
+              : undefined
+          }
         />
       </div>
     </>

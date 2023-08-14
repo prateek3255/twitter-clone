@@ -14,11 +14,13 @@ const ReplyModal = ({
   closeModal,
   originalTweet,
   currentLoggedInUser,
+  onReply,
 }: {
   isOpen: boolean;
   closeModal: () => void;
   originalTweet: TweetBaseInfo;
   currentLoggedInUser?: LoggedInUserBaseInfo;
+  onReply?: () => void;
 }) => {
   const [_, startTransition] = React.useTransition();
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
@@ -108,6 +110,7 @@ const ReplyModal = ({
                         content,
                         replyToTweetId: originalTweet.id,
                       });
+                      onReply?.();
                       closeModal();
                     });
                   }}

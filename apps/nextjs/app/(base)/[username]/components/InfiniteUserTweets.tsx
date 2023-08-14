@@ -5,6 +5,7 @@ import type { UserTweetsWithMeta } from "utils/tweet";
 import { useIntersectionObserver } from "hooks/useIntesectionObserver";
 import { fetchNextUserTweetsPage } from "app/actions";
 import { Spinner } from "components/Spinner";
+import { LoggedInUserBaseInfo } from "types/common";
 
 const mapToTweet = (
   tweets: Array<UserTweetsWithMeta>,
@@ -68,7 +69,11 @@ type Action =
   | {
       type: "toggle_tweet_retweet";
       tweetId: string;
-    };
+    }
+  | {
+    type: "add_reply";
+    tweetId: string;
+  }
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -116,6 +121,19 @@ const reducer = (state: State, action: Action): State => {
           return tweet;
         }),
       };
+    case "add_reply":
+      return {
+        ...state,
+        tweets: state.tweets.map((tweet) => {
+          if (tweet.id === action.tweetId) {
+            return {
+              ...tweet,
+              replies: tweet.replies + 1,
+            };
+          }
+          return tweet;
+        }),
+      };
     default:
       return state;
   }
@@ -126,11 +144,13 @@ export const InfiniteUserTweets = ({
   username,
   profileImage,
   name,
+  currentLoggedInUser,
 }: {
   initialTweets: Array<UserTweetsWithMeta>;
   username: string;
   profileImage: string;
   name?: string | null;
+  currentLoggedInUser?: LoggedInUserBaseInfo
 }) => {
   const [{ tweets, isLastPage }, dispatch] = React.useReducer(reducer, {
     tweets: mapToTweet(initialTweets, { name, profileImage, username }),
@@ -200,6 +220,13 @@ export const InfiniteUserTweets = ({
               tweetId,
             });
           }}
+          onReplySuccess={(tweetId) => {
+            dispatch({
+              type: "add_reply",
+              tweetId,
+            });
+          }}
+          currentLoggedInUser={currentLoggedInUser}
         />
       ))}
       <div className="h-1" ref={endOfTweetsRef} />

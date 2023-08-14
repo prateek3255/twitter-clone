@@ -1,3 +1,4 @@
+'use client';
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +10,8 @@ import { formatDistanceForTweet } from "utils/common";
 import { toggleTweetLike, toggleTweetRetweet } from "app/actions";
 import { TweetAction } from "components/TweetAction";
 import { DEFAULT_PROFILE_IMAGE } from "constants/user";
+import { ReplyModal } from "./ReplyModal";
+import { LoggedInUserBaseInfo } from "types/common";
 
 export interface TweetProps {
   username: string;
@@ -20,10 +23,12 @@ export interface TweetProps {
   replies: number;
   retweets: number;
   id: string;
+  onReplySuccess?: (tweetId: string) => void;
   onLikeClick?: (tweetId: string) => void;
   hasLiked?: boolean;
   onRetweetClick?: (tweetId: string) => void;
   hasRetweeted?: boolean;
+  currentLoggedInUser?: LoggedInUserBaseInfo;
 }
 
 export const Tweet = ({
@@ -40,8 +45,11 @@ export const Tweet = ({
   hasLiked,
   onRetweetClick,
   hasRetweeted,
+  currentLoggedInUser,
+  onReplySuccess,
 }: TweetProps) => {
   const router = useRouter();
+  const [isReplyModalOpen, setIsReplyModalOpen] = React.useState(false);
 
   const handleTweetClick = () => {
     const isTextSelected = window.getSelection()?.toString();
@@ -50,6 +58,7 @@ export const Tweet = ({
   };
 
   return (
+    <>
     <article
       onClick={handleTweetClick}
       className="p-4 border-b border-solid border-gray-700 cursor-pointer"
@@ -92,7 +101,7 @@ export const Tweet = ({
                 size="compact"
                 type="reply"
                 count={replies}
-                action={() => {}}
+                action={() => setIsReplyModalOpen(true)}
               />
               <TweetAction
                 size="compact"
@@ -126,5 +135,20 @@ export const Tweet = ({
         </div>
       </div>
     </article>
+    <ReplyModal
+      isOpen={isReplyModalOpen}
+      closeModal={() => setIsReplyModalOpen(false)}
+      originalTweet={{
+        id,
+        username,
+        name,
+        profileImage,
+        content,
+        createdAt,
+      }}
+      currentLoggedInUser={currentLoggedInUser}
+      onReply={() => onReplySuccess?.(id)}
+    />
+    </>
   );
 };
