@@ -6,7 +6,7 @@ import { useIntersectionObserver } from "hooks/useIntesectionObserver";
 import { Spinner } from "components/Spinner";
 import { LoggedInUserBaseInfo } from "types/common";
 
-const mapToTweet = (tweets: Array<UserTweetsWithMeta>) => {
+const mapToTweet = (tweets: Array<UserTweetsWithMeta>, isLoggedIn: boolean) => {
   return tweets.map((tweet) => {
     // In case of retweeted tweet, we add the info related to the
     // original tweet to the tweet object.
@@ -21,8 +21,10 @@ const mapToTweet = (tweets: Array<UserTweetsWithMeta>) => {
         likes: tweet.retweetOf._count.likes,
         replies: tweet.retweetOf._count.replies,
         retweets: tweet.retweetOf._count.retweets,
-        hasLiked: tweet.retweetOf.likes.length > 0,
-        hasRetweeted: tweet.retweetOf.retweets.length > 0,
+        hasLiked: tweet.retweetOf.likes.length > 0 && isLoggedIn,
+        hasRetweeted: tweet.retweetOf.retweets.length > 0 && isLoggedIn,
+        originalTweetId: tweet.retweetOf.id,
+        retweetAuthor: tweet.author,
       };
     }
 
@@ -36,8 +38,9 @@ const mapToTweet = (tweets: Array<UserTweetsWithMeta>) => {
       likes: tweet._count.likes,
       replies: tweet._count.replies,
       retweets: tweet._count.retweets,
-      hasLiked: tweet.likes.length > 0,
-      hasRetweeted: tweet.retweets.length > 0,
+      hasLiked: tweet.likes.length > 0 && isLoggedIn,
+      hasRetweeted: tweet.retweets.length > 0 && isLoggedIn,
+      originalTweetId: null,
     };
   });
 };
@@ -144,8 +147,9 @@ export const InfiniteTweets = ({
   currentLoggedInUser?: LoggedInUserBaseInfo;
   fetchNextPage: (cursor: string) => Promise<Array<UserTweetsWithMeta>>;
 }) => {
+  const isLoggedIn = !!currentLoggedInUser;
   const [{ tweets, isLastPage }, dispatch] = React.useReducer(reducer, {
-    tweets: mapToTweet(initialTweets),
+    tweets: mapToTweet(initialTweets, isLoggedIn),
     isLastPage: false,
   });
   const [isLoading, setIsLoading] = React.useState(false);
@@ -153,14 +157,14 @@ export const InfiniteTweets = ({
   const entry = useIntersectionObserver(endOfTweetsRef, {});
   const isVisible = !!entry?.isIntersecting;
   const lastTweetId = tweets[tweets.length - 1]?.id;
-
+  
   const [prevInitialTweets, setPrevInitialTweets] =
-    React.useState(initialTweets);
+  React.useState(initialTweets);
   if (prevInitialTweets !== initialTweets && initialTweets.length > 0) {
     setPrevInitialTweets(initialTweets);
     dispatch({
       type: "update_latest_tweet",
-      newInitialTweets: mapToTweet(initialTweets),
+      newInitialTweets: mapToTweet(initialTweets, isLoggedIn),
     });
   }
 
@@ -174,13 +178,13 @@ export const InfiniteTweets = ({
       setIsLoading(false);
       dispatch({
         type: "add_tweets",
-        newTweets: mapToTweet(nextTweets),
+        newTweets: mapToTweet(nextTweets, isLoggedIn),
       });
     };
     if (isVisible) {
       updateTweets();
     }
-  }, [isVisible, lastTweetId, isLoading, isLastPage, fetchNextPage]);
+  }, [isVisible, lastTweetId, isLoading, isLastPage, fetchNextPage, isLoggedIn]);
 
   return (
     <>

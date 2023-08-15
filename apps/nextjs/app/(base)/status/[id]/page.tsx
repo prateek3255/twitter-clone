@@ -17,10 +17,10 @@ const TweetStat = ({ label, count }: { label: string; count: number }) => (
   </div>
 );
 
-const getTweetInfo = (tweet: TweetWithMeta) => {
+const getTweetInfo = (tweet: TweetWithMeta, isLoggedIn: boolean) => {
   if (tweet.retweetOf) {
     return {
-      id: tweet.retweetOf.id,
+      id: tweet.id,
       content: tweet.retweetOf.content,
       createdAt: tweet.retweetOf.createdAt,
       name: tweet.retweetOf.author.name ?? "",
@@ -29,9 +29,9 @@ const getTweetInfo = (tweet: TweetWithMeta) => {
       likes: tweet.retweetOf._count.likes,
       replies: tweet.retweetOf._count.replies,
       retweets: tweet.retweetOf._count.retweets,
-      hasLiked: tweet.retweetOf.likes.length > 0,
-      hasRetweeted: tweet.retweetOf.retweets.length > 0,
-      isRetweet: true,
+      hasLiked: tweet.retweetOf.likes.length > 0 && isLoggedIn,
+      hasRetweeted: tweet.retweetOf.retweets.length > 0 && isLoggedIn,
+      originalTweetId: tweet.retweetOf.id,
       retweetAuthor: tweet.author,
     };
   }
@@ -46,9 +46,9 @@ const getTweetInfo = (tweet: TweetWithMeta) => {
     likes: tweet._count.likes,
     replies: tweet._count.replies,
     retweets: tweet._count.retweets,
-    hasLiked: tweet.likes.length > 0,
-    hasRetweeted: tweet.retweets.length > 0,
-    isRetweet: false,
+    hasLiked: tweet.likes.length > 0  && isLoggedIn,
+    hasRetweeted: tweet.retweets.length > 0 && isLoggedIn,
+    originalTweetId: null,
   };
 };
 
@@ -57,17 +57,22 @@ export default async function TweetStatus({
 }: {
   params: { id: string };
 }) {
-  const [tweet, user, initialReplies] = await Promise.all([
+  const [tweet, user] = await Promise.all([
     getTweetWithID(id),
     getCurrentLoggedInUser(),
-    getTweetReplies(id),
   ]);
 
   if (!tweet) {
     notFound();
   }
 
-  const tweetInfo = getTweetInfo(tweet);
+  const originalTweetId = tweet?.retweetOf?.id ?? tweet?.id;
+
+  const initialReplies = await getTweetReplies(originalTweetId);
+
+  const isLoggedIn = !!user;
+
+  const tweetInfo = getTweetInfo(tweet, isLoggedIn);
   const currentLoggedInUser = user
     ? {
         id: user?.id,
@@ -79,7 +84,7 @@ export default async function TweetStatus({
 
   const fetchNextRepliesPage = async (cursor: string) => {
     "use server";
-    const replies = await getTweetReplies(id, cursor);
+    const replies = await getTweetReplies(originalTweetId, cursor);
     return replies;
   };
 
@@ -96,7 +101,7 @@ export default async function TweetStatus({
       </div>
       {/* Tweet large */}
       <article className="px-4">
-        {tweetInfo.isRetweet && (
+        {tweetInfo.originalTweetId && (
           <div className="flex items-center gap-3 text-gray-500 text-xs ml-6 mb-1 font-bold mt-[-4px]">
             <Retweet className="w-4 h-4" />
             <span>
@@ -140,7 +145,7 @@ export default async function TweetStatus({
           hasLiked={tweetInfo.hasLiked}
           hasRetweeted={tweetInfo.hasRetweeted}
           tweetInfo={{
-            id: tweetInfo.id,
+            id: originalTweetId,
             content: tweetInfo.content,
             createdAt: tweetInfo.createdAt,
             name: tweetInfo.name,

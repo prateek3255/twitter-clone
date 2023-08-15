@@ -2,13 +2,12 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getUserId } from "utils/auth";
-import { getTweetsByUsername } from "utils/tweet";
 import { prisma } from "utils/db";
 import { revalidatePath } from "next/cache";
 
 export const logout = async () => {
   // Sleep for 200 ms
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  await new Promise((resolve) => setTimeout(resolve, 200));
   cookies().set({
     name: "auth",
     value: "",
@@ -42,7 +41,7 @@ export const replyToTweet = async ({
 }) => {
   const userId = getUserId();
   if (!userId) {
-    throw new Error("User not found");
+    redirect("/signin");
   }
   await prisma.tweet.create({
     data: {
@@ -63,7 +62,7 @@ export const toggleTweetLike = async ({
 }) => {
   const userId = getUserId();
   if (!userId) {
-    throw new Error("User not found");
+    redirect("/signin");
   }
   if (hasLiked) {
     await prisma.tweetLike.create({
@@ -92,7 +91,7 @@ export const toggleTweetRetweet = async ({
 }) => {
   const userId = getUserId();
   if (!userId) {
-    throw new Error("User not found");
+    redirect("/signin");
   }
   if (hasRetweeted) {
     // When creating a retweet original tweet id is passed creating
