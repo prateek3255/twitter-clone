@@ -1,8 +1,8 @@
-import { BackButton } from "ui/icons";
 import { ButtonOrLink } from "components/ButtonOrLink";
 import Image from "next/image";
 import { getCurrentLoggedInUser, getUserProfile } from "utils/user";
 import { DEFAULT_PROFILE_IMAGE } from "constants/user";
+import { BackButton } from "components/BackButton";
 
 const FollowCount = ({ count, label }: { count: number; label: string }) => (
   <a href="/psuranas/followers" className="hover:underline decoration-white">
@@ -80,12 +80,8 @@ export default async function Profile({
   return (
     <>
       {/* Header */}
-      <div className="h-14 w-full px-4 flex items-center">
-        <div className=" min-w-[56px] flex items-center">
-          <button className="text-white p-2 rounded-full hover:bg-gray-100/10">
-            <BackButton aria-label="Go back" />
-          </button>
-        </div>
+      <div className="h-14 w-full px-4 flex gap-5 items-center">
+        <BackButton />
         <div className="flex flex-col">
           <span className="text-white text-xl font-bold">
             {user?.name ?? user?.username ?? "Profile"}

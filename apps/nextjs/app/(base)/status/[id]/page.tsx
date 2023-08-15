@@ -1,4 +1,3 @@
-import { BackButton } from "ui/icons";
 import Image from "next/image";
 import Link from "next/link";
 import { Retweet } from "ui/icons";
@@ -9,6 +8,7 @@ import { getTweetReplies, getTweetWithID, TweetWithMeta } from "utils/tweet";
 import { notFound } from "next/navigation";
 import { getCurrentLoggedInUser } from "utils/user";
 import { InfiniteTweets } from "components/InfiniteTweets";
+import { BackButton } from "components/BackButton";
 
 const TweetStat = ({ label, count }: { label: string; count: number }) => (
   <div className="flex gap-1">
@@ -46,7 +46,7 @@ const getTweetInfo = (tweet: TweetWithMeta, isLoggedIn: boolean) => {
     likes: tweet._count.likes,
     replies: tweet._count.replies,
     retweets: tweet._count.retweets,
-    hasLiked: tweet.likes.length > 0  && isLoggedIn,
+    hasLiked: tweet.likes.length > 0 && isLoggedIn,
     hasRetweeted: tweet.retweets.length > 0 && isLoggedIn,
     originalTweetId: null,
   };
@@ -91,12 +91,8 @@ export default async function TweetStatus({
   return (
     <>
       {/* Header */}
-      <div className="h-14 w-full px-4 flex items-center">
-        <div className="min-w-[56px] flex items-center">
-          <button className="text-white p-2 rounded-full hover:bg-gray-100/10">
-            <BackButton aria-label="Go back" />
-          </button>
-        </div>
+      <div className="h-14 w-full px-4 flex items-center gap-5">
+        <BackButton />
         <span className="text-white text-xl font-bold">Tweet</span>
       </div>
       {/* Tweet large */}
