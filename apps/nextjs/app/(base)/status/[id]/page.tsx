@@ -5,10 +5,10 @@ import { Retweet } from "ui/icons";
 import { format } from "date-fns";
 import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 import { TweetActions } from "./components/TweetActions";
-import { getTweetWithID, TweetWithMeta } from "utils/tweet";
+import { getTweetReplies, getTweetWithID, TweetWithMeta } from "utils/tweet";
 import { notFound } from "next/navigation";
-import { getUserId } from "utils/auth";
 import { getCurrentLoggedInUser } from "utils/user";
+import { InfiniteTweets } from "components/InfiniteTweets";
 
 const TweetStat = ({ label, count }: { label: string; count: number }) => (
   <div className="flex gap-1">
@@ -57,14 +57,31 @@ export default async function TweetStatus({
 }: {
   params: { id: string };
 }) {
-  const tweet = await getTweetWithID(id);
+  const [tweet, user, initialReplies] = await Promise.all([
+    getTweetWithID(id),
+    getCurrentLoggedInUser(),
+    getTweetReplies(id),
+  ]);
 
   if (!tweet) {
     notFound();
   }
 
   const tweetInfo = getTweetInfo(tweet);
-  const user = await getCurrentLoggedInUser();
+  const currentLoggedInUser = user
+    ? {
+        id: user?.id,
+        name: user?.name ?? undefined,
+        username: user?.username,
+        profileImage: user?.profileImage,
+      }
+    : undefined;
+
+  const fetchNextRepliesPage = async (cursor: string) => {
+    "use server";
+    const replies = await getTweetReplies(id, cursor);
+    return replies;
+  };
 
   return (
     <>
@@ -130,18 +147,17 @@ export default async function TweetStatus({
             profileImage: tweetInfo.profileImage,
             username: tweetInfo.username,
           }}
-          currentLoggedInUser={
-            user
-              ? {
-                  id: user?.id,
-                  name: user?.name ?? undefined,
-                  username: user?.username,
-                  profileImage: user?.profileImage,
-                }
-              : undefined
-          }
+          currentLoggedInUser={currentLoggedInUser}
         />
       </article>
+      {/* Replies */}
+      <div>
+        <InfiniteTweets
+          initialTweets={initialReplies}
+          currentLoggedInUser={currentLoggedInUser}
+          fetchNextPage={fetchNextRepliesPage}
+        />
+      </div>
     </>
   );
 }

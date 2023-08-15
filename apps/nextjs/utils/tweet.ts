@@ -278,7 +278,7 @@ export const getTweetReplies = async (id: string, cursor?: string) => {
           }
         : undefined,
     orderBy: {
-      createdAt: "asc",
+      createdAt: "desc",
     },
   });
 
