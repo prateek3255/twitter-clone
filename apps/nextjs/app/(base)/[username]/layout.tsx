@@ -78,7 +78,7 @@ export default async function Profile({
   ]);
   const doesUserExist = user !== null;
   const isLoggedInUserFollowingProfile =
-    user?.followers?.find(({ id }) => id === user?.id) !== undefined;
+    user?.followers?.find(({ id }) => id === currentLoggedInUser?.id) !== undefined;
   return (
     <>
       {/* Header */}

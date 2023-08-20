@@ -23,7 +23,7 @@ const buttonOrLink = cva(
         small: "min-w-[36px] min-h-[36px] px-4 text-sm",
       },
       disabled: {
-        true: "opacity-50 cursoe-not-allowed",
+        true: "opacity-50 cursor-not-allowed",
         false: "",
       }
     },
