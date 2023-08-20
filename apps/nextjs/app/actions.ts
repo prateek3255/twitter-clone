@@ -145,3 +145,44 @@ export const toggleTweetRetweet = async ({
   await new Promise((resolve) => setTimeout(resolve, 2000));
   revalidatePath("status/[id]");
 };
+
+export const toggleFollowUser = async ({
+  userId,
+  isFollowing,
+}: {
+  userId: string;
+  isFollowing: boolean;
+}) => {
+  const currentUserId = getUserId();
+  if (!currentUserId) {
+    redirect("/signin");
+  }
+  if (isFollowing) {
+    await prisma.user.update({
+      where: {
+        id: currentUserId,
+      },
+      data: {
+        following: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+    });
+  } else {
+    await prisma.user.update({
+      where: {
+        id: currentUserId,
+      },
+      data: {
+        following: {
+          disconnect: {
+            id: userId,
+          },
+        },
+      },
+    });
+  }
+  revalidatePath("/[username]");
+};

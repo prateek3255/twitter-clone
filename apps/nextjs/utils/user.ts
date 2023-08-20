@@ -27,6 +27,7 @@ export const getCurrentLoggedInUser = async () => {
 };
 
 export const getUserProfile = cache(async (username: string) => {
+  const currentLoggedInUserId = getUserId();
   const user = await prisma.user.findUnique({
     where: {
       username,
@@ -39,6 +40,18 @@ export const getUserProfile = cache(async (username: string) => {
           tweets: true,
         },
       },
+      ...(typeof currentLoggedInUserId === "string"
+        ? {
+            followers: {
+              select: {
+                id: true,
+              },
+              where: {
+                id: currentLoggedInUserId,
+              },
+            },
+          }
+        : {}),
     },
   });
   return user;

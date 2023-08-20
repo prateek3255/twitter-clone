@@ -23,8 +23,8 @@ const TweetActions = ({
   // TODO: Figure out why this does not work
   const [optimisticHasLiked, toggleOptimisticHasLiked] = useOptimistic(
     hasLiked,
-    (prevHasLiked) => {
-      return !prevHasLiked;
+    (_, newLiked: boolean) => {
+      return newLiked;
     }
   );
 

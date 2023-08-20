@@ -15,13 +15,15 @@ const buttonOrLink = cva(
           "text-white px-4 min-h-[36px] text-sm font-semibold border-gray-700 hover:bg-gray-100/10",
         "tertiary-light":
           "text-white px-4 min-h-[36px] text-sm font-semibold border-white hover:bg-white/10",
+        "tertiary-danger":
+           "text-red-500 px-4 min-h-[36px] text-sm font-semibold border-red-500 hover:bg-red-500/10",
       },
       size: {
         large: "min-w-[52px] min-h-[52px] px-8 text-base",
         small: "min-w-[36px] min-h-[36px] px-4 text-sm",
       },
       disabled: {
-        true: "opacity-50 pointer-events-none",
+        true: "opacity-50 cursoe-not-allowed",
         false: "",
       }
     },

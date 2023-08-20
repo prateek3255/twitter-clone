@@ -1,8 +1,8 @@
-import { ButtonOrLink } from "components/ButtonOrLink";
 import Image from "next/image";
 import { getCurrentLoggedInUser, getUserProfile } from "utils/user";
 import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 import { BackButton } from "components/BackButton";
+import { FollowButton } from "./components/FollowButton";
 
 const FollowCount = ({ count, label }: { count: number; label: string }) => (
   <a href="/psuranas/followers" className="hover:underline decoration-white">
@@ -77,6 +77,8 @@ export default async function Profile({
     getCurrentLoggedInUser(),
   ]);
   const doesUserExist = user !== null;
+  const isLoggedInUserFollowingProfile =
+    user?.followers?.find(({ id }) => id === user?.id) !== undefined;
   return (
     <>
       {/* Header */}
@@ -117,12 +119,13 @@ export default async function Profile({
           )}
         </div>
         <div className=" h-[67px] flex w-full justify-end items-start">
-          {doesUserExist &&
-            (currentLoggedInUser?.username === user.username ? (
-              <ButtonOrLink variant="tertiary">Edit profile</ButtonOrLink>
-            ) : (
-              <ButtonOrLink variant="secondary">Follow</ButtonOrLink>
-            ))}
+          {doesUserExist && (
+            <FollowButton
+              isCurrentUser={currentLoggedInUser?.username === user?.username}
+              profileUserId={user.id}
+              isFollowing={isLoggedInUserFollowingProfile}
+            />
+          )}
         </div>
         {/* Name */}
         <div className="flex flex-col mb-3">
