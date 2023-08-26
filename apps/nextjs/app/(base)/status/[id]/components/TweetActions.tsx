@@ -30,19 +30,21 @@ const TweetActions = ({
 
   const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
 
-  const [_, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   return (
     <>
       <div className="py-4 flex justify-around gap-5 border-b border-solid border-gray-700">
         <TweetAction
           size="normal"
           type="reply"
+          disabled={isPending}
           action={() => setIsReplyModalOpen(true)}
         />
         <TweetAction
           size="normal"
           type="retweet"
           active={hasRetweeted}
+          disabled={isPending}
           action={() => {
             startTransition(async () => {
               await toggleTweetRetweet({
@@ -56,6 +58,7 @@ const TweetActions = ({
           size="normal"
           type="like"
           active={optimisticHasLiked}
+          disabled={isPending}
           action={() => {
             toggleOptimisticHasLiked(!optimisticHasLiked);
             startTransition(async () => {

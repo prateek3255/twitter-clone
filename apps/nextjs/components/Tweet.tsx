@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { startTransition } from "react";
+import { useTransition } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import { Retweet } from "ui/icons";
 import { formatDistanceForTweet } from "utils/common";
@@ -68,6 +68,7 @@ export const Tweet = (props: TweetProps) => {
     showOwnRetweet
   } = props;
   const [isReplyModalOpen, setIsReplyModalOpen] = React.useState(false);
+  const [isPending, startTransition] = useTransition();
   const isRetweet = typeof props.originalTweetId === "string";
   const originalTweetId = props.originalTweetId ?? id;
 
@@ -129,6 +130,7 @@ export const Tweet = (props: TweetProps) => {
                   size="compact"
                   type="reply"
                   count={replies}
+                  disabled={isPending}
                   action={() => setIsReplyModalOpen(true)}
                 />
                 <TweetAction
@@ -136,6 +138,7 @@ export const Tweet = (props: TweetProps) => {
                   type="retweet"
                   active={hasRetweeted}
                   count={retweets}
+                  disabled={isPending}
                   action={() => {
                     startTransition(() => {
                       toggleTweetRetweet({
@@ -151,6 +154,7 @@ export const Tweet = (props: TweetProps) => {
                   active={hasLiked}
                   type="like"
                   count={likes}
+                  disabled={isPending}
                   action={() => {
                     startTransition(() => {
                       toggleTweetLike({ tweetId: originalTweetId, hasLiked: !hasLiked });
