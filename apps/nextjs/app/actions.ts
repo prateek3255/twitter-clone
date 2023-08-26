@@ -186,3 +186,43 @@ export const toggleFollowUser = async ({
   }
   revalidatePath("/[username]");
 };
+
+export const saveProfile = async (formData: FormData) => {
+  const loggedInUserId = getUserId();
+  if (!loggedInUserId) {
+    redirect("/signin");
+  }
+  const username = formData.get("username") as string;
+  const name = formData.get("name") as string;
+  const bio = formData.get("bio") as string;
+
+  // Check if username is already taken
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      username,
+    },
+  });
+  if (existingUser && existingUser.id !== loggedInUserId) {
+    return { success: false, error: "username_already_taken" };
+  }
+
+  // Update user
+  await prisma.user.update({
+    where: {
+      id: loggedInUserId,
+    },
+    data: {
+      username,
+      name,
+      bio,
+    },
+  });
+
+  // If username is changed, redirect to new username
+  // else revalidate current path
+  if (username === existingUser?.username) {
+    revalidatePath("/[username]");
+  } else {
+    redirect(`/${username}`);
+  }
+};

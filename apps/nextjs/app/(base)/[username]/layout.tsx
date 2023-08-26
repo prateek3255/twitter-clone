@@ -6,7 +6,7 @@ import { FollowButton } from "./components/FollowButton";
 import { EditProfile } from "./components/EditProfile";
 
 const FollowCount = ({ count, label }: { count: number; label: string }) => (
-  <a href="/psuranas/followers" className="hover:underline decoration-white">
+  <a href="#" className="hover:underline decoration-white">
     <span className="text-white font-bold text-sm">{count} </span>
     <span className="text-gray-500 text-sm">{label}</span>
   </a>
@@ -59,7 +59,7 @@ const UserProfileDetails = ({ userProfile }: { userProfile: UserProfile }) => {
       >
         <TabItem isActive>Tweets</TabItem>
         <TabItem>Replies</TabItem>
-        <TabItem>Media</TabItem>
+        {/* <TabItem>Media</TabItem> */}
         <TabItem>Likes</TabItem>
       </div>
     </>
@@ -79,7 +79,8 @@ export default async function Profile({
   ]);
   const doesUserExist = user !== null;
   const isLoggedInUserFollowingProfile =
-    user?.followers?.find(({ id }) => id === currentLoggedInUser?.id) !== undefined;
+    user?.followers?.find(({ id }) => id === currentLoggedInUser?.id) !==
+    undefined;
   const isCurrentUser = currentLoggedInUser?.username === user?.username;
 
   return (
@@ -122,15 +123,19 @@ export default async function Profile({
           )}
         </div>
         <div className=" h-[67px] flex w-full justify-end items-start">
-          {doesUserExist && (
-            isCurrentUser ? (
-              <EditProfile />
+          {doesUserExist &&
+            (isCurrentUser ? (
+              <EditProfile
+                username={user.username}
+                bio={user.bio}
+                name={user.name}
+              />
             ) : (
-            <FollowButton
-              profileUserId={user.id}
-              isFollowing={isLoggedInUserFollowingProfile}
-            />)
-          )}
+              <FollowButton
+                profileUserId={user.id}
+                isFollowing={isLoggedInUserFollowingProfile}
+              />
+            ))}
         </div>
         {/* Name */}
         <div className="flex flex-col mb-3">

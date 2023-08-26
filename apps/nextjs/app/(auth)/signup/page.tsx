@@ -127,6 +127,7 @@ export default function Signup({
               label="Name"
               id="name"
               name="name"
+              maxLength={40}
               placeholder="John"
               defaultValue={fieldValues?.name}
               error={fieldErrors?.name}
@@ -137,6 +138,7 @@ export default function Signup({
               id="username"
               name="username"
               minLength={2}
+              maxLength={15}
               pattern="^[a-zA-Z0-9_]{1,15}$"
               placeholder="johndoe"
               defaultValue={fieldValues?.username}
