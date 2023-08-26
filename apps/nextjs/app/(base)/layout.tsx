@@ -49,8 +49,8 @@ export default async function RootLayout({
 
   return (
     <>
-      <div className="flex w-full h-full">
-        <header className="w-full h-full flex-[4] flex flex-col items-end text-white pb-3 pt-2 px-2 border-r border-solid border-gray-700">
+      <div className="grid w-full min-h-full grid-cols-[4fr_8fr]">
+        <header className="w-full h-full flex flex-col items-end text-white pb-3 pt-2 px-2 border-r border-solid border-gray-700">
           <div className="w-full max-w-[256px] h-full flex flex-col justify-between">
             <div>
               <h1>
@@ -93,7 +93,7 @@ export default async function RootLayout({
             )}
           </div>
         </header>
-        <main className="flex-[8] w-full overflow-y-auto">
+        <main className="flex-[8] w-full overflow-y-auto max-h-screen">
           <div className="w-full min-h-full max-w-[600px] border-r border-solid border-gray-700">
             {children}
           </div>

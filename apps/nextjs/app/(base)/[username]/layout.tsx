@@ -97,9 +97,9 @@ export default async function Profile({
       </div>
       {/* Cover Image */}
       {doesUserExist ? (
-        <div className="w-[600px] h-[200px] bg-gradient-to-r from-cyan-500 to-blue-500" />
+        <div className="max-w-[600px] w-full h-[200px] bg-gradient-to-r from-cyan-500 to-blue-500" />
       ) : (
-        <div className="w-[600px] h-[200px] bg-gray-700" />
+        <div className="max-w-[600px] w-full h-[200px] bg-gray-700" />
       )}
 
       <div className="relative pt-3 px-4">
