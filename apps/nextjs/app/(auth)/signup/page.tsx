@@ -1,6 +1,6 @@
 // import { experimental_useFormStatus as useFormStatus } from "react-dom";
 import { ButtonOrLink } from "components/ButtonOrLink";
-import FloatingInput from "components/FloatingInput";
+import { FloatingInput } from "components/FloatingInput";
 import { prisma } from "utils/db";
 import { z } from "zod";
 import { redirect } from "next/navigation";
@@ -97,12 +97,14 @@ export default function Signup({
         ...rest,
         passwordHash,
         // Generate a deterministic profile image using a random number and save it in the database
-        profileImage: `https://api.dicebear.com/6.x/big-ears-neutral/png?seed=${Math.random().toString(36).substring(2)}`
+        profileImage: `https://api.dicebear.com/6.x/big-ears-neutral/png?seed=${Math.random()
+          .toString(36)
+          .substring(2)}`,
       },
     });
     setAuthCookie({
       userId: newUser.id,
-    })
+    });
     return redirect("/");
   }
 

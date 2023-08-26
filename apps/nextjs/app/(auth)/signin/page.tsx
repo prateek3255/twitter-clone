@@ -1,4 +1,4 @@
-import FloatingInput from "components/FloatingInput";
+import {FloatingInput} from "components/FloatingInput";
 import { redirect } from "next/navigation";
 import {
   decodeValueAndErrors,

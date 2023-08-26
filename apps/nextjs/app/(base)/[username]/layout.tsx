@@ -3,6 +3,7 @@ import { getCurrentLoggedInUser, getUserProfile } from "utils/user";
 import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 import { BackButton } from "components/BackButton";
 import { FollowButton } from "./components/FollowButton";
+import { EditProfile } from "./components/EditProfile";
 
 const FollowCount = ({ count, label }: { count: number; label: string }) => (
   <a href="/psuranas/followers" className="hover:underline decoration-white">
@@ -79,6 +80,8 @@ export default async function Profile({
   const doesUserExist = user !== null;
   const isLoggedInUserFollowingProfile =
     user?.followers?.find(({ id }) => id === currentLoggedInUser?.id) !== undefined;
+  const isCurrentUser = currentLoggedInUser?.username === user?.username;
+
   return (
     <>
       {/* Header */}
@@ -120,11 +123,13 @@ export default async function Profile({
         </div>
         <div className=" h-[67px] flex w-full justify-end items-start">
           {doesUserExist && (
+            isCurrentUser ? (
+              <EditProfile />
+            ) : (
             <FollowButton
-              isCurrentUser={currentLoggedInUser?.username === user?.username}
               profileUserId={user.id}
               isFollowing={isLoggedInUserFollowingProfile}
-            />
+            />)
           )}
         </div>
         {/* Name */}

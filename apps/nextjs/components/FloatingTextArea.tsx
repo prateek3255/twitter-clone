@@ -1,14 +1,14 @@
 import React from "react";
 import { cva } from "class-variance-authority";
 
-interface FloatingInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+interface FloatingTextAreaProps
+  extends React.InputHTMLAttributes<HTMLTextAreaElement> {
   label: string;
   error?: string;
 }
 
-const floatingInput = cva(
-  "h-[56px] w-full rounded-[4px] outline bg-transparent focus:outline-2 text-white text-base px-3 pt-5 floating-input",
+const floatingTextArea = cva(
+  "h-[160px] w-full rounded-[4px] outline bg-transparent focus:outline-2 text-white text-base px-3 pt-7 floating-text-area",
   {
     variants: {
       error: {
@@ -22,16 +22,16 @@ const floatingInput = cva(
   }
 );
 
-const FloatingInput = React.forwardRef<HTMLInputElement, FloatingInputProps>(
+const FloatingTextArea = React.forwardRef<HTMLTextAreaElement, FloatingTextAreaProps>(
   ({ label, className, error, ...rest }, ref) => {
-    const classNames = `${floatingInput({
+    const classNames = `${floatingTextArea({
       error: !!error,
     })} ${className ?? ""}`;
 
     return (
       <div>
         <div className="flex flex-col-reverse relative">
-          <input
+          <textarea
             className={classNames}
             aria-invalid={!!error}
             aria-errormessage={error}
@@ -52,6 +52,6 @@ const FloatingInput = React.forwardRef<HTMLInputElement, FloatingInputProps>(
   }
 );
 
-FloatingInput.displayName = "FloatingInput";
+FloatingTextArea.displayName = "FloatingTextArea";
 
-export { FloatingInput };
+export { FloatingTextArea };

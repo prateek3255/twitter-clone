@@ -4,11 +4,9 @@ import { ButtonOrLink } from "components/ButtonOrLink";
 import { toggleFollowUser } from "app/actions";
 
 const FollowButton = ({
-  isCurrentUser,
   isFollowing,
   profileUserId,
 }: {
-  isCurrentUser: boolean;
   isFollowing: boolean;
   profileUserId: string;
 }) => {
@@ -21,10 +19,6 @@ const FollowButton = ({
       await toggleFollowUser({ userId: profileUserId, isFollowing: false });
     });
   };
-
-  if (isCurrentUser) {
-    return <ButtonOrLink variant="tertiary">Edit profile</ButtonOrLink>;
-  }
 
   if (isFollowing) {
     if (isHoveringOnFollowing) {

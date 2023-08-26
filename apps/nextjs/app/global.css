@@ -2,16 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-.floating-input {
-  transition: all 0.2s ease-in-out;
+.floating-input, .floating-text-area {
+  transition: outline 0.2s ease-in-out;
 }
 
-.floating-input + label {
+.floating-input + label,
+.floating-text-area + label {
     position: absolute;
 }
 
 .floating-input:placeholder-shown + label {
     transform: translate(11px, -16px) scale(1.25);
+}
+
+.floating-text-area:placeholder-shown + label {
+    transform: translate(11px, -120px) scale(1.25);
+}
+
+.floating-input:placeholder-shown + label,
+.floating-text-area:placeholder-shown + label {
     cursor: text;
     transform-origin: left bottom;
     transition: all 0.2s ease-in-out;
@@ -20,21 +29,31 @@
 .floating-input:not(placeholder-shown) + label,
 .floating-input:focus + label {
     transform: translate(12px, -30px) scale(1);
+
 }
 
-.floating-input:focus + label {
+.floating-text-area:not(placeholder-shown) + label,
+.floating-text-area:focus + label {
+    transform: translate(12px, -133px) scale(1);
+}
+
+.floating-input:focus + label,
+.floating-text-area:focus + label {
     @apply text-primary-blue;
 }
 
-.floating-input[aria-invalid="true"]:focus + label {
+.floating-input[aria-invalid="true"]:focus + label,
+.floating-text-area[aria-invalid="true"]:focus + label {
     @apply text-red-500;
 }
 
-.floating-input::placeholder {
+.floating-input::placeholder,
+.floating-text-area::placeholder {
     opacity: 0;
     transition: inherit;
 }
 
-.floating-input:focus::placeholder {
+.floating-input:focus::placeholder,
+.floating-text-area:focus::placeholder {
     opacity: 1;
 }
