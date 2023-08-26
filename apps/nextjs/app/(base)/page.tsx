@@ -2,9 +2,20 @@ import Image from "next/image";
 import { CreateTweetHomePage } from "./components/CreateTweetHomePage";
 import { getCurrentLoggedInUser } from "utils/user";
 import { DEFAULT_PROFILE_IMAGE } from "constants/user";
+import { InfiniteTweets } from "components/InfiniteTweets";
+import { getHomeTweets } from "utils/tweet";
 
-export default async function Web() {
+export default async function Home() {
   const user = await getCurrentLoggedInUser();
+  const initialTweets = await getHomeTweets();
+
+  const fetchNextPage = async (cursor: string) => {
+    "use server";
+    const tweets = await getHomeTweets(cursor);
+    return tweets;
+  }
+
+
   return (
     <>
       <div className="p-4 border-b border-solid border-gray-700 w-full">
@@ -24,6 +35,20 @@ export default async function Web() {
           </div>
         </div>
       )}
+      <InfiniteTweets
+        initialTweets={initialTweets}
+        fetchNextPage={fetchNextPage}
+        currentLoggedInUser={
+          user
+            ? {
+                id: user.id,
+                username: user.username,
+                name: user.name ?? undefined,
+                profileImage: user.profileImage,
+              }
+            : undefined
+        }
+      />
     </>
   );
 }

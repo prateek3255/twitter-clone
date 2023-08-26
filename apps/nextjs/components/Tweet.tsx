@@ -30,6 +30,7 @@ interface BaseTweetProps {
   hasRetweeted?: boolean;
   currentLoggedInUser?: LoggedInUserBaseInfo;
   originalTweetId: string | null;
+  showOwnRetweet?: boolean;
 }
 
 interface RetweetProps extends BaseTweetProps {
@@ -64,6 +65,7 @@ export const Tweet = (props: TweetProps) => {
     hasRetweeted,
     currentLoggedInUser,
     onReplySuccess,
+    showOwnRetweet
   } = props;
   const [isReplyModalOpen, setIsReplyModalOpen] = React.useState(false);
   const isRetweet = typeof props.originalTweetId === "string";
@@ -75,13 +77,15 @@ export const Tweet = (props: TweetProps) => {
     router.push(`/status/${id}`);
   };
 
+  const showRetweetedBy = showOwnRetweet ? hasRetweeted || isRetweet : isRetweet;
+
   return (
     <>
       <article
         onClick={handleTweetClick}
         className="p-4 border-b border-solid border-gray-700 cursor-pointer"
       >
-        {(hasRetweeted || isRetweet) && (
+        {showRetweetedBy && (
           <div className="flex items-center gap-3 text-gray-500 text-xs ml-6 mb-1 font-bold mt-[-4px]">
             <Retweet className="w-4 h-4" />
             <span>

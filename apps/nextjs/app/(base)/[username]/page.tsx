@@ -35,6 +35,7 @@ export default async function Profile({
               : undefined
           }
           fetchNextPage={fetchNextUserTweetsPage}
+          isUserProfile
         />
       </div>
     </>

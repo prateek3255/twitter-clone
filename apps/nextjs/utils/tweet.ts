@@ -168,7 +168,7 @@ export const getTweetWithID = async (id: string) => {
           name: true,
           profileImage: true,
         },
-      }, 
+      },
       retweets: {
         where: {
           authorId: userId ?? undefined,
@@ -279,6 +279,131 @@ export const getTweetReplies = async (id: string, cursor?: string) => {
         : undefined,
     orderBy: {
       createdAt: "desc",
+    },
+  });
+
+  return tweets;
+};
+
+export const getHomeTweets = async (cursor?: string) => {
+  const userId = getUserId();
+
+  let followingCount = 0;
+  if (typeof cursor !== "string" && typeof userId === "string") {
+    const followingQuery = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        _count: {
+          select: {
+            following: true,
+          },
+        },
+      },
+    });
+    followingCount = followingQuery?._count?.following ?? 0;
+  }
+
+  const hasFollowers = followingCount > 0;
+
+  // Fetch tweets from users that the current user follows
+  const tweets = await prisma.tweet.findMany({
+    ...(hasFollowers
+      ? {
+          where: {
+            author: {
+              followers: {
+                some: {
+                  id: userId ?? undefined,
+                },
+              },
+            },
+          },
+        }
+      : {}),
+    include: {
+      _count: {
+        select: {
+          likes: true,
+          replies: true,
+          retweets: true,
+        },
+      },
+      retweetOf: {
+        select: {
+          id: true,
+          content: true,
+          createdAt: true,
+          author: {
+            select: {
+              id: true,
+              username: true,
+              name: true,
+              profileImage: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+              replies: true,
+              retweets: true,
+            },
+          },
+          likes: {
+            where: {
+              userId: userId ?? undefined,
+            },
+            select: {
+              userId: true,
+            },
+          },
+          retweets: {
+            where: {
+              authorId: userId ?? undefined,
+            },
+            select: {
+              authorId: true,
+            },
+          },
+        },
+      },
+      author: {
+        select: {
+          id: true,
+          username: true,
+          name: true,
+          profileImage: true,
+        },
+      },
+      retweets: {
+        where: {
+          authorId: userId ?? undefined,
+        },
+        select: {
+          authorId: true,
+        },
+      },
+      likes: {
+        where: {
+          userId: userId ?? undefined,
+        },
+        select: {
+          userId: true,
+        },
+      },
+    },
+    take: 4,
+    skip: typeof cursor === "string" ? 1 : 0,
+    cursor:
+      typeof cursor === "string"
+        ? {
+            id: cursor,
+          }
+        : undefined,
+    orderBy: {
+      createdAt: "asc",
     },
   });
 

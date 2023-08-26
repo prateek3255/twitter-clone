@@ -141,11 +141,13 @@ const reducer = (state: State, action: Action): State => {
 export const InfiniteTweets = ({
   initialTweets,
   currentLoggedInUser,
-  fetchNextPage
+  fetchNextPage,
+  isUserProfile = false,
 }: {
   initialTweets: Array<UserTweetsWithMeta>;
   currentLoggedInUser?: LoggedInUserBaseInfo;
   fetchNextPage: (cursor: string) => Promise<Array<UserTweetsWithMeta>>;
+  isUserProfile?: boolean;
 }) => {
   const isLoggedIn = !!currentLoggedInUser;
   const [{ tweets, isLastPage }, dispatch] = React.useReducer(reducer, {
@@ -211,6 +213,7 @@ export const InfiniteTweets = ({
             });
           }}
           currentLoggedInUser={currentLoggedInUser}
+          showOwnRetweet={isUserProfile}
         />
       ))}
       <div className="h-1" ref={endOfTweetsRef} />
