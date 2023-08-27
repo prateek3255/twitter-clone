@@ -4,37 +4,12 @@ import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 import { BackButton } from "components/BackButton";
 import { FollowButton } from "./components/FollowButton";
 import { EditProfile } from "./components/EditProfile";
+import { TabItem } from "./components/TabItem";
 
 const FollowCount = ({ count, label }: { count: number; label: string }) => (
   <a href="#" className="hover:underline decoration-white">
     <span className="text-white font-bold text-sm">{count} </span>
     <span className="text-gray-500 text-sm">{label}</span>
-  </a>
-);
-
-const TabItem = ({
-  isActive = false,
-  children,
-}: {
-  isActive?: boolean;
-  children: React.ReactNode;
-}) => (
-  <a
-    href="/"
-    role="tab"
-    aria-selected={isActive}
-    className="min-w-[56px] w-full flex justify-center hover:bg-gray-100/10"
-  >
-    <div
-      className={`py-4 text-sm relative ${
-        isActive ? "font-bold text-white" : "font-semibold text-gray-500"
-      }`}
-    >
-      {children}
-      {isActive && (
-        <div className="absolute bottom-0 bg-primary-blue h-1 w-full rounded-full" />
-      )}
-    </div>
   </a>
 );
 
@@ -57,10 +32,9 @@ const UserProfileDetails = ({ userProfile }: { userProfile: UserProfile }) => {
         role="tablist"
         className="flex mt-3 border-b border-solid border-gray-700 mx-[-16px]"
       >
-        <TabItem isActive>Tweets</TabItem>
-        <TabItem>Replies</TabItem>
-        {/* <TabItem>Media</TabItem> */}
-        <TabItem>Likes</TabItem>
+        <TabItem href={`/${userProfile.username}`}>Tweets</TabItem>
+        <TabItem href={`/${userProfile.username}/replies`}>Replies</TabItem>
+        <TabItem href={`/${userProfile.username}/likes`}>Likes</TabItem>
       </div>
     </>
   );

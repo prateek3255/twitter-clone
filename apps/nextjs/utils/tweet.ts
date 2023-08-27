@@ -2,26 +2,8 @@ import { prisma } from "./db";
 import { getUserId } from "./auth";
 import "server-only";
 
-export const getTweetsByUsername = async (
-  username: string,
-  cursor?: string
-) => {
-  const userId = getUserId();
-  const tweets = await prisma.tweet.findMany({
-    where: {
-      author: {
-        username,
-      },
-      replyToId: null,
-      NOT: {
-        // Hide user's own retweets from their profile
-        retweetOf: {
-          author: {
-            username,
-          },
-        },
-      },
-    },
+const getTweetFields = (userId?: string | null) =>
+  ({
     include: {
       _count: {
         select: {
@@ -93,6 +75,29 @@ export const getTweetsByUsername = async (
         },
       },
     },
+  }) as const;
+
+export const getTweetsByUsername = async (
+  username: string,
+  cursor?: string
+) => {
+  const userId = getUserId();
+  const tweets = await prisma.tweet.findMany({
+    where: {
+      author: {
+        username,
+      },
+      replyToId: null,
+      NOT: {
+        // Hide user's own retweets from their profile
+        retweetOf: {
+          author: {
+            username,
+          },
+        },
+      },
+    },
+    ...getTweetFields(userId),
     take: 4,
     skip: typeof cursor === "string" ? 1 : 0,
     cursor:
@@ -115,77 +120,7 @@ export const getTweetWithID = async (id: string) => {
     where: {
       id,
     },
-    include: {
-      _count: {
-        select: {
-          likes: true,
-          replies: true,
-          retweets: true,
-        },
-      },
-      retweetOf: {
-        select: {
-          id: true,
-          content: true,
-          createdAt: true,
-          author: {
-            select: {
-              id: true,
-              username: true,
-              name: true,
-              profileImage: true,
-            },
-          },
-          _count: {
-            select: {
-              likes: true,
-              replies: true,
-              retweets: true,
-            },
-          },
-          likes: {
-            where: {
-              userId: userId ?? undefined,
-            },
-            select: {
-              userId: true,
-            },
-          },
-          retweets: {
-            where: {
-              authorId: userId ?? undefined,
-            },
-            select: {
-              authorId: true,
-            },
-          },
-        },
-      },
-      author: {
-        select: {
-          id: true,
-          username: true,
-          name: true,
-          profileImage: true,
-        },
-      },
-      retweets: {
-        where: {
-          authorId: userId ?? undefined,
-        },
-        select: {
-          authorId: true,
-        },
-      },
-      likes: {
-        where: {
-          userId: userId ?? undefined,
-        },
-        select: {
-          userId: true,
-        },
-      },
-    },
+    ...getTweetFields(userId),
   });
 
   return tweet;
@@ -198,77 +133,7 @@ export const getTweetReplies = async (id: string, cursor?: string) => {
     where: {
       replyToId: id,
     },
-    include: {
-      _count: {
-        select: {
-          likes: true,
-          replies: true,
-          retweets: true,
-        },
-      },
-      retweetOf: {
-        select: {
-          id: true,
-          content: true,
-          createdAt: true,
-          author: {
-            select: {
-              id: true,
-              username: true,
-              name: true,
-              profileImage: true,
-            },
-          },
-          _count: {
-            select: {
-              likes: true,
-              replies: true,
-              retweets: true,
-            },
-          },
-          likes: {
-            where: {
-              userId: userId ?? undefined,
-            },
-            select: {
-              userId: true,
-            },
-          },
-          retweets: {
-            where: {
-              authorId: userId ?? undefined,
-            },
-            select: {
-              authorId: true,
-            },
-          },
-        },
-      },
-      author: {
-        select: {
-          id: true,
-          username: true,
-          name: true,
-          profileImage: true,
-        },
-      },
-      retweets: {
-        where: {
-          authorId: userId ?? undefined,
-        },
-        select: {
-          authorId: true,
-        },
-      },
-      likes: {
-        where: {
-          userId: userId ?? undefined,
-        },
-        select: {
-          userId: true,
-        },
-      },
-    },
+    ...getTweetFields(userId),
     take: 4,
     skip: typeof cursor === "string" ? 1 : 0,
     cursor:
@@ -323,77 +188,7 @@ export const getHomeTweets = async (cursor?: string) => {
           },
         }
       : {}),
-    include: {
-      _count: {
-        select: {
-          likes: true,
-          replies: true,
-          retweets: true,
-        },
-      },
-      retweetOf: {
-        select: {
-          id: true,
-          content: true,
-          createdAt: true,
-          author: {
-            select: {
-              id: true,
-              username: true,
-              name: true,
-              profileImage: true,
-            },
-          },
-          _count: {
-            select: {
-              likes: true,
-              replies: true,
-              retweets: true,
-            },
-          },
-          likes: {
-            where: {
-              userId: userId ?? undefined,
-            },
-            select: {
-              userId: true,
-            },
-          },
-          retweets: {
-            where: {
-              authorId: userId ?? undefined,
-            },
-            select: {
-              authorId: true,
-            },
-          },
-        },
-      },
-      author: {
-        select: {
-          id: true,
-          username: true,
-          name: true,
-          profileImage: true,
-        },
-      },
-      retweets: {
-        where: {
-          authorId: userId ?? undefined,
-        },
-        select: {
-          authorId: true,
-        },
-      },
-      likes: {
-        where: {
-          userId: userId ?? undefined,
-        },
-        select: {
-          userId: true,
-        },
-      },
-    },
+    ...getTweetFields(userId),
     take: 4,
     skip: typeof cursor === "string" ? 1 : 0,
     cursor:
@@ -403,7 +198,67 @@ export const getHomeTweets = async (cursor?: string) => {
           }
         : undefined,
     orderBy: {
-      createdAt: "asc",
+      createdAt: "desc",
+    },
+  });
+
+  return tweets;
+};
+
+export const getUserReplies = async (username: string, cursor?: string) => {
+  const userId = getUserId();
+
+  const tweets = await prisma.tweet.findMany({
+    where: {
+      author: {
+        username,
+      },
+      replyToId: {
+        not: null,
+      },
+    },
+    ...getTweetFields(userId),
+    take: 4,
+    skip: typeof cursor === "string" ? 1 : 0,
+    cursor:
+      typeof cursor === "string"
+        ? {
+            id: cursor,
+          }
+        : undefined,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return tweets;
+};
+
+export const getUserLikes = async (username: string, cursor?: string) => {
+  const userId = getUserId();
+
+  const tweets = await prisma.tweet.findMany({
+    where: {
+      author: {
+        username,
+      },
+      likes: {
+        some: {
+          userId: userId ?? undefined,
+        },
+      }
+    },
+    ...getTweetFields(userId),
+    take: 4,
+    skip: typeof cursor === "string" ? 1 : 0,
+    cursor:
+      typeof cursor === "string"
+        ? {
+            id: cursor,
+          }
+        : undefined,
+    orderBy: {
+      createdAt: "desc",
     },
   });
 
