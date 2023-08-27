@@ -18,7 +18,7 @@ const NavItem = ({
   return (
     <Link
       href={href}
-      className={`flex p-3 gap-5 items-center rounded-full text-xl text-white hover:bg-gray-100/10 w-fit pr-5 ${isActive ? "font-bold" : ""}`}
+      className={`flex p-3 gap-5 items-center rounded-full text-xl text-white hover:bg-gray-100/10 w-fit px-4 sm:px-3 sm:pr-5 ${isActive ? "font-bold" : ""}`}
     >
       {isActive ? activeIcon : icon}
       {children}
