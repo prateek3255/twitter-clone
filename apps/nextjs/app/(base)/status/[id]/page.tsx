@@ -9,6 +9,9 @@ import { notFound } from "next/navigation";
 import { getCurrentLoggedInUser } from "utils/user";
 import { InfiniteTweets } from "components/InfiniteTweets";
 import { BackButton } from "components/BackButton";
+import { Suspense } from "react";
+import { Spinner } from "components/Spinner";
+import { LoggedInUserBaseInfo } from "types/common";
 
 const TweetStat = ({ label, count }: { label: string; count: number }) => (
   <div className="flex gap-1">
@@ -68,8 +71,6 @@ export default async function TweetStatus({
 
   const originalTweetId = tweet?.retweetOf?.id ?? tweet?.id;
 
-  const initialReplies = await getTweetReplies(originalTweetId);
-
   const isLoggedIn = !!user;
 
   const tweetInfo = getTweetInfo(tweet, isLoggedIn);
@@ -81,12 +82,6 @@ export default async function TweetStatus({
         profileImage: user?.profileImage,
       }
     : undefined;
-
-  const fetchNextRepliesPage = async (cursor: string) => {
-    "use server";
-    const replies = await getTweetReplies(originalTweetId, cursor);
-    return replies;
-  };
 
   return (
     <>
@@ -153,14 +148,37 @@ export default async function TweetStatus({
       </article>
       {/* Replies */}
       <div>
-        <InfiniteTweets
-          initialTweets={initialReplies}
-          currentLoggedInUser={currentLoggedInUser}
-          fetchNextPage={fetchNextRepliesPage}
-        />
+        <Suspense fallback={<Spinner />}>
+          <TweetReplies
+            parentTweetId={originalTweetId}
+            currentLoggedInUser={currentLoggedInUser}
+          />
+        </Suspense>
       </div>
     </>
   );
 }
 
-export const dynamic = "force-dynamic";
+async function TweetReplies({
+  parentTweetId,
+  currentLoggedInUser,
+}: {
+  parentTweetId: string;
+  currentLoggedInUser?: LoggedInUserBaseInfo;
+}) {
+  const initialReplies = await getTweetReplies(parentTweetId);
+
+  const fetchNextRepliesPage = async (cursor: string) => {
+    "use server";
+    const replies = await getTweetReplies(parentTweetId, cursor);
+    return replies;
+  };
+
+  return (
+    <InfiniteTweets
+      initialTweets={initialReplies}
+      currentLoggedInUser={currentLoggedInUser}
+      fetchNextPage={fetchNextRepliesPage}
+    />
+  );
+}

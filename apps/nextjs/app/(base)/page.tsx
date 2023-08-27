@@ -7,22 +7,19 @@ import { getHomeTweets } from "utils/tweet";
 import { CreateTweetHomePage } from "./components/CreateTweetHomePage";
 import { ProfileButton } from "./components/ProfileButton";
 import { ButtonOrLink } from "components/ButtonOrLink";
+import { Suspense } from "react";
+import { Spinner } from "components/Spinner";
 
 export default async function Home() {
   const user = await getCurrentLoggedInUser();
-  const initialTweets = await getHomeTweets();
-
-  const fetchNextPage = async (cursor: string) => {
-    "use server";
-    const tweets = await getHomeTweets(cursor);
-    return tweets;
-  };
 
   return (
     <>
+      {/* Desktop header */}
       <div className="p-4 border-b border-solid border-gray-700 w-full hidden sm:block">
         <h1 className="text-white font-bold text-xl">Home</h1>
       </div>
+      {/* Mobile header */}
       <div className="flex flex-col gap-3 sm:hidden p-4 border-b border-solid border-gray-700 w-full">
         <div className="flex w-full items-center">
           <div className="flex-1 w-full">
@@ -41,10 +38,22 @@ export default async function Home() {
         </div>
         {!user && (
           <div className="flex w-full gap-2">
-            <ButtonOrLink stretch size="small" variant="primary" as="link" href="/signin">
+            <ButtonOrLink
+              stretch
+              size="small"
+              variant="primary"
+              as="link"
+              href="/signin"
+            >
               Log in
             </ButtonOrLink>
-            <ButtonOrLink stretch size="small" variant="secondary" as="link" href="/signup">
+            <ButtonOrLink
+              stretch
+              size="small"
+              variant="secondary"
+              as="link"
+              href="/signup"
+            >
               Sign up
             </ButtonOrLink>
           </div>
@@ -64,20 +73,39 @@ export default async function Home() {
           </div>
         </div>
       )}
-      <InfiniteTweets
-        initialTweets={initialTweets}
-        fetchNextPage={fetchNextPage}
-        currentLoggedInUser={
-          user
-            ? {
-                id: user.id,
-                username: user.username,
-                name: user.name ?? undefined,
-                profileImage: user.profileImage,
-              }
-            : undefined
-        }
-      />
+      <Suspense fallback={<Spinner />}>
+        <HomeTweets />
+      </Suspense>
     </>
+  );
+}
+
+async function HomeTweets() {
+  const [user, initialTweets] = await Promise.all([
+    getCurrentLoggedInUser(),
+    getHomeTweets(),
+  ]);
+
+  const fetchNextPage = async (cursor: string) => {
+    "use server";
+    const tweets = await getHomeTweets(cursor);
+    return tweets;
+  };
+
+  return (
+    <InfiniteTweets
+      initialTweets={initialTweets}
+      fetchNextPage={fetchNextPage}
+      currentLoggedInUser={
+        user
+          ? {
+              id: user.id,
+              username: user.username,
+              name: user.name ?? undefined,
+              profileImage: user.profileImage,
+            }
+          : undefined
+      }
+    />
   );
 }
