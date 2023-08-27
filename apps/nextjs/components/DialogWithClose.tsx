@@ -39,7 +39,7 @@ const DialogWithClose = ({
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-start mt-4 justify-center p-4 text-center">
+          <div className="flex h-full items-start justify-center sm:pt-8 sm:p-4 text-center">
             <Transition.Child
               as={React.Fragment}
               enter="ease-out duration-300"
@@ -49,7 +49,7 @@ const DialogWithClose = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-2xl bg-black p-4 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full h-full sm:h-auto max-w-xl transform overflow-hidden sm:rounded-2xl bg-black p-4 text-left align-middle shadow-xl transition-all">
                 <div className="flex gap-4 items-center">
                   <button
                     className="text-white p-2 rounded-full hover:bg-gray-100/10"
