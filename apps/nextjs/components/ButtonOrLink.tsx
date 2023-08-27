@@ -25,6 +25,10 @@ const buttonOrLink = cva(
       disabled: {
         true: "opacity-50 cursor-not-allowed",
         false: "",
+      },
+      stretch: {
+        true: "w-full",
+        false: "",
       }
     },
     defaultVariants: {
@@ -57,6 +61,7 @@ export const ButtonOrLink = (props: ButtonOrLinkProps) => {
     variant: props.variant,
     size: props.size,
     disabled: props.disabled,
+    stretch: props.stretch,
   })} ${props.className ?? ""}`;
 
   if (props.as === "link") {
