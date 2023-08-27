@@ -6,7 +6,6 @@ import {
   TwitterLogo,
 } from "ui/icons";
 import { ButtonOrLink } from "components/ButtonOrLink";
-import { clearAuthCookie } from "utils/auth";
 import { getCurrentLoggedInUser } from "utils/user";
 import { DEFAULT_PROFILE_IMAGE } from "constants/user";
 import { TweetButton } from "./components/TweetButtonWithModal";
@@ -14,10 +13,10 @@ import { ProfileButton } from "./components/ProfileButton";
 import { NavItem } from "./components/NavItem";
 
 const LoggedOutFooter = () => (
-  <div className="fixed flex bottom-0 left-0 right-0 h-[4.5rem] bg-primary-blue">
-    <div className="flex-[4]" />
-    <div className="flex-[8] py-3">
-      <div className="w-[850px] flex justify-between">
+  <div className="fixed hidden px-4 sm:flex bottom-0 left-0 right-0 h-[4.5rem] bg-primary-blue">
+    <div className="md:flex-[4]" />
+    <div className="md:flex-[8] w-full py-3">
+      <div className="max-w-[850px] w-full flex justify-between">
         <div className="flex flex-col">
           <span className="text-white text-2xl font-bold">
             Don’t miss what’s happening
@@ -49,8 +48,8 @@ export default async function RootLayout({
 
   return (
     <>
-      <div className="grid w-full min-h-full grid-cols-[4fr_8fr]">
-        <header className="w-full h-full flex flex-col items-end text-white pb-3 pt-2 px-2 border-r border-solid border-gray-700">
+      <div className="w-full min-h-full block sm:grid sm:grid-cols-[4fr_8fr]">
+        <header className="hidden sm:flex w-full h-full flex-col items-end text-white pb-3 pt-2 px-2 border-r border-solid border-gray-700">
           <div className="w-full max-w-[256px] h-full flex flex-col justify-between">
             <div>
               <h1>

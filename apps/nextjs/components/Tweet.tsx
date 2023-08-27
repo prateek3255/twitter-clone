@@ -125,7 +125,7 @@ export const Tweet = (props: TweetProps) => {
             </div>
             <div className="flex flex-col gap-3">
               <span className="text-white text-sm">{content}</span>
-              <div className="flex max-w-[310px] w-full justify-between">
+              <div className="flex max-w-[342px] w-full justify-between pr-8">
                 <TweetAction
                   size="compact"
                   type="reply"
