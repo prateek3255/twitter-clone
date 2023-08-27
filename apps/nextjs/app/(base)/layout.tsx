@@ -49,6 +49,7 @@ export default async function RootLayout({
   return (
     <>
       <div className="w-full min-h-full block sm:grid sm:grid-cols-[4fr_8fr]">
+        {/* Desktop Sidebar */}
         <header className="hidden sm:flex w-full h-full flex-col items-end text-white pb-3 pt-2 px-2 border-r border-solid border-gray-700">
           <div className="w-full max-w-[256px] h-full flex flex-col justify-between">
             <div>
@@ -92,6 +93,18 @@ export default async function RootLayout({
             )}
           </div>
         </header>
+        {/* Mobile Bottom Navbar */}
+        {isLoggedIn && (
+          <nav className=" z-10 flex sm:hidden fixed left-0 bottom-0 right-0 h-[3.5rem] justify-around border-t border-solid border-gray-700 bg-black">
+            <NavItem href="/" icon={<Home />} activeIcon={<HomeFilled />} />
+            <NavItem
+              href={`/${user.username}`}
+              icon={<Profile />}
+              activeIcon={<ProfileFilled />}
+            />
+          </nav>
+        )}
+        {/* Main Content */}
         <main className="flex-[8] w-full overflow-y-auto max-h-screen">
           <div className="w-full min-h-full max-w-[600px] border-r border-solid border-gray-700">
             {children}

@@ -8,7 +8,7 @@ const NavItem = ({
   href,
   activeIcon,
 }: {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   icon: React.ReactNode;
   activeIcon: React.ReactNode;
   href: string;
