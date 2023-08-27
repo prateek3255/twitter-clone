@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { Dialog, Transition } from "@headlessui/react";
 import { ButtonOrLink } from "components/ButtonOrLink";
-import { Cross } from "ui/icons";
+import { CreateTweetMobile, Cross } from "ui/icons";
 import { createTweet } from "app/actions";
 import { TweetCTA } from "components/TweetCTA";
 
@@ -22,12 +22,21 @@ export const TweetButton = ({ profileImage, loggedInUserName }: { profileImage: 
   return (
     <>
       <ButtonOrLink
-        className="mt-3 w-full"
+        className="mt-3 w-full sm:block hidden"
         size="large"
         variant="primary"
         onClick={openModal}
       >
         Tweet
+      </ButtonOrLink>
+      <ButtonOrLink
+        className="sm:hidden block text-white pl-[14px] pr-[14px]"
+        size="large"
+        variant="primary"
+        onClick={openModal}
+      >
+       <CreateTweetMobile />
+       <span className="sr-only">Tweet</span>
       </ButtonOrLink>
       <Transition show={isOpen} as={React.Fragment}>
         <Dialog

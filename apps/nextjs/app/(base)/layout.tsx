@@ -95,6 +95,10 @@ export default async function RootLayout({
         </header>
         {/* Mobile Bottom Navbar */}
         {isLoggedIn && (
+          <>
+          <div className="block sm:hidden fixed right-4 z-10 bottom-[4.5rem]">
+            <TweetButton profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE} loggedInUserName={user.name ?? user.username} />
+          </div>
           <nav className=" z-10 flex sm:hidden fixed left-0 bottom-0 right-0 h-[3.5rem] justify-around border-t border-solid border-gray-700 bg-black">
             <NavItem href="/" icon={<Home />} activeIcon={<HomeFilled />} />
             <NavItem
@@ -103,6 +107,7 @@ export default async function RootLayout({
               activeIcon={<ProfileFilled />}
             />
           </nav>
+          </>
         )}
         {/* Main Content */}
         <main className="flex-[8] w-full overflow-y-auto max-h-screen">
