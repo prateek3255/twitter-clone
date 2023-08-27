@@ -1,5 +1,6 @@
 import {FloatingInput} from "components/FloatingInput";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import {
   decodeValueAndErrors,
   comparePassword,
@@ -96,6 +97,12 @@ export default function Signin({
           />
         </div>
         <SubmitButton>Sign In</SubmitButton>
+        <div className="text-center text-white text-base w-full mt-4 font-medium">
+          Don&apos;t have an account?{" "}
+          <Link href="/signup" className=" underline">
+            Sign up
+          </Link>
+        </div>
       </form>
     </>
   );

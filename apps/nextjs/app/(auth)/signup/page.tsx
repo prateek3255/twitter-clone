@@ -1,10 +1,9 @@
-// import { experimental_useFormStatus as useFormStatus } from "react-dom";
 import { ButtonOrLink } from "components/ButtonOrLink";
 import { FloatingInput } from "components/FloatingInput";
 import { prisma } from "utils/db";
 import { z } from "zod";
 import { redirect } from "next/navigation";
-
+import Link from "next/link";
 import {
   decodeValueAndErrors,
   encodeValueAndErrors,
@@ -120,7 +119,7 @@ export default function Signup({
       </h1>
       <form action={signup}>
         <div className="flex flex-col gap-4 mb-10">
-          <div className="flex w-full gap-4">
+          <div className="flex flex-col sm:flex-row w-full gap-4">
             <FloatingInput
               required
               autoFocus
@@ -172,6 +171,13 @@ export default function Signup({
         <ButtonOrLink variant="secondary" size="large" className="w-full mt-4">
           Sign Up with a burner account
         </ButtonOrLink>
+
+        <div className="text-center text-white text-base w-full mt-4 font-medium">
+          Already have an account?{" "}
+          <Link href="/signin" className=" underline">
+            Sign in
+          </Link>
+        </div>
       </form>
     </>
   );
