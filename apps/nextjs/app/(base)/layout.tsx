@@ -59,6 +59,7 @@ export default async function RootLayout({
                   className=" h-[50px] w-[50px] rounded-full flex justify-center items-center hover:bg-gray-100/10"
                 >
                   <TwitterLogo aria-label="Twitter logo" />
+                  <span className="sr-only">Go to home</span>
                 </a>
               </h1>
               <nav className="mt-1">
