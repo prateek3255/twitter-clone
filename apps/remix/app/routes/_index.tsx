@@ -1,8 +1,16 @@
-import { Button } from "ui";
+import type { V2_MetaFunction } from "@remix-run/node";
+import {FloatingInput} from "ui";
+
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: "New Remix App" },
+    { name: "description", content: "Welcome to Remix!" },
+  ];
+};
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
+    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <h1>Welcome to Remix</h1>
       <ul>
         <li>
@@ -24,7 +32,9 @@ export default function Index() {
           </a>
         </li>
         <li>
-          <Button />
+          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
+            Remix Docs
+          </a>
         </li>
       </ul>
     </div>

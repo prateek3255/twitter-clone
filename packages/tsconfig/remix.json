@@ -8,11 +8,7 @@
         "**/*.tsx"
     ],
     "compilerOptions": {
-        "lib": [
-            "DOM",
-            "DOM.Iterable",
-            "ES2019"
-        ],
+        "lib": ["DOM", "DOM.Iterable", "ES2019"],
         "isolatedModules": true,
         "esModuleInterop": true,
         "jsx": "react-jsx",
@@ -24,10 +20,8 @@
         "forceConsistentCasingInFileNames": true,
         "baseUrl": ".",
         "paths": {
-            "~/*": [
-                "./app/*"
-            ]
+          "~/*": ["./app/*"]
         },
         "noEmit": true
-    }
+      }
 }
