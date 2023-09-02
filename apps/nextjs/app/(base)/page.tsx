@@ -8,7 +8,7 @@ import { CreateTweetHomePage } from "./components/CreateTweetHomePage";
 import { ProfileButton } from "./components/ProfileButton";
 import { ButtonOrLink } from "components/ButtonOrLink";
 import { Suspense } from "react";
-import { Spinner } from "components/Spinner";
+import { Spinner } from "ui";
 
 export default async function Home() {
   const user = await getCurrentLoggedInUser();

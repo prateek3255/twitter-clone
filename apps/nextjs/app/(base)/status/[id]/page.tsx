@@ -10,7 +10,7 @@ import { getCurrentLoggedInUser } from "utils/user";
 import { InfiniteTweets } from "components/InfiniteTweets";
 import { BackButton } from "components/BackButton";
 import { Suspense } from "react";
-import { Spinner } from "components/Spinner";
+import { Spinner } from "ui";
 import { LoggedInUserBaseInfo } from "types/common";
 
 const TweetStat = ({ label, count }: { label: string; count: number }) => (

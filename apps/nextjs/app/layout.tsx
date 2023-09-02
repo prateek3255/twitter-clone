@@ -1,4 +1,4 @@
-import "./global.css";
+import "ui/global.css";
 import localFont from "next/font/local";
 
 const chirp = localFont({

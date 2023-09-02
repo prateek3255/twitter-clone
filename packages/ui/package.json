@@ -13,7 +13,8 @@
     "eslint": "^7.32.0",
     "react": "^18.2.0",
     "tsconfig": "workspace:*",
-    "typescript": "^4.5.2"
+    "typescript": "^4.5.2",
+    "class-variance-authority": "^0.6.0"
   },
   "dependencies": {
     "class-variance-authority": "^0.6.0"

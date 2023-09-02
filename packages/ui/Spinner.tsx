@@ -1,4 +1,4 @@
-import { LoadingIndicator } from "ui/icons";
+import { LoadingIndicator } from "./icons";
 
 const Spinner = () => {
   return (

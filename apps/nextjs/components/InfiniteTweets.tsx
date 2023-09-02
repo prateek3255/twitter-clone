@@ -3,7 +3,7 @@ import React from "react";
 import { Tweet } from "components/Tweet";
 import type { UserTweetsWithMeta } from "utils/tweet";
 import { useIntersectionObserver } from "hooks/useIntesectionObserver";
-import { Spinner } from "components/Spinner";
+import { Spinner } from "ui";
 import { LoggedInUserBaseInfo } from "types/common";
 
 const mapToTweet = (tweets: Array<UserTweetsWithMeta>, isLoggedIn: boolean) => {

@@ -1,5 +1,5 @@
 import { ButtonOrLink } from "components/ButtonOrLink";
-import { FloatingInput } from "components/FloatingInput";
+import { FloatingInput } from "ui";
 import { prisma } from "utils/db";
 import { z } from "zod";
 import { redirect } from "next/navigation";

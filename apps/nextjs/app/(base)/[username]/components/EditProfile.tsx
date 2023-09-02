@@ -2,8 +2,7 @@
 import React from "react";
 import { experimental_useFormStatus as useFormStatus } from "react-dom";
 import { ButtonOrLink } from "components/ButtonOrLink";
-import { FloatingInput } from "components/FloatingInput";
-import { FloatingTextArea } from "components/FloatingTextArea";
+import { FloatingInput, FloatingTextArea } from "ui";
 import { saveProfile } from "app/actions";
 import { DialogWithClose } from "components/DialogWithClose";
 

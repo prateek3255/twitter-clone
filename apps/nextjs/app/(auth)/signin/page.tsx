@@ -1,4 +1,4 @@
-import {FloatingInput} from "components/FloatingInput";
+import {FloatingInput} from "ui";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import {
