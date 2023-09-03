@@ -97,6 +97,7 @@ importers:
       autoprefixer: ^10.4.13
       class-variance-authority: ^0.6.0
       concurrently: ^7.6.0
+      database: workspace:*
       eslint: ^8.38.0
       isbot: ^3.6.8
       postcss: ^8.4.18
@@ -114,6 +115,7 @@ importers:
       '@remix-run/vercel': 1.19.3_@vercel+node@2.15.10
       '@vercel/node': 2.15.10
       class-variance-authority: 0.6.0_typescript@5.2.2
+      database: link:../../packages/database
       isbot: 3.6.13
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
