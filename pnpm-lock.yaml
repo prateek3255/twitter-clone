@@ -90,11 +90,12 @@ importers:
       '@remix-run/react': ^1.19.3
       '@remix-run/serve': ^1.19.3
       '@remix-run/vercel': ^1.19.3
-      '@types/react': ^18.0.35
-      '@types/react-dom': ^18.0.11
+      '@types/react': ^18.2.21
+      '@types/react-dom': ^18.2.7
       '@types/source-map-support': ^0.5.6
       '@vercel/node': ^2.10.3
       autoprefixer: ^10.4.13
+      class-variance-authority: ^0.6.0
       concurrently: ^7.6.0
       eslint: ^8.38.0
       isbot: ^3.6.8
@@ -112,6 +113,7 @@ importers:
       '@remix-run/react': 1.19.3_biqbaboplfbrettd7655fr4n2y
       '@remix-run/vercel': 1.19.3_@vercel+node@2.15.10
       '@vercel/node': 2.15.10
+      class-variance-authority: 0.6.0_typescript@5.2.2
       isbot: 3.6.13
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -152,18 +154,17 @@ importers:
 
   packages/ui:
     specifiers:
-      '@types/react': ^18.0.17
-      '@types/react-dom': ^18.0.6
+      '@types/react': ^18.2.21
+      '@types/react-dom': ^18.2.7
       class-variance-authority: ^0.6.0
       eslint: ^7.32.0
       react: ^18.2.0
       tsconfig: workspace:*
       typescript: ^4.5.2
-    dependencies:
-      class-variance-authority: 0.6.0_typescript@4.8.4
     devDependencies:
-      '@types/react': 18.0.25
-      '@types/react-dom': 18.0.8
+      '@types/react': 18.2.21
+      '@types/react-dom': 18.2.7
+      class-variance-authority: 0.6.0_typescript@4.8.4
       eslint: 7.32.0
       react: 18.2.0
       tsconfig: link:../tsconfig
@@ -2841,24 +2842,10 @@ packages:
     resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==}
     dev: true
 
-  /@types/react-dom/18.0.8:
-    resolution: {integrity: sha512-C3GYO0HLaOkk9dDAz3Dl4sbe4AKUGTCfFIZsz3n/82dPNN8Du533HzKatDxeUYWu24wJgMP1xICqkWk1YOLOIw==}
-    dependencies:
-      '@types/react': 18.2.21
-    dev: true
-
   /@types/react-dom/18.2.7:
     resolution: {integrity: sha512-GRaAEriuT4zp9N4p1i8BDBYmEyfo+xQ3yHjJU4eiK5NDa1RmUZG+unZABUTK4/Ox/M+GaHwb6Ow8rUITrtjszA==}
     dependencies:
       '@types/react': 18.2.21
-    dev: true
-
-  /@types/react/18.0.25:
-    resolution: {integrity: sha512-xD6c0KDT4m7n9uD4ZHi02lzskaiqcBxf4zi+tXZY98a04wvc0hi/TcCPC2FOESZi51Nd7tlUeOJY8RofL799/g==}
-    dependencies:
-      '@types/prop-types': 15.7.5
-      '@types/scheduler': 0.16.2
-      csstype: 3.1.1
     dev: true
 
   /@types/react/18.2.21:
@@ -3899,7 +3886,7 @@ packages:
     dependencies:
       clsx: 1.2.1
       typescript: 4.8.4
-    dev: false
+    dev: true
 
   /class-variance-authority/0.6.0_typescript@5.2.2:
     resolution: {integrity: sha512-qdRDgfjx3GRb9fpwpSvn+YaidnT7IUJNe4wt5/SWwM+PmUwJUhQRk/8zAyNro0PmVfmen2635UboTjIBXXxy5A==}
@@ -3962,7 +3949,6 @@ packages:
   /clsx/1.2.1:
     resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
     engines: {node: '>=6'}
-    dev: false
 
   /code-block-writer/10.1.1:
     resolution: {integrity: sha512-67ueh2IRGst/51p0n6FvPrnRjAGHY5F8xdjkgrYE7DDzpJe6qA07RYQ9VcoUeo5ATOjSOiWpSL3SWBRRbempMw==}
@@ -9351,6 +9337,7 @@ packages:
     resolution: {integrity: sha512-QCh+85mCy+h0IGff8r5XWzOVSbBO+KfeYrMQh7NJ58QujwcE22u+NUSmUxqF+un70P9GXKxa2HCNiTTMJknyjQ==}
     engines: {node: '>=4.2.0'}
     hasBin: true
+    dev: true
 
   /typescript/4.9.5:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
