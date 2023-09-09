@@ -1,11 +1,11 @@
-import {FloatingInput} from "ui";
+import { FloatingInput } from "ui";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import {
   decodeValueAndErrors,
   comparePassword,
   encodeValueAndErrors,
-  setAuthCookie
+  setAuthCookie,
 } from "utils/auth";
 import { SubmitButton } from "../components/SubmitButton";
 import { prisma } from "utils/db";
@@ -63,7 +63,6 @@ export default function Signin({
       userId: user.id,
     });
     return redirect("/");
-
   };
 
   const { fieldErrors, fieldValues } = decodeValueAndErrors({

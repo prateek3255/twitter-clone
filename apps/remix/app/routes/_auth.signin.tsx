@@ -5,6 +5,7 @@ import { ButtonOrLink } from "components/ButtonOrLink";
 import {prisma} from "utils/db.server";
 import { isEmail } from "utils/common";
 import { json, type ActionArgs } from "@remix-run/node";
+import { createUserSession } from "utils/auth.server";
 
 
 export const action = async ({ request }: ActionArgs) => {
@@ -53,12 +54,7 @@ export const action = async ({ request }: ActionArgs) => {
     })
   }
 
-  return json({
-    fields,
-    fieldErrors: null,
-  }, {
-    status: 200,
-  })
+  return createUserSession(user.id, "/");
 
 }
 

@@ -1,12 +1,17 @@
 import { Outlet } from "@remix-run/react";
 import { TwitterLogo } from "ui";
-// import { isAuthenticated } from "../../utils/auth";
-// import { redirect } from "next/navigation";
+import { redirect, type LoaderArgs, json } from "@remix-run/node";
+import { isAuthenticated } from "utils/auth.server";
+
+export const loader = async ({ request }: LoaderArgs) => {
+  const isLoggedIn = await isAuthenticated(request);
+  if (isLoggedIn) {
+    throw redirect("/", 302);
+  }
+  return json({}, { status: 200 });
+}
 
 export default function AuthLayout() {
-//   if (isAuthenticated()) {
-//     redirect("/");
-//   }
 
   return (
     <main className="flex h-full w-full justify-center items-center">
