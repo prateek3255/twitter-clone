@@ -90,11 +90,13 @@ importers:
       '@remix-run/react': ^1.19.3
       '@remix-run/serve': ^1.19.3
       '@remix-run/vercel': ^1.19.3
+      '@types/bcryptjs': ^2.4.2
       '@types/react': ^18.2.21
       '@types/react-dom': ^18.2.7
       '@types/source-map-support': ^0.5.6
       '@vercel/node': ^2.10.3
       autoprefixer: ^10.4.13
+      bcryptjs: ^2.4.3
       class-variance-authority: ^0.6.0
       concurrently: ^7.6.0
       database: workspace:*
@@ -114,6 +116,7 @@ importers:
       '@remix-run/react': 1.19.3_biqbaboplfbrettd7655fr4n2y
       '@remix-run/vercel': 1.19.3_@vercel+node@2.15.10
       '@vercel/node': 2.15.10
+      bcryptjs: 2.4.3
       class-variance-authority: 0.6.0_typescript@5.2.2
       database: link:../../packages/database
       isbot: 3.6.13
@@ -125,6 +128,7 @@ importers:
       '@remix-run/dev': 1.19.3_@remix-run+serve@1.19.3
       '@remix-run/eslint-config': 1.19.3_jj5tamtiqgy7do7uz4nx4zl4oy
       '@remix-run/serve': 1.19.3
+      '@types/bcryptjs': 2.4.2
       '@types/react': 18.2.21
       '@types/react-dom': 18.2.7
       '@types/source-map-support': 0.5.7

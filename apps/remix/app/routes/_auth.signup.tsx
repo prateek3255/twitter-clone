@@ -50,7 +50,7 @@ export default function Signup() {
         </div>
 
         <ButtonOrLink type="submit" size="large" stretch>
-          Sign In
+          Sign Up
         </ButtonOrLink>
 
         <ButtonOrLink variant="secondary" size="large" className="w-full mt-4">

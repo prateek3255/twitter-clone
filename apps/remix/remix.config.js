@@ -10,7 +10,7 @@ module.exports = {
   // assetsBuildDirectory: "public/build",
   // publicPath: "/build/",
   serverModuleFormat: "cjs",
-  serverDependenciesToBundle: ["ui"],
+  serverDependenciesToBundle: ["ui", "database"],
   future: {
     v2_dev: true,
     v2_errorBoundary: true,

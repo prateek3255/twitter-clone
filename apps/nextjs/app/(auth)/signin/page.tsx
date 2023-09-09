@@ -84,6 +84,8 @@ export default function Signin({
             placeholder="john@doe.com"
             defaultValue={fieldValues?.usernameOrEmail}
             error={fieldErrors?.usernameOrEmail}
+            aria-invalid={Boolean(fieldErrors?.usernameOrEmail)}
+            aria-errormessage={fieldErrors?.usernameOrEmail ?? undefined}
           />
           <FloatingInput
             required
@@ -94,6 +96,8 @@ export default function Signin({
             type="password"
             defaultValue={fieldValues?.password}
             error={fieldErrors?.password}
+            aria-invalid={Boolean(fieldErrors?.password)}
+            aria-errormessage={fieldErrors?.password ?? undefined}
           />
         </div>
         <SubmitButton>Sign In</SubmitButton>
