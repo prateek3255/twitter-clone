@@ -65,8 +65,9 @@ export const ButtonOrLink = (props: ButtonOrLinkProps) => {
   })} ${props.className ?? ""}`;
 
   if (props.as === "link") {
-    const { as, ...rest } = props;
+    const { as, variant, size, disabled, stretch, ...rest } = props;
     return <Link {...rest} className={classNames} />;
   }
-  return <button {...props} className={classNames} />;
+  const { variant, size, disabled, stretch, ...propsWithoutCVA } = props;
+  return <button {...propsWithoutCVA} className={classNames} />;
 };
