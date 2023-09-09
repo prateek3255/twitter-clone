@@ -22,7 +22,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "source-map-support": "^0.5.21",
-    "ui": "workspace:*"
+    "ui": "workspace:*",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.19.3",

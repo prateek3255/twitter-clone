@@ -130,6 +130,8 @@ export default function Signup({
               placeholder="John"
               defaultValue={fieldValues?.name}
               error={fieldErrors?.name}
+              aria-invalid={Boolean(fieldErrors?.name)}
+              aria-errormessage={fieldErrors?.name ?? undefined}
             />
             <FloatingInput
               required
@@ -142,6 +144,8 @@ export default function Signup({
               placeholder="johndoe"
               defaultValue={fieldValues?.username}
               error={fieldErrors?.username}
+              aria-invalid={Boolean(fieldErrors?.username)}
+              aria-errormessage={fieldErrors?.username ?? undefined}
             />
           </div>
           <FloatingInput
@@ -153,6 +157,8 @@ export default function Signup({
             placeholder="john@doe.com"
             defaultValue={fieldValues?.email}
             error={fieldErrors?.email}
+            aria-invalid={Boolean(fieldErrors?.email)}
+            aria-errormessage={fieldErrors?.email ?? undefined}
           />
           <FloatingInput
             type="password"
@@ -163,6 +169,8 @@ export default function Signup({
             placeholder="********"
             defaultValue={fieldValues?.password}
             error={fieldErrors?.password}
+            aria-invalid={Boolean(fieldErrors?.password)}
+            aria-errormessage={fieldErrors?.password ?? undefined}
           />
         </div>
 

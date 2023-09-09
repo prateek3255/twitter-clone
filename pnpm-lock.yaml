@@ -110,6 +110,7 @@ importers:
       tsconfig: workspace:*
       typescript: ^5.0.4
       ui: workspace:*
+      zod: ^3.21.4
     dependencies:
       '@remix-run/css-bundle': 1.19.3
       '@remix-run/node': 1.19.3
@@ -124,6 +125,7 @@ importers:
       react-dom: 18.2.0_react@18.2.0
       source-map-support: 0.5.21
       ui: link:../../packages/ui
+      zod: 3.21.4
     devDependencies:
       '@remix-run/dev': 1.19.3_@remix-run+serve@1.19.3
       '@remix-run/eslint-config': 1.19.3_jj5tamtiqgy7do7uz4nx4zl4oy
