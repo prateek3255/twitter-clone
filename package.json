@@ -16,15 +16,14 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "eslint": "^8.49.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-turbo": "latest",
     "prettier": "latest",
-    "turbo": "latest",
-    "eslint": "^7.23.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-config-turbo": "latest"
+    "turbo": "latest"
   },
   "engines": {
     "node": ">=14.0.0"
   },
-  "dependencies": {},
   "packageManager": "pnpm@7.13.2"
 }

@@ -4,8 +4,7 @@
   "types": "./index.ts",
   "version": "0.0.0",
   "dependencies": {
-    "@prisma/client": "4.13.0",
-    "typescript": "4.5.3"
+    "@prisma/client": "4.13.0"
   },
   "scripts": {
     "db:generate": "prisma generate",
@@ -14,6 +13,7 @@
   "devDependencies": {
     "@types/node": "^17.0.12",
     "prisma": "4.13.0",
-    "tsconfig": "workspace:*"
+    "tsconfig": "workspace:*",
+    "typescript": "5.0.4"
   }
 }

@@ -2,7 +2,8 @@
   "$schema": "https://turbo.build/schema.json",
   "globalEnv": [
     "NODE_ENV",
-    "COOKIE_SECRET"
+    "COOKIE_SECRET",
+    "SESSION_SECRET"
   ],
   "pipeline": {
     "build": {
