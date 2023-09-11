@@ -1,5 +1,5 @@
 "use client";
-import React, { startTransition } from "react";
+import React from "react";
 import Image from "next/image";
 import { ThreeDots, ChevronDown } from "ui/icons";
 import { Popover } from "@headlessui/react";
@@ -24,7 +24,7 @@ const ProfileButton = ({
             className="rounded-full object-contain sm:max-h-[40px] sm:max-w-[40px] max-h-[30px] max-w-[30px]"
             width={40}
             height={40}
-            alt="Prateek's profile image"
+            alt={`${name}'s avatar`}
           />
           <div className="hidden sm:flex flex-col items-start text-white">
             <span className="font-semibold text-base">{name}</span>

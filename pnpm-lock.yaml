@@ -83,6 +83,7 @@ importers:
 
   apps/remix:
     specifiers:
+      '@headlessui/react': ^1.7.15
       '@remix-run/css-bundle': ^1.19.3
       '@remix-run/dev': ^1.19.3
       '@remix-run/eslint-config': ^1.19.3
@@ -112,6 +113,7 @@ importers:
       ui: workspace:*
       zod: ^3.21.4
     dependencies:
+      '@headlessui/react': 1.7.15_biqbaboplfbrettd7655fr4n2y
       '@remix-run/css-bundle': 1.19.3
       '@remix-run/node': 1.19.3
       '@remix-run/react': 1.19.3_biqbaboplfbrettd7655fr4n2y
