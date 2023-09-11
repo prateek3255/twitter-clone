@@ -1,12 +1,12 @@
-import { ButtonOrLink } from "components/ButtonOrLink";
+import { ButtonOrLink } from "~/components/ButtonOrLink";
 import { FloatingInput } from "ui";
 import { z } from "zod";
 import { Link, useActionData, Form, useNavigation } from "@remix-run/react";
 import bcrypt from "bcryptjs";
-import { prisma } from "utils/db.server";
-import { getFlattenedZodErrors } from "utils/common";
+import { prisma } from "~/utils/db.server";
+import { getFlattenedZodErrors } from "~/utils/common";
 import { json, type ActionArgs } from "@remix-run/node";
-import { createUserSession } from "utils/auth.server";
+import { createUserSession } from "~/utils/auth.server";
 
 export const action = async ({ request }: ActionArgs) => {
   const form = await request.formData();

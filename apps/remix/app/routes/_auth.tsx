@@ -1,7 +1,7 @@
 import { Outlet } from "@remix-run/react";
 import { TwitterLogo } from "ui";
 import { redirect, type LoaderArgs, json } from "@remix-run/node";
-import { isAuthenticated } from "utils/auth.server";
+import { isAuthenticated } from "~/utils/auth.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const isLoggedIn = await isAuthenticated(request);

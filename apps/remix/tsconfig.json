@@ -12,6 +12,7 @@
     "baseUrl": ".",
     "paths": {
       "class-variance-authority": ["./node_modules/class-variance-authority"],
+      "~/*": ["./app/*"]
     }
   }
 }

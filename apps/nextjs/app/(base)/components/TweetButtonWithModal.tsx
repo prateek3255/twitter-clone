@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { ButtonOrLink } from "components/ButtonOrLink";
-import { CreateTweetMobile, Cross } from "ui/icons";
+import { CreateTweetMobile } from "ui/icons";
 import { createTweet } from "app/actions";
 import { TweetCTA } from "components/TweetCTA";
 import { DialogWithClose } from "components/DialogWithClose";
@@ -64,7 +64,7 @@ export const TweetButton = ({
               className="rounded-full object-contain max-h-[48px]"
               width={48}
               height={48}
-              alt={`${loggedInUserName}'s profile image`}
+              alt={`${loggedInUserName}'s avatar`}
             />
             <label htmlFor="tweet" className="sr-only">
               Create a tweet
