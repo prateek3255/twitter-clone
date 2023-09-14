@@ -19,10 +19,6 @@ import { type LoaderArgs, json } from "@remix-run/node";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const currentLoggedInUser = await getCurrentLoggedInUser(request);
-  // TODO: Handle error handling
-  //   if (isLoggedIn) {
-  //     throw redirect("/", 302);
-  //   }
   return json({ user: currentLoggedInUser }, { status: 200 });
 };
 

@@ -1,7 +1,5 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
 
-// TODO: This error shouldn't appear, figure out how to fix it
-// eslint-disable-next-line turbo/no-undeclared-env-vars
 const sessionSecret = process.env.SESSION_SECRET;
 
 if (!sessionSecret) {

@@ -1,5 +1,6 @@
 import { prisma } from "./db.server";
 import { getUserSession } from "./auth.server";
+import { json, redirect } from "@remix-run/node";
 
 export const getUser = async (userId: string) => {
   const user = await prisma.user.findUnique({
@@ -9,7 +10,6 @@ export const getUser = async (userId: string) => {
   });
 
   if (!user) {
-    // TODO: Handle error boundaries
     throw new Error("User not found");
   }
 
@@ -59,16 +59,16 @@ export const getUserProfile = async (username: string, request: Request) => {
 export const toggleFollowUser = async ({
   userId,
   isFollowing,
-  request
+  request,
 }: {
   userId: string;
   isFollowing: boolean;
   request: Request;
 }) => {
   const currentUserId = await getUserSession(request);
-  // if (!currentUserId) {
-  //   redirect("/signin");
-  // }
+  if (!currentUserId) {
+    return redirect("/signin", 302);
+  }
   if (isFollowing) {
     await prisma.user.update({
       where: {
@@ -96,4 +96,5 @@ export const toggleFollowUser = async ({
       },
     });
   }
+  return json({ success: true }, { status: 200 });
 };

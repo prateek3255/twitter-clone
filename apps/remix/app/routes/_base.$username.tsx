@@ -16,7 +16,6 @@ export const loader = async ({ request, params }: LoaderArgs) => {
     getUserProfile(params.username as string, request),
     getCurrentLoggedInUser(request),
   ]);
-  // TODO: Handle error handling
   return json({ user, currentLoggedInUser }, { status: 200 });
 };
 
@@ -26,7 +25,7 @@ export const action = async ({ request }: ActionArgs) => {
   const action = form.get("_action")?.toString() ?? "";
 
   if (action === "follow" || action === "unfollow") {
-    await toggleFollowUser({
+    return await toggleFollowUser({
       userId: profileUserId,
       isFollowing: action === "follow",
       request,
