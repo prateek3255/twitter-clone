@@ -24,3 +24,76 @@ export const getCurrentLoggedInUser = async (request: Request) => {
   }
   return null;
 };
+
+export const getUserProfile = async (username: string, request: Request) => {
+  const currentLoggedInUserId = await getUserSession(request);
+  const user = await prisma.user.findUnique({
+    where: {
+      username,
+    },
+    include: {
+      _count: {
+        select: {
+          followers: true,
+          following: true,
+          tweets: true,
+        },
+      },
+      ...(typeof currentLoggedInUserId === "string"
+        ? {
+            followers: {
+              select: {
+                id: true,
+              },
+              where: {
+                id: currentLoggedInUserId,
+              },
+            },
+          }
+        : {}),
+    },
+  });
+  return user;
+};
+
+export const toggleFollowUser = async ({
+  userId,
+  isFollowing,
+  request
+}: {
+  userId: string;
+  isFollowing: boolean;
+  request: Request;
+}) => {
+  const currentUserId = await getUserSession(request);
+  // if (!currentUserId) {
+  //   redirect("/signin");
+  // }
+  if (isFollowing) {
+    await prisma.user.update({
+      where: {
+        id: currentUserId,
+      },
+      data: {
+        following: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+    });
+  } else {
+    await prisma.user.update({
+      where: {
+        id: currentUserId,
+      },
+      data: {
+        following: {
+          disconnect: {
+            id: userId,
+          },
+        },
+      },
+    });
+  }
+};

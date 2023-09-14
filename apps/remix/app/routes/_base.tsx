@@ -17,7 +17,16 @@ import { getCurrentLoggedInUser } from "~/utils/user.server";
 import { DEFAULT_PROFILE_IMAGE } from "~/constants/user";
 import { type LoaderArgs, json } from "@remix-run/node";
 
-export const TweetButton = ({
+export const loader = async ({ request }: LoaderArgs) => {
+  const currentLoggedInUser = await getCurrentLoggedInUser(request);
+  // TODO: Handle error handling
+  //   if (isLoggedIn) {
+  //     throw redirect("/", 302);
+  //   }
+  return json({ user: currentLoggedInUser }, { status: 200 });
+};
+
+const TweetButton = ({
   profileImage,
   loggedInUserName,
 }: {
@@ -187,15 +196,6 @@ const ProfileButton = ({
       </Popover.Panel>
     </Popover>
   );
-};
-
-export const loader = async ({ request }: LoaderArgs) => {
-  const currentLoggedInUser = await getCurrentLoggedInUser(request);
-  // TODO: Handle error handling
-  //   if (isLoggedIn) {
-  //     throw redirect("/", 302);
-  //   }
-  return json({ user: currentLoggedInUser }, { status: 200 });
 };
 
 export default function RootLayout() {
