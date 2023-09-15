@@ -5,6 +5,7 @@ import { BackButton } from "components/BackButton";
 import { FollowButton } from "./components/FollowButton";
 import { EditProfile } from "./components/EditProfile";
 import { TabItem } from "./components/TabItem";
+import { notFound } from "next/navigation";
 
 const FollowCount = ({ count, label }: { count: number; label: string }) => (
   <a href="#" className="hover:underline decoration-white">
@@ -51,7 +52,10 @@ export default async function Profile({
     getUserProfile(username),
     getCurrentLoggedInUser(),
   ]);
-  const doesUserExist = user !== null;
+
+  if (!user) {
+    notFound();
+  }
   const isLoggedInUserFollowingProfile =
     user?.followers?.find(({ id }) => id === currentLoggedInUser?.id) !==
     undefined;
@@ -66,73 +70,51 @@ export default async function Profile({
           <span className="text-white text-xl font-bold">
             {user?.name ?? user?.username ?? "Profile"}
           </span>
-          {doesUserExist && (
-            <span className="text-gray-500 text-sm">
-              {user._count.tweets} Tweets
-            </span>
-          )}
+
+          <span className="text-gray-500 text-sm">
+            {user._count.tweets} Tweets
+          </span>
         </div>
       </div>
       {/* Cover Image */}
-      {doesUserExist ? (
-        <div className="max-w-[600px] w-full h-[200px] bg-gradient-to-r from-cyan-500 to-blue-500" />
-      ) : (
-        <div className="max-w-[600px] w-full h-[200px] bg-gray-700" />
-      )}
+      <div className="max-w-[600px] w-full h-[200px] bg-gradient-to-r from-cyan-500 to-blue-500" />
 
       <div className="relative pt-3 px-4">
         <div className="absolute top-[-67px] left-4">
           {/* Profile Image */}
-          {doesUserExist ? (
-            <Image
-              src={user?.profileImage ?? DEFAULT_PROFILE_IMAGE}
-              className="rounded-full object-contain max-h-[134px] border-4 border-solid border-black"
-              width={134}
-              height={134}
-              priority
-              alt={`${user.username}'s profile image`}
-            />
-          ) : (
-            <div className="rounded-full bg-gray-800 h-[134px] w-[134px] border-4 border-solid border-black" />
-          )}
+          <Image
+            src={user?.profileImage ?? DEFAULT_PROFILE_IMAGE}
+            className="rounded-full object-contain max-h-[134px] border-4 border-solid border-black"
+            width={134}
+            height={134}
+            priority
+            alt={`${user.username}'s profile image`}
+          />
         </div>
         <div className=" h-[67px] flex w-full justify-end items-start">
-          {doesUserExist &&
-            (isCurrentUser ? (
-              <EditProfile
-                username={user.username}
-                bio={user.bio}
-                name={user.name}
-              />
-            ) : (
-              <FollowButton
-                profileUserId={user.id}
-                isFollowing={isLoggedInUserFollowingProfile}
-              />
-            ))}
+          {isCurrentUser ? (
+            <EditProfile
+              username={user.username}
+              bio={user.bio}
+              name={user.name}
+            />
+          ) : (
+            <FollowButton
+              profileUserId={user.id}
+              isFollowing={isLoggedInUserFollowingProfile}
+            />
+          )}
         </div>
         {/* Name */}
         <div className="flex flex-col mb-3">
           <span className="text-white text-xl font-extrabold">
-            {doesUserExist ? user?.name : `@${username}`}
+            {user?.name}
           </span>
-          {doesUserExist && (
-            <span className="text-gray-500 text-sm">@{user.username}</span>
-          )}
+          <span className="text-gray-500 text-sm">@{user.username}</span>
         </div>
-        {doesUserExist && <UserProfileDetails userProfile={user} />}
-        {!doesUserExist && (
-          <div className="flex flex-col gap-2 max-w-[330px] mx-auto mt-16">
-            <span className="text-white text-3xl font-extrabold">
-              This account doesn’t exist
-            </span>
-            <span className="text-gray-500 text-sm">
-              Try searching for another.
-            </span>
-          </div>
-        )}
+        <UserProfileDetails userProfile={user} />
       </div>
-      {doesUserExist && children}
+      {children}
     </>
   );
 }

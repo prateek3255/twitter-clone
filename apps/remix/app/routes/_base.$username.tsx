@@ -1,5 +1,12 @@
 import React from "react";
-import { Link, useLoaderData, useParams, Form, useNavigation } from "@remix-run/react";
+import {
+  Link,
+  useLoaderData,
+  Form,
+  useNavigation,
+  useRouteError,
+  isRouteErrorResponse,
+} from "@remix-run/react";
 import { type LoaderArgs, json, type ActionArgs } from "@remix-run/node";
 import {
   getCurrentLoggedInUser,
@@ -16,6 +23,13 @@ export const loader = async ({ request, params }: LoaderArgs) => {
     getUserProfile(params.username as string, request),
     getCurrentLoggedInUser(request),
   ]);
+
+  if (!user) {
+    throw json(
+      { error: "User not found", username: params.username },
+      { status: 404 }
+    );
+  }
   return json({ user, currentLoggedInUser }, { status: 200 });
 };
 
@@ -146,9 +160,7 @@ const UserProfileDetails = ({ userProfile }: { userProfile: UserProfile }) => {
 };
 
 export default function Profile() {
-  const { username } = useParams();
   const { user, currentLoggedInUser } = useLoaderData<typeof loader>();
-  const doesUserExist = user !== null;
   const isLoggedInUserFollowingProfile =
     user?.followers?.find(({ id }) => id === currentLoggedInUser?.id) !==
     undefined;
@@ -163,62 +175,82 @@ export default function Profile() {
           <span className="text-white text-xl font-bold">
             {user?.name ?? user?.username ?? "Profile"}
           </span>
-          {doesUserExist && (
-            <span className="text-gray-500 text-sm">
-              {user._count.tweets} Tweets
-            </span>
-          )}
+
+          <span className="text-gray-500 text-sm">
+            {user._count.tweets} Tweets
+          </span>
         </div>
       </div>
       {/* Cover Image */}
-      {doesUserExist ? (
-        <div className="max-w-[600px] w-full h-[200px] bg-gradient-to-r from-cyan-500 to-blue-500" />
-      ) : (
-        <div className="max-w-[600px] w-full h-[200px] bg-gray-700" />
-      )}
+      <div className="max-w-[600px] w-full h-[200px] bg-gradient-to-r from-cyan-500 to-blue-500" />
 
       <div className="relative pt-3 px-4">
         <div className="absolute top-[-67px] left-4">
           {/* Profile Image */}
-          {doesUserExist ? (
-            <img
-              src={user?.profileImage ?? DEFAULT_PROFILE_IMAGE}
-              className="rounded-full object-contain max-h-[134px] border-4 border-solid border-black"
-              width={134}
-              height={134}
-              alt={`${user.username}'s avatar`}
-            />
-          ) : (
-            <div className="rounded-full bg-gray-800 h-[134px] w-[134px] border-4 border-solid border-black" />
-          )}
+          <img
+            src={user?.profileImage ?? DEFAULT_PROFILE_IMAGE}
+            className="rounded-full object-contain max-h-[134px] border-4 border-solid border-black"
+            width={134}
+            height={134}
+            alt={`${user.username}'s avatar`}
+          />
         </div>
         <div className=" h-[67px] flex w-full justify-end items-start">
-          {doesUserExist &&
-            (isCurrentUser ? (
-              //   <EditProfile
-              //     username={user.username}
-              //     bio={user.bio}
-              //     name={user.name}
-              //   />
-              <div />
-            ) : (
-              <FollowButton
-                profileUserId={user.id}
-                isFollowing={isLoggedInUserFollowingProfile}
-              />
-            ))}
+          {isCurrentUser ? (
+            //   <EditProfile
+            //     username={user.username}
+            //     bio={user.bio}
+            //     name={user.name}
+            //   />
+            <div />
+          ) : (
+            <FollowButton
+              profileUserId={user.id}
+              isFollowing={isLoggedInUserFollowingProfile}
+            />
+          )}
         </div>
         {/* Name */}
         <div className="flex flex-col mb-3">
           <span className="text-white text-xl font-extrabold">
-            {doesUserExist ? user?.name : `@${username}`}
+            {user?.name}
           </span>
-          {doesUserExist && (
-            <span className="text-gray-500 text-sm">@{user.username}</span>
-          )}
+
+          <span className="text-gray-500 text-sm">@{user.username}</span>
         </div>
         {user && <UserProfileDetails userProfile={user} />}
-        {!doesUserExist && (
+      </div>
+      {/* {doesUserExist && children} */}
+    </>
+  );
+}
+
+export const ErrorBoundary = () => {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error) && error.status === 404) {
+    return (
+      <>
+        <div className="h-14 w-full px-4 flex gap-5 items-center">
+          <BackButton />
+          <div className="flex flex-col">
+            <span className="text-white text-xl font-bold">Profile</span>
+          </div>
+        </div>
+
+        <div className="max-w-[600px] w-full h-[200px] bg-gray-700" />
+
+        <div className="relative pt-3 px-4">
+          <div className="absolute top-[-67px] left-4">
+            <div className="rounded-full bg-gray-800 h-[134px] w-[134px] border-4 border-solid border-black" />
+          </div>
+          <div className="h-[67px]" />
+          <div className="flex flex-col mb-3">
+            <span className="text-white text-xl font-extrabold">
+              @{error.data.username}
+            </span>
+          </div>
+
           <div className="flex flex-col gap-2 max-w-[330px] mx-auto mt-16">
             <span className="text-white text-3xl font-extrabold">
               This account doesn’t exist
@@ -227,9 +259,10 @@ export default function Profile() {
               Try searching for another.
             </span>
           </div>
-        )}
-      </div>
-      {/* {doesUserExist && children} */}
-    </>
-  );
-}
+        </div>
+      </>
+    );
+  }
+
+  throw error;
+};

@@ -83,7 +83,7 @@ export default function App() {
   );
 }
 
-export const ErrorBoundary = ({ error }: { error: Error }) => {
+export const ErrorBoundary = () => {
   return (
     <Document>
       <main className="flex h-full w-full justify-center items-center">
