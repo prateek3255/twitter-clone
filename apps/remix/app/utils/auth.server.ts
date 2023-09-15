@@ -31,6 +31,15 @@ export const isAuthenticated = async (request: Request) => {
   return typeof userId === "string";
 }
 
+export const destroyUserSession = async (request: Request) => {
+  const session = await storage.getSession(request.headers.get("Cookie"));
+  return redirect("/signin", {
+    headers: {
+      "Set-Cookie": await storage.destroySession(session),
+    }
+  })
+}
+
 export const createUserSession =  async (userId: string, redirectTo: string) => {
   const session = await storage.getSession();
   session.set("userId", userId);

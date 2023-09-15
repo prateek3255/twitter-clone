@@ -1,6 +1,5 @@
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, ActionArgs } from "@remix-run/node";
 import { TwitterLogo } from "ui";
-import { ButtonOrLink } from "~/components/ButtonOrLink";
 import {
   Links,
   LiveReload,
@@ -9,6 +8,8 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import { ButtonOrLink } from "~/components/ButtonOrLink";
+import { destroyUserSession } from "~/utils/auth.server";
 
 import styles from "./styles/app.css";
 
@@ -40,6 +41,15 @@ const fonts = `
     --font-chirp: 'chirp', system-ui, sans-serif;
   }
 `;
+
+export const action = async ({ request }: ActionArgs) => {
+  const form = await request.formData();
+  const action = form.get("_action")?.toString() ?? "";
+
+  if (action === "logout") {
+    return destroyUserSession(request);
+  }
+};
 
 const Document = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -85,9 +95,17 @@ export const ErrorBoundary = ({ error }: { error: Error }) => {
             <h1 className="font-bold text-3xl text-white">
               Something went wrong!
             </h1>
-            <ButtonOrLink size="large" className="w-full">
-              Try again
-            </ButtonOrLink>
+            <form method="post" className="w-full">
+              <ButtonOrLink
+                size="large"
+                stretch
+                name="_action"
+                value="logout"
+                type="submit"
+              >
+                Try again
+              </ButtonOrLink>
+            </form>
           </div>
         </div>
       </main>
