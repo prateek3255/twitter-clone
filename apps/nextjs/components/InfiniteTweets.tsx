@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
 import { Tweet } from "components/Tweet";
-import type { UserTweetsWithMeta } from "utils/tweet";
-import { useIntersectionObserver } from "hooks/useIntesectionObserver";
+import type { TweetWithMeta } from "utils/tweet";
+import { useIntersectionObserver } from "hooks/useIntersectionObserver";
 import { Spinner } from "ui";
 import { LoggedInUserBaseInfo } from "types/common";
 
-const mapToTweet = (tweets: Array<UserTweetsWithMeta>, isLoggedIn: boolean) => {
+const mapToTweet = (tweets: Array<TweetWithMeta>, isLoggedIn: boolean) => {
   return tweets.map((tweet) => {
     // In case of retweeted tweet, we add the info related to the
     // original tweet to the tweet object.
@@ -144,9 +144,9 @@ export const InfiniteTweets = ({
   fetchNextPage,
   isUserProfile = false,
 }: {
-  initialTweets: Array<UserTweetsWithMeta>;
+  initialTweets: Array<TweetWithMeta>;
   currentLoggedInUser?: LoggedInUserBaseInfo;
-  fetchNextPage: (cursor: string) => Promise<Array<UserTweetsWithMeta>>;
+  fetchNextPage: (cursor: string) => Promise<Array<TweetWithMeta>>;
   isUserProfile?: boolean;
 }) => {
   const isLoggedIn = !!currentLoggedInUser;

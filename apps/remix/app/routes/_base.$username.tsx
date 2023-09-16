@@ -6,6 +6,7 @@ import {
   useNavigation,
   useRouteError,
   isRouteErrorResponse,
+  Outlet,
 } from "@remix-run/react";
 import { type LoaderArgs, json, type ActionArgs } from "@remix-run/node";
 import {
@@ -220,13 +221,15 @@ export default function Profile() {
         </div>
         {user && <UserProfileDetails userProfile={user} />}
       </div>
-      {/* {doesUserExist && children} */}
+      <Outlet />
     </>
   );
 }
 
 export const ErrorBoundary = () => {
   const error = useRouteError();
+
+  console.log(error);
 
   if (isRouteErrorResponse(error) && error.status === 404) {
     return (

@@ -19,6 +19,7 @@
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.6.0",
     "database": "workspace:*",
+    "date-fns": "^2.30.0",
     "isbot": "^3.6.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

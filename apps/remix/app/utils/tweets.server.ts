@@ -1,6 +1,5 @@
-import { prisma } from "./db";
-import { getUserId } from "./auth";
-import "server-only";
+import { prisma } from "./db.server";
+import { getUserSession } from "./auth.server";
 
 const getTweetFields = (userId?: string | null) =>
   ({
@@ -78,10 +77,11 @@ const getTweetFields = (userId?: string | null) =>
   }) as const;
 
 export const getTweetsByUsername = async (
+  request: Request,
   username: string,
-  cursor?: string
+  cursor?: string,
 ) => {
-  const userId = getUserId();
+  const userId = await getUserSession(request);
   const tweets = await prisma.tweet.findMany({
     where: {
       author: {
@@ -113,9 +113,8 @@ export const getTweetsByUsername = async (
   return tweets;
 };
 
-export const getTweetWithID = async (id: string) => {
-  const userId = getUserId();
-
+export const getTweetWithID = async (request: Request, id: string) => {
+  const userId = await getUserSession(request);
   const tweet = await prisma.tweet.findUnique({
     where: {
       id,
@@ -126,9 +125,8 @@ export const getTweetWithID = async (id: string) => {
   return tweet;
 };
 
-export const getTweetReplies = async (id: string, cursor?: string) => {
-  const userId = getUserId();
-
+export const getTweetReplies = async (request: Request, id: string, cursor?: string) => {
+  const userId = await getUserSession(request);
   const tweets = await prisma.tweet.findMany({
     where: {
       replyToId: id,
@@ -150,9 +148,8 @@ export const getTweetReplies = async (id: string, cursor?: string) => {
   return tweets;
 };
 
-export const getHomeTweets = async (cursor?: string) => {
-  const userId = getUserId();
-
+export const getHomeTweets = async (request: Request, cursor?: string) => {
+  const userId = await getUserSession(request);
   let followingCount = 0;
   if (typeof cursor !== "string" && typeof userId === "string") {
     const followingQuery = await prisma.user.findUnique({
@@ -205,8 +202,8 @@ export const getHomeTweets = async (cursor?: string) => {
   return tweets;
 };
 
-export const getUserReplies = async (username: string, cursor?: string) => {
-  const userId = getUserId();
+export const getUserReplies = async (request: Request, username: string, cursor?: string) => {
+  const userId = await getUserSession(request);
 
   const tweets = await prisma.tweet.findMany({
     where: {
@@ -234,8 +231,8 @@ export const getUserReplies = async (username: string, cursor?: string) => {
   return tweets;
 };
 
-export const getUserLikes = async (username: string, cursor?: string) => {
-  const userId = getUserId();
+export const getUserLikes = async (request: Request, username: string, cursor?: string) => {
+  const userId = await getUserSession(request);
 
   const tweets = await prisma.tweet.findMany({
     where: {
@@ -246,7 +243,7 @@ export const getUserLikes = async (username: string, cursor?: string) => {
         some: {
           userId: userId ?? undefined,
         },
-      },
+      }
     },
     ...getTweetFields(userId),
     take: 4,
@@ -265,4 +262,7 @@ export const getUserLikes = async (username: string, cursor?: string) => {
   return tweets;
 };
 
-export type TweetWithMeta = Awaited<ReturnType<typeof getTweetsByUsername>>[0];
+export type TweetWithMeta = Awaited<
+  ReturnType<typeof getTweetsByUsername>
+>[0];
+
