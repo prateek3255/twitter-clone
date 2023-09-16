@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet, Link, useLoaderData } from "@remix-run/react";
+import { Outlet, Link, useLoaderData, useLocation } from "@remix-run/react";
 import {
   Home,
   HomeFilled,
@@ -108,7 +108,8 @@ const NavItem = ({
   activeIcon: React.ReactNode;
   href: string;
 }) => {
-  const isActive = false;
+  const location = useLocation();
+  const isActive = location.pathname === href;
   return (
     <Link
       to={href}

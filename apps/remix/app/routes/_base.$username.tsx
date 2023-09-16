@@ -7,6 +7,7 @@ import {
   useRouteError,
   isRouteErrorResponse,
   Outlet,
+  useLocation,
 } from "@remix-run/react";
 import { type LoaderArgs, json, type ActionArgs } from "@remix-run/node";
 import {
@@ -105,9 +106,8 @@ const TabItem = ({
   href: string;
   children: React.ReactNode;
 }) => {
-  // const selectedLayoutSegment = useSelectedLayoutSegment();
-  // const segment = href.split("/")[2];
-  const isActive = false;
+  const location = useLocation();
+  const isActive = location.pathname === href;
 
   return (
     <Link
