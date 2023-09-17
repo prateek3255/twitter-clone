@@ -66,7 +66,7 @@ export default async function Home() {
             className="rounded-full object-contain max-h-[48px]"
             width={48}
             height={48}
-            alt="Prateek's profile image"
+            alt={`${user.username}'s avatar`}
           />
           <div className="flex-1 ml-3 mt-2">
             <CreateTweetHomePage />
