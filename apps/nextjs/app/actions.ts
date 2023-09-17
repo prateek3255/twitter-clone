@@ -141,8 +141,6 @@ export const toggleTweetRetweet = async ({
       },
     });
   }
-  // Sleep for 2 seconds
-  await new Promise((resolve) => setTimeout(resolve, 2000));
   revalidatePath("status/[id]");
 };
 

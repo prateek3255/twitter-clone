@@ -32,10 +32,13 @@ const ActiveLabel: Record<ActionType, string> = {
 
 interface TweetActionPropsBase {
   type: ActionType;
-  active?: boolean;
-  disabled?: boolean;
   action: () => void;
   size: "compact" | "normal";
+  active?: boolean;
+  disabled?: boolean;
+  submit?: boolean;
+  name?: string;
+  value?: string;
 }
 
 interface TweetActionPropsCompact extends TweetActionPropsBase {
@@ -62,6 +65,9 @@ const TweetAction = (props: TweetActionProps) => {
         props.action();
       }}
       disabled={props.disabled}
+      type={props.submit ? "submit" : "button"}
+      name={props.name}
+      value={props.value}
     >
       <div className={`relative ${props.size === 'normal' ? '[&_>_svg]:w-6 [&_>_svg]:h-6' : ''}`}>
         <div className="absolute top-0 left-0 right-0 bottom-0 rounded-full m-[-8px] transition-colors"></div>

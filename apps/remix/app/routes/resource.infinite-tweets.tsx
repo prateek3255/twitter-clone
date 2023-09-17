@@ -1,11 +1,11 @@
 import React, { Suspense } from "react";
-import { json } from "@remix-run/node";
-import type { SerializeFrom, LoaderArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import type { SerializeFrom, LoaderArgs, ActionArgs } from "@remix-run/node";
 import { Spinner, Retweet } from "ui";
 import { formatDistanceForTweet } from "~/utils/common";
 import { formatDistanceToNowStrict, parseISO } from "date-fns";
 import type { FetcherWithComponents } from "@remix-run/react";
-import { useFetcher, Link, useNavigate, Await } from "@remix-run/react";
+import { useFetcher, Link, useNavigate, Await, Form } from "@remix-run/react";
 import type { TweetWithMeta } from "~/utils/tweets.server";
 import { useIntersectionObserver } from "~/hooks/useIntersectionObserver";
 import type { LoggedInUserBaseInfo } from "~/types/common";
@@ -17,7 +17,14 @@ import {
   getUserReplies,
 } from "~/utils/tweets.server";
 import { TweetAction } from "~/components/TweetAction";
+import { ReplyModal } from "~/components/ReplyModal";
 import { DEFAULT_PROFILE_IMAGE } from "~/constants/user";
+import { getUserSession } from "~/utils/auth.server";
+import {
+  toggleTweetLike,
+  toggleTweetRetweet,
+  replyToTweet,
+} from "~/utils/tweet.server";
 
 type InfiniteTweetsParams =
   | { type: "user_tweets"; username: string }
@@ -67,6 +74,54 @@ export const loader = async ({ request }: LoaderArgs) => {
     },
     200
   );
+};
+
+export const action = async ({ request }: ActionArgs) => {
+  const formData = await request.formData();
+  const action = formData.get("_action");
+  const userId = await getUserSession(request);
+
+  if (!userId) {
+    return redirect("/signin", 302);
+  }
+
+  switch (action) {
+    case "toggle_tweet_like":
+      {
+        const tweetId = formData.get("tweetId") as string;
+        const hasLiked = formData.get("hasLiked") === "true";
+        await toggleTweetLike({
+          request,
+          tweetId,
+          hasLiked,
+        });
+      }
+      break;
+    case "toggle_tweet_retweet":
+      {
+        const tweetId = formData.get("tweetId") as string;
+        const hasRetweeted = formData.get("hasRetweeted") === "true";
+        await toggleTweetRetweet({
+          request,
+          tweetId,
+          hasRetweeted,
+        });
+      }
+      break;
+    case "reply_to_tweet":
+      {
+        const replyToTweetId = formData.get("replyToTweetId") as string;
+        const content = formData.get("tweet") as string;
+        await replyToTweet({
+          request,
+          replyToTweetId,
+          content,
+        });
+      }
+      break;
+  }
+
+  return redirect(request.headers.get("Referer") ?? "/");
 };
 
 type LoaderTweets = NonNullable<
@@ -362,14 +417,13 @@ export const Tweet = (props: TweetProps) => {
     hasLiked,
     onRetweetClick,
     hasRetweeted,
-    // currentLoggedInUser,
-    // onReplySuccess,
+    currentLoggedInUser,
+    onReplySuccess,
     showOwnRetweet,
   } = props;
   const [isReplyModalOpen, setIsReplyModalOpen] = React.useState(false);
-  //   const [isPending, startTransition] = useTransition();
   const isRetweet = typeof props.originalTweetId === "string";
-  //   const originalTweetId = props.originalTweetId ?? id;
+  const originalTweetId = props.originalTweetId ?? id;
   const navigate = useNavigate();
 
   const handleTweetClick = () => {
@@ -381,6 +435,10 @@ export const Tweet = (props: TweetProps) => {
   const showRetweetedBy = showOwnRetweet
     ? hasRetweeted || isRetweet
     : isRetweet;
+
+  const closeReplyModal = React.useCallback(() => {
+    setIsReplyModalOpen(false);
+  }, []);
 
   return (
     <>
@@ -438,49 +496,56 @@ export const Tweet = (props: TweetProps) => {
                   size="compact"
                   type="reply"
                   count={replies}
-                  //   disabled={isPending}
                   action={() => setIsReplyModalOpen(true)}
                 />
-                <TweetAction
-                  size="compact"
-                  type="retweet"
-                  active={hasRetweeted}
-                  count={retweets}
-                  //   disabled={isPending}
-                  action={() => {
-                    // startTransition(() => {
-                    //   toggleTweetRetweet({
-                    //     tweetId: originalTweetId,
-                    //     hasRetweeted: !hasRetweeted,
-                    //   });
-                    // });
-                    onRetweetClick?.(id);
-                  }}
-                />
-                <TweetAction
-                  size="compact"
-                  active={hasLiked}
-                  type="like"
-                  count={likes}
-                  //   disabled={isPending}
-                  action={() => {
-                    // startTransition(() => {
-                    //   toggleTweetLike({
-                    //     tweetId: originalTweetId,
-                    //     hasLiked: !hasLiked,
-                    //   });
-                    // });
-                    onLikeClick?.(id);
-                  }}
-                />
+                <Form method="post" action="/resource/infinite-tweets">
+                  <input type="hidden" name="tweetId" value={id} />
+                  <input
+                    type="hidden"
+                    name="hasRetweeted"
+                    value={hasRetweeted?.toString() ?? "false"}
+                  />
+                  <TweetAction
+                    size="compact"
+                    type="retweet"
+                    active={hasRetweeted}
+                    count={retweets}
+                    submit
+                    name="_action"
+                    value="toggle_tweet_retweet"
+                    action={() => {
+                      onRetweetClick?.(id);
+                    }}
+                  />
+                </Form>
+                <Form method="post" action="/resource/infinite-tweets">
+                  <input type="hidden" name="tweetId" value={id} />
+                  <input
+                    type="hidden"
+                    name="hasLiked"
+                    value={hasLiked?.toString() ?? "false"}
+                  />
+                  <TweetAction
+                    size="compact"
+                    active={hasLiked}
+                    type="like"
+                    count={likes}
+                    submit
+                    name="_action"
+                    value="toggle_tweet_like"
+                    action={() => {
+                      onLikeClick?.(id);
+                    }}
+                  />
+                </Form>
               </div>
             </div>
           </div>
         </div>
       </article>
-      {/* <ReplyModal
+      <ReplyModal
         isOpen={isReplyModalOpen}
-        closeModal={() => setIsReplyModalOpen(false)}
+        closeModal={closeReplyModal}
         originalTweet={{
           id: originalTweetId,
           username,
@@ -491,7 +556,7 @@ export const Tweet = (props: TweetProps) => {
         }}
         currentLoggedInUser={currentLoggedInUser}
         onReply={() => onReplySuccess?.(id)}
-      /> */}
+      />
     </>
   );
 };
