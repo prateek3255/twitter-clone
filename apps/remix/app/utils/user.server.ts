@@ -98,3 +98,37 @@ export const toggleFollowUser = async ({
   }
   return json({ success: true }, { status: 200 });
 };
+
+export const saveProfile = async (
+  request: Request,
+  { username, name, bio }: { username: string; bio: string; name: string }
+) => {
+  const loggedInUserId = await getUserSession(request);
+  if (!loggedInUserId) {
+    return redirect("/signin");
+  }
+
+  // Check if username is already taken
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      username,
+    },
+  });
+  if (existingUser && existingUser.id !== loggedInUserId) {
+    return { success: false, error: "username_already_taken" };
+  }
+
+  // Update user
+  await prisma.user.update({
+    where: {
+      id: loggedInUserId,
+    },
+    data: {
+      username,
+      name,
+      bio,
+    },
+  });
+
+  return { success: true, shouldRedirect: username !== existingUser?.username };
+};
