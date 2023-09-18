@@ -1,19 +1,23 @@
 import { useEffect, useRef } from "react";
 import { TwitterLogo, ThreeDots, ChevronDown } from "ui";
 import { Popover } from "@headlessui/react";
-import { type LoaderArgs, json } from "@remix-run/node";
+import { type LoaderArgs, defer } from "@remix-run/node";
 import { Form, useLoaderData, useNavigation } from "@remix-run/react";
 import { DEFAULT_PROFILE_IMAGE } from "~/constants/user";
 import { ButtonOrLink } from "~/components/ButtonOrLink";
 import { getCurrentLoggedInUser } from "~/utils/user.server";
+import { getHomeTweets } from "~/utils/tweets.server";
+import { SuspendedInfiniteTweets } from "./resource.infinite-tweets";
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const currentLoggedInUser = await getCurrentLoggedInUser(request);
-  return json({ user: currentLoggedInUser }, { status: 200 });
+  return defer({
+    user: await getCurrentLoggedInUser(request),
+    tweets: getHomeTweets(request),
+  });
 };
 
 export default function Home() {
-  const { user } = useLoaderData<typeof loader>();
+  const { user, tweets } = useLoaderData<typeof loader>();
   const formRef = useRef<HTMLFormElement>(null);
   const navigation = useNavigation();
   const isLoading = navigation.state === "submitting";
@@ -135,9 +139,20 @@ export default function Home() {
           </div>
         </div>
       )}
-      {/* <Suspense fallback={<Spinner />}>
-        <HomeTweets />
-      </Suspense> */}
+      <SuspendedInfiniteTweets
+        initialTweetsPromise={tweets}
+        currentLoggedInUser={
+          user
+            ? {
+                id: user.id,
+                username: user.username,
+                name: user.name ?? undefined,
+                profileImage: user.profileImage,
+              }
+            : undefined
+        }
+        type="home_timeline"
+      />
     </>
   );
 }

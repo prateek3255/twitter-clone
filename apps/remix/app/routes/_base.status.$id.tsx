@@ -2,13 +2,18 @@ import { Retweet } from "ui";
 import { useState, useCallback } from "react";
 import { useLoaderData, Link, useNavigation, Form } from "@remix-run/react";
 import { format, parseISO } from "date-fns";
-import { json, type LoaderArgs } from "@remix-run/node";
+import { json, type LoaderArgs, defer } from "@remix-run/node";
 import { DEFAULT_PROFILE_IMAGE } from "~/constants/user";
-import { getTweetWithID, type TweetWithMeta } from "~/utils/tweets.server";
+import {
+  getTweetReplies,
+  getTweetWithID,
+  type TweetWithMeta,
+} from "~/utils/tweets.server";
 import { getCurrentLoggedInUser } from "~/utils/user.server";
 import { BackButton } from "~/components/BackButton";
 import { TweetAction } from "~/components/TweetAction";
 import { ReplyModal } from "~/components/ReplyModal";
+import { SuspendedInfiniteTweets } from "./resource.infinite-tweets";
 
 const TweetStat = ({ label, count }: { label: string; count: number }) => (
   <div className="flex gap-1">
@@ -29,7 +34,17 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       { status: 404 }
     );
   }
-  return json({ tweet: getTweetInfo(tweet, !!user), user }, { status: 200 });
+  const tweetInfo = getTweetInfo(tweet, !!user);
+  return defer({
+    tweet: tweetInfo,
+    user,
+    replies: getTweetReplies(request, tweetInfo.originalTweetId ?? tweetInfo.id).then((tweets) =>
+      tweets.map((tweet) => ({
+        ...tweet,
+        createdAt: tweet.createdAt.toISOString(),
+      }))
+    ),
+  });
 };
 
 const getTweetInfo = (tweet: TweetWithMeta, isLoggedIn: boolean) => {
@@ -68,7 +83,7 @@ const getTweetInfo = (tweet: TweetWithMeta, isLoggedIn: boolean) => {
 };
 
 export default function TweetStatus() {
-  const { tweet, user } = useLoaderData<typeof loader>();
+  const { tweet, user, replies } = useLoaderData<typeof loader>();
   const originalTweetId = tweet?.originalTweetId ?? tweet?.id;
   const navigation = useNavigation();
   const isLoading = navigation.state === "loading";
@@ -191,14 +206,24 @@ export default function TweetStatus() {
         />
       </article>
       {/* Replies */}
-      {/* <div>
-        <Suspense fallback={<Spinner />}>
-          <TweetReplies
-            parentTweetId={originalTweetId}
-            currentLoggedInUser={currentLoggedInUser}
-          />
-        </Suspense>
-      </div> */}
+      <div>
+        <SuspendedInfiniteTweets
+          key={originalTweetId}
+          initialTweetsPromise={replies}
+          currentLoggedInUser={
+            currentLoggedInUser
+              ? {
+                  id: currentLoggedInUser.id,
+                  username: currentLoggedInUser.username,
+                  name: currentLoggedInUser.name ?? undefined,
+                  profileImage: currentLoggedInUser.profileImage,
+                }
+              : undefined
+          }
+          type="tweet_replies"
+          tweetId={originalTweetId}
+        />
+      </div>
     </>
   );
 }
