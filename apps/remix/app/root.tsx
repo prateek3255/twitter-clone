@@ -1,6 +1,7 @@
 import type { LinksFunction, ActionArgs } from "@remix-run/node";
 import { TwitterLogo } from "ui";
 import {
+  Form,
   Links,
   LiveReload,
   Meta,
@@ -121,7 +122,7 @@ export const ErrorBoundary = () => {
             <h1 className="font-bold text-3xl text-white">
               Something went wrong!
             </h1>
-            <form method="post" className="w-full">
+            <Form method="post" className="w-full">
               <ButtonOrLink
                 size="large"
                 stretch
@@ -131,7 +132,7 @@ export const ErrorBoundary = () => {
               >
                 Try again
               </ButtonOrLink>
-            </form>
+            </Form>
           </div>
         </div>
       </main>
