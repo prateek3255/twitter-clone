@@ -24,6 +24,7 @@ export default function UserTweets() {
 
   return (
     <SuspendedInfiniteTweets
+      key={data.username}
       initialTweetsPromise={data.tweets}
       currentLoggedInUser={
         data.currentLoggedInUser

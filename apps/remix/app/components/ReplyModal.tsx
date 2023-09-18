@@ -60,7 +60,9 @@ const ReplyModal = ({
             <span className="text-gray-500 text-sm">
               <time dateTime={`${originalTweet.createdAt}`}>
                 {format(
-                  parseISO(originalTweet.createdAt),
+                  typeof originalTweet.createdAt === "string"
+                    ? parseISO(originalTweet.createdAt)
+                    : originalTweet.createdAt,
                   "h:mm a · MMM d, yyyy"
                 )}
               </time>

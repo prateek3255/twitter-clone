@@ -22,7 +22,6 @@ import { DEFAULT_PROFILE_IMAGE } from "~/constants/user";
 import { BackButton } from "~/components/BackButton";
 import { ButtonOrLink } from "~/components/ButtonOrLink";
 import { DialogWithClose } from "~/components/DialogWithClose";
-// import { EditProfile } from "./components/EditProfile";
 
 export const loader = async ({ request, params }: LoaderArgs) => {
   const [user, currentLoggedInUser] = await Promise.all([

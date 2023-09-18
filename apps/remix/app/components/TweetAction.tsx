@@ -32,8 +32,8 @@ const ActiveLabel: Record<ActionType, string> = {
 
 interface TweetActionPropsBase {
   type: ActionType;
-  action: () => void;
   size: "compact" | "normal";
+  action?: () => void;
   active?: boolean;
   disabled?: boolean;
   submit?: boolean;
@@ -62,7 +62,7 @@ const TweetAction = (props: TweetActionProps) => {
       } transition-colors ${hoverBg} disabled:opacity-50 disabled:cursor-not-allowed`}
       onClick={(event) => {
         event.stopPropagation();
-        props.action();
+        props.action?.();
       }}
       disabled={props.disabled}
       type={props.submit ? "submit" : "button"}

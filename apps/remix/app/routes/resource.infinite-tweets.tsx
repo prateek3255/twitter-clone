@@ -5,7 +5,14 @@ import { Spinner, Retweet } from "ui";
 import { formatDistanceForTweet } from "~/utils/common";
 import { formatDistanceToNowStrict, parseISO } from "date-fns";
 import type { FetcherWithComponents } from "@remix-run/react";
-import { useFetcher, Link, useNavigate, Await, Form } from "@remix-run/react";
+import {
+  useFetcher,
+  Link,
+  useNavigate,
+  Await,
+  Form,
+  useNavigation,
+} from "@remix-run/react";
 import type { TweetWithMeta } from "~/utils/tweets.server";
 import { useIntersectionObserver } from "~/hooks/useIntersectionObserver";
 import type { LoggedInUserBaseInfo } from "~/types/common";
@@ -25,6 +32,7 @@ import {
   toggleTweetRetweet,
   replyToTweet,
 } from "~/utils/tweet.server";
+import { usePrevious } from "~/hooks/usePrevious";
 
 type InfiniteTweetsParams =
   | { type: "user_tweets"; username: string }
@@ -123,6 +131,8 @@ export const action = async ({ request }: ActionArgs) => {
 
   return redirect(request.headers.get("Referer") ?? "/");
 };
+
+export const shouldRevalidate = () => false;
 
 type LoaderTweets = NonNullable<
   FetcherWithComponents<SerializeFrom<typeof loader>>["data"]
@@ -334,30 +344,36 @@ export const InfiniteTweets = ({
     shouldFetch,
   ]);
 
+  const handleLikeClick = React.useCallback((tweetId: string) => {
+    dispatch({
+      type: "toggle_tweet_like",
+      tweetId,
+    });
+  }, []);
+
+  const handleRetweetClick = React.useCallback((tweetId: string) => {
+    dispatch({
+      type: "toggle_tweet_retweet",
+      tweetId,
+    });
+  }, []);
+
+  const handleReplySuccess = React.useCallback((tweetId: string) => {
+    dispatch({
+      type: "add_reply",
+      tweetId,
+    });
+  }, []);
+
   return (
     <>
       {tweets.map((tweet) => (
         <Tweet
           key={tweet.id}
           {...tweet}
-          onRetweetClick={(tweetId) => {
-            dispatch({
-              type: "toggle_tweet_retweet",
-              tweetId,
-            });
-          }}
-          onLikeClick={(tweetId) => {
-            dispatch({
-              type: "toggle_tweet_like",
-              tweetId,
-            });
-          }}
-          onReplySuccess={(tweetId) => {
-            dispatch({
-              type: "add_reply",
-              tweetId,
-            });
-          }}
+          onRetweetClick={handleRetweetClick}
+          onLikeClick={handleLikeClick}
+          onReplySuccess={handleReplySuccess}
           currentLoggedInUser={currentLoggedInUser}
           showOwnRetweet={isUserProfile}
         />
@@ -425,12 +441,36 @@ export const Tweet = (props: TweetProps) => {
   const isRetweet = typeof props.originalTweetId === "string";
   const originalTweetId = props.originalTweetId ?? id;
   const navigate = useNavigate();
+  const navigation = useNavigation();
+  const [currentAction, setCurrentAction] = React.useState<
+    "like" | "retweet" | undefined
+  >(undefined);
+  const isLoading = navigation.state !== "idle";
+  const prevLoading = usePrevious(isLoading);
 
   const handleTweetClick = () => {
     const isTextSelected = window.getSelection()?.toString();
     if (isTextSelected) return;
     navigate(`/status/${id}`);
   };
+
+  // This is to trigger the client side update when the user
+  // clicks on the like or retweet button and the navigation
+  // is finished. Figure out if there's a better way to do this.
+  React.useEffect(() => {
+    if (
+      prevLoading !== isLoading &&
+      !isLoading &&
+      typeof currentAction === "string"
+    ) {
+      if (currentAction === "like") {
+        onLikeClick?.(id);
+      } else if (currentAction === "retweet") {
+        onRetweetClick?.(id);
+      }
+      setCurrentAction(undefined);
+    }
+  }, [currentAction, id, isLoading, onLikeClick, onRetweetClick, prevLoading]);
 
   const showRetweetedBy = showOwnRetweet
     ? hasRetweeted || isRetweet
@@ -495,6 +535,7 @@ export const Tweet = (props: TweetProps) => {
                 <TweetAction
                   size="compact"
                   type="reply"
+                  disabled={isLoading}
                   count={replies}
                   action={() => setIsReplyModalOpen(true)}
                 />
@@ -503,18 +544,19 @@ export const Tweet = (props: TweetProps) => {
                   <input
                     type="hidden"
                     name="hasRetweeted"
-                    value={hasRetweeted?.toString() ?? "false"}
+                    value={(!hasRetweeted).toString()}
                   />
                   <TweetAction
                     size="compact"
                     type="retweet"
                     active={hasRetweeted}
                     count={retweets}
+                    disabled={isLoading}
                     submit
                     name="_action"
                     value="toggle_tweet_retweet"
                     action={() => {
-                      onRetweetClick?.(id);
+                      setCurrentAction("retweet");
                     }}
                   />
                 </Form>
@@ -523,18 +565,19 @@ export const Tweet = (props: TweetProps) => {
                   <input
                     type="hidden"
                     name="hasLiked"
-                    value={hasLiked?.toString() ?? "false"}
+                    value={(!hasLiked).toString()}
                   />
                   <TweetAction
                     size="compact"
                     active={hasLiked}
                     type="like"
                     count={likes}
+                    disabled={isLoading}
                     submit
                     name="_action"
                     value="toggle_tweet_like"
                     action={() => {
-                      onLikeClick?.(id);
+                      setCurrentAction("like");
                     }}
                   />
                 </Form>

@@ -151,7 +151,7 @@ export const getTweetReplies = async (request: Request, id: string, cursor?: str
 export const getHomeTweets = async (request: Request, cursor?: string) => {
   const userId = await getUserSession(request);
   let followingCount = 0;
-  if (typeof cursor !== "string" && typeof userId === "string") {
+  if (typeof userId === "string") {
     const followingQuery = await prisma.user.findUnique({
       where: {
         id: userId,
