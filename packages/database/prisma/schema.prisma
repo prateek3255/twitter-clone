@@ -24,6 +24,7 @@ model User {
   following User[] @relation("UserFollows")
   createdAt DateTime @default(now())
   likes TweetLike[]
+  burner Boolean @default(false)
 }
 
 model Tweet {

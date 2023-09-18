@@ -1,5 +1,6 @@
 import { ButtonOrLink } from "~/components/ButtonOrLink";
 import { FloatingInput } from "ui";
+import { faker } from '@faker-js/faker';
 import { z } from "zod";
 import { Link, useActionData, Form, useNavigation } from "@remix-run/react";
 import bcrypt from "bcryptjs";
@@ -10,6 +11,51 @@ import { createUserSession } from "~/utils/auth.server";
 
 export const action = async ({ request }: ActionArgs) => {
   const form = await request.formData();
+  const action = form.get("_action")?.toString() ?? "";
+
+  if (action === "signup_burner") {
+    const name = faker.person.firstName();
+    const username = faker.internet.userName();
+    const email = faker.internet.email();
+    const password = faker.internet.password();
+
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [
+          {
+            email,
+          },
+          {
+            username,
+          },
+        ],
+      },
+    });
+
+    // If the burner user with the same email or username already exists, just log them in
+    if (existingUser) {
+      return createUserSession(existingUser.id, "/");
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    const newUser = await prisma.user.create({
+      data: {
+        name,
+        username,
+        email,
+        passwordHash,
+        // Generate a deterministic profile image using a random number and save it in the database
+        profileImage: `https://api.dicebear.com/6.x/big-ears-neutral/png?seed=${Math.random()
+          .toString(36)
+          .substring(2)}`,
+        burner: true,
+      },
+    });
+
+    return createUserSession(newUser.id, "/");
+  }
+
+
   const name = form.get("name")?.toString() ?? "";
   const username = form.get("username")?.toString() ?? "";
   const email = form.get("email")?.toString() ?? "";
@@ -129,7 +175,7 @@ export default function Signup() {
               error={actionData?.fieldErrors?.name}
               aria-invalid={Boolean(actionData?.fieldErrors?.name)}
               aria-errormessage={actionData?.fieldErrors?.name ?? undefined}
-              />
+            />
             <FloatingInput
               required
               label="Username"
@@ -171,21 +217,38 @@ export default function Signup() {
           />
         </div>
 
-        <ButtonOrLink type="submit" size="large" stretch disabled={navigation.state === "submitting"}>
+        <ButtonOrLink
+          type="submit"
+          size="large"
+          stretch
+          disabled={navigation.state === "submitting"}
+          name="_action"
+          value="signup"
+        >
           Sign Up
         </ButtonOrLink>
+      </Form>
 
-        <ButtonOrLink variant="secondary" size="large" className="w-full mt-4">
+      <Form method="post">
+        <ButtonOrLink
+          variant="secondary"
+          size="large"
+          className="w-full mt-4"
+          name="_action"
+          value="signup_burner"
+          type="submit"
+          disabled={navigation.state === "submitting"}
+        >
           Sign Up with a burner account
         </ButtonOrLink>
-
-        <div className="text-center text-white text-base w-full mt-4 font-medium">
-          Already have an account?{" "}
-          <Link to="/signin" className=" underline" prefetch="intent">
-            Sign in
-          </Link>
-        </div>
       </Form>
+
+      <div className="text-center text-white text-base w-full mt-4 font-medium">
+        Already have an account?{" "}
+        <Link to="/signin" className=" underline" prefetch="intent">
+          Sign in
+        </Link>
+      </div>
     </>
   );
 }
