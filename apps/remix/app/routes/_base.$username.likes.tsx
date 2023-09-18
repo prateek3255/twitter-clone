@@ -1,5 +1,5 @@
 import { defer, type LoaderArgs } from "@remix-run/node";
-import { getUserReplies } from "~/utils/tweets.server";
+import { getUserLikes } from "~/utils/tweets.server";
 import { getCurrentLoggedInUser } from "~/utils/user.server";
 import { SuspendedInfiniteTweets } from "./resource.infinite-tweets";
 import { useLoaderData } from "@remix-run/react";
@@ -8,7 +8,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   const username = params.username as string;
 
   return defer({
-    tweets: getUserReplies(request, username).then((tweets) =>
+    tweets: getUserLikes(request, username).then((tweets) =>
       tweets.map((tweet) => ({
         ...tweet,
         createdAt: tweet.createdAt.toISOString(),
@@ -19,7 +19,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   });
 };
 
-export default function UserReplies() {
+export default function UserLikes() {
   const data = useLoaderData<typeof loader>();
 
   return (
@@ -36,7 +36,7 @@ export default function UserReplies() {
             }
           : undefined
       }
-      type="user_replies"
+      type="user_likes"
       username={data.username}
       isUserProfile
     />

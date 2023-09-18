@@ -12,7 +12,12 @@ import { SuspendedInfiniteTweets } from "./resource.infinite-tweets";
 export const loader = async ({ request }: LoaderArgs) => {
   return defer({
     user: await getCurrentLoggedInUser(request),
-    tweets: getHomeTweets(request),
+    tweets: getHomeTweets(request).then((tweets) =>
+      tweets.map((tweet) => ({
+        ...tweet,
+        createdAt: tweet.createdAt.toISOString(),
+      }))
+    ),
   });
 };
 
