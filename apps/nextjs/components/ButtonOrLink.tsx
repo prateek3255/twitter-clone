@@ -54,7 +54,7 @@ type LinkProps = ButtonOrLinkPropsBase &
     href: string;
   };
 
-type ButtonOrLinkProps = ButtonProps | LinkProps;
+export type ButtonOrLinkProps = ButtonProps | LinkProps;
 
 export const ButtonOrLink = (props: ButtonOrLinkProps) => {
   const classNames = `${buttonOrLink({

@@ -1,4 +1,4 @@
-import { ButtonOrLink } from "components/ButtonOrLink";
+import { faker } from '@faker-js/faker';
 import { FloatingInput } from "ui";
 import { prisma } from "utils/db";
 import { z } from "zod";
@@ -107,6 +107,55 @@ export default function Signup({
     return redirect("/");
   }
 
+  async function signupWithBurnerAccount() {
+    "use server";
+    const name = faker.person.firstName();
+    const username = faker.internet.userName();
+    const email = faker.internet.email();
+    const password = faker.internet.password();
+
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [
+          {
+            email,
+          },
+          {
+            username,
+          },
+        ],
+      },
+    });
+
+    // If the burner user with the same email or username already exists, just log them in
+    if (existingUser) {
+      setAuthCookie({
+        userId: existingUser.id,
+      });
+      return redirect("/");
+    }
+
+    const passwordHash = await hashPassword(password);
+    const newUser = await prisma.user.create({
+      data: {
+        name,
+        username,
+        email,
+        passwordHash,
+        // Generate a deterministic profile image using a random number and save it in the database
+        profileImage: `https://api.dicebear.com/6.x/big-ears-neutral/png?seed=${Math.random()
+          .toString(36)
+          .substring(2)}`,
+        burner: true,
+      },
+    });
+
+    setAuthCookie({
+      userId: newUser.id,
+    });
+    return redirect("/");
+  }
+
   const { fieldErrors, fieldValues } = decodeValueAndErrors({
     fieldErrors: searchParams.fieldErrors,
     fieldValues: searchParams.fieldValues,
@@ -117,7 +166,7 @@ export default function Signup({
       <h1 className="font-bold text-3xl text-white mb-7">
         Create your account
       </h1>
-      <form action={signup}>
+      <form action={signup} className="mb-4">
         <div className="flex flex-col gap-4 mb-10">
           <div className="flex flex-col sm:flex-row w-full gap-4">
             <FloatingInput
@@ -175,18 +224,18 @@ export default function Signup({
         </div>
 
         <SubmitButton>Sign Up</SubmitButton>
-
-        <ButtonOrLink variant="secondary" size="large" className="w-full mt-4">
-          Sign Up with a burner account
-        </ButtonOrLink>
-
-        <div className="text-center text-white text-base w-full mt-4 font-medium">
-          Already have an account?{" "}
-          <Link href="/signin" className=" underline">
-            Sign in
-          </Link>
-        </div>
       </form>
+
+      <form action={signupWithBurnerAccount}>
+        <SubmitButton variant="secondary">Sign Up with a burner account</SubmitButton>
+      </form>
+
+      <div className="text-center text-white text-base w-full mt-4 font-medium">
+        Already have an account?{" "}
+        <Link href="/signin" className=" underline">
+          Sign in
+        </Link>
+      </div>
     </>
   );
 }

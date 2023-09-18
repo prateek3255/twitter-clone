@@ -19,6 +19,7 @@ importers:
   apps/nextjs:
     specifiers:
       '@babel/core': ^7.0.0
+      '@faker-js/faker': ^8.0.2
       '@headlessui/react': ^1.7.15
       '@types/bcryptjs': ^2.4.2
       '@types/jsonwebtoken': ^9.0.2
@@ -49,6 +50,7 @@ importers:
       ui: workspace:*
       zod: ^3.21.4
     dependencies:
+      '@faker-js/faker': 8.0.2
       '@headlessui/react': 1.7.15_biqbaboplfbrettd7655fr4n2y
       bcryptjs: 2.4.3
       class-variance-authority: 0.6.0_typescript@5.2.2
@@ -74,7 +76,7 @@ importers:
       eslint: 8.49.0
       eslint-config-next: 13.4.19_rngtr6f3b25lvetpihwplgecf4
       eslint-config-prettier: 9.0.0_eslint@8.49.0
-      eslint-config-turbo: 1.10.13_eslint@8.49.0
+      eslint-config-turbo: 1.10.14_eslint@8.49.0
       eslint-plugin-react: 7.33.2_eslint@8.49.0
       postcss: 8.4.18
       tailwindcss: 3.2.2_postcss@8.4.18
@@ -4807,15 +4809,6 @@ packages:
       eslint: 8.49.0
     dev: true
 
-  /eslint-config-turbo/1.10.13_eslint@8.49.0:
-    resolution: {integrity: sha512-Ffa0SxkRCPMtfUX/HDanEqsWoLwZTQTAXO9W4IsOtycb2MzJDrVcLmoFW5sMwCrg7gjqbrC4ZJoD+1SPPzIVqg==}
-    peerDependencies:
-      eslint: '>6.6.0'
-    dependencies:
-      eslint: 8.49.0
-      eslint-plugin-turbo: 1.10.13_eslint@8.49.0
-    dev: true
-
   /eslint-config-turbo/1.10.14_eslint@8.49.0:
     resolution: {integrity: sha512-ZeB+IcuFXy1OICkLuAplVa0euoYbhK+bMEQd0nH9+Lns18lgZRm33mVz/iSoH9VdUzl/1ZmFmoK+RpZc+8R80A==}
     peerDependencies:
@@ -5259,15 +5252,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
       - typescript
-    dev: true
-
-  /eslint-plugin-turbo/1.10.13_eslint@8.49.0:
-    resolution: {integrity: sha512-el4AAmn0zXmvHEyp1h0IQMfse10Vy8g5Vbg4IU3+vD9CSj5sDbX07iFVt8sCKg7og9Q5FAa9mXzlCf7t4vYgzg==}
-    peerDependencies:
-      eslint: '>6.6.0'
-    dependencies:
-      dotenv: 16.0.3
-      eslint: 8.49.0
     dev: true
 
   /eslint-plugin-turbo/1.10.14_eslint@8.49.0:
