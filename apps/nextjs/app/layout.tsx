@@ -27,9 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${chirp.variable} h-full`}>
-      <body className="bg-black h-full overflow-hidden">
-        {children}
-      </body>
+      <body className="bg-black h-full overflow-hidden">{children}</body>
     </html>
   );
 }
