@@ -12,6 +12,11 @@ import {
   setAuthCookie,
 } from "utils/auth";
 import { SubmitButton } from "../components/SubmitButton";
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Sign Up | Twitter Clone",
+};
 
 export default function Signup({
   searchParams,

@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { prisma } from "./db";
 import { getUserId } from "./auth";
 import "server-only";
@@ -113,7 +114,7 @@ export const getTweetsByUsername = async (
   return tweets;
 };
 
-export const getTweetWithID = async (id: string) => {
+export const getTweetWithID = cache(async (id: string) => {
   const userId = getUserId();
 
   const tweet = await prisma.tweet.findUnique({
@@ -124,7 +125,7 @@ export const getTweetWithID = async (id: string) => {
   });
 
   return tweet;
-};
+});
 
 export const getTweetReplies = async (id: string, cursor?: string) => {
   const userId = getUserId();

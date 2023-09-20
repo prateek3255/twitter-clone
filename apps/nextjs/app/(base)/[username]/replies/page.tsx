@@ -1,6 +1,20 @@
 import { getUserReplies } from "utils/tweet";
 import { getCurrentLoggedInUser } from "utils/user";
 import { InfiniteTweets } from "components/InfiniteTweets";
+import { Metadata, ResolvingMetadata } from "next";
+
+export async function generateMetadata(
+  _: unknown,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const resolvingParent = await parent;
+
+  return {
+    title: `Tweeets with replies by ${
+      resolvingParent.title?.absolute ?? ""
+    } | Twitter Clone`,
+  };
+}
 
 export default async function Profile({
   params: { username },

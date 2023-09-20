@@ -6,6 +6,22 @@ import { FollowButton } from "./components/FollowButton";
 import { EditProfile } from "./components/EditProfile";
 import { TabItem } from "./components/TabItem";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
+
+type Props = {
+  params: { username: string };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const username = params.username;
+  const user = await getUserProfile(username);
+
+  return {
+    title: `${
+      user?.name ?? user?.username ?? "Profile"
+    } (@${user?.username})`,
+  };
+}
 
 const FollowCount = ({ count, label }: { count: number; label: string }) => (
   <a href="#" className="hover:underline decoration-white">

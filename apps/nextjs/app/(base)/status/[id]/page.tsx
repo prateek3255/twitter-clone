@@ -12,6 +12,23 @@ import { BackButton } from "components/BackButton";
 import { Suspense } from "react";
 import { Spinner } from "ui";
 import { LoggedInUserBaseInfo } from "types/common";
+import { Metadata } from "next";
+
+type Props = {
+  params: { id: string };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const id = params.id;
+  const tweet = await getTweetWithID(id);
+  const author = tweet?.retweetOf ? tweet.retweetOf.author : tweet?.author;
+  const content = tweet?.retweetOf ? tweet.retweetOf.content : tweet?.content;
+  const trimmedContent = (content?.length ?? 0) > 20 ? content?.slice(0, 20) + "..." : content;
+
+  return {
+    title: `${author?.name ?? author?.username ?? ""} on Twitter Clone: "${trimmedContent}"`,
+  };
+}
 
 const TweetStat = ({ label, count }: { label: string; count: number }) => (
   <div className="flex gap-1">

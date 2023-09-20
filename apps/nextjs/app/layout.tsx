@@ -1,5 +1,6 @@
 import "ui/global.css";
 import localFont from "next/font/local";
+import { Metadata } from "next";
 
 const chirp = localFont({
   src: [
@@ -19,6 +20,10 @@ const chirp = localFont({
   variable: "--font-chirp",
   display: "swap",
 });
+
+export const metadata: Metadata = {
+  title: "Home | Twitter Clone",
+};
 
 export default function RootLayout({
   children,

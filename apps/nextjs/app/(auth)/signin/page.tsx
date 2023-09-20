@@ -10,6 +10,11 @@ import {
 import { SubmitButton } from "../components/SubmitButton";
 import { prisma } from "utils/db";
 import { isEmail } from "utils/common";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign In | Twitter Clone",
+};
 
 export default function Signin({
   searchParams,
