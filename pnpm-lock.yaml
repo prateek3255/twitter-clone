@@ -100,6 +100,7 @@ importers:
       autoprefixer: ^10.4.13
       bcryptjs: ^2.4.3
       class-variance-authority: ^0.6.0
+      clsx: ^2.0.0
       concurrently: ^7.6.0
       database: workspace:*
       date-fns: ^2.30.0
@@ -139,6 +140,7 @@ importers:
       '@types/react-dom': 18.2.7
       '@types/source-map-support': 0.5.7
       autoprefixer: 10.4.13_postcss@8.4.18
+      clsx: 2.0.0
       concurrently: 7.6.0
       eslint: 8.48.0
       postcss: 8.4.18
@@ -2676,6 +2678,11 @@ packages:
   /clsx/1.2.1:
     resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
     engines: {node: '>=6'}
+
+  /clsx/2.0.0:
+    resolution: {integrity: sha512-rQ1+kcj+ttHG0MKVGBUXwayCCF1oh39BF5COIpRzuCEv8Mwjv0XucrI2ExNTOn9IlLifGClWQcU9BrZORvtw6Q==}
+    engines: {node: '>=6'}
+    dev: true
 
   /color-convert/1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
