@@ -2,7 +2,7 @@ import { Retweet } from "ui";
 import { useState, useCallback } from "react";
 import { useLoaderData, Link, useNavigation, Form } from "@remix-run/react";
 import { format, parseISO } from "date-fns";
-import { json, type LoaderArgs, defer } from "@remix-run/node";
+import { json, type LoaderArgs, defer, type V2_MetaFunction } from "@remix-run/node";
 import { DEFAULT_PROFILE_IMAGE } from "~/constants/user";
 import {
   getTweetReplies,
@@ -45,6 +45,15 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       }))
     ),
   });
+};
+
+export const meta: V2_MetaFunction<typeof loader> = ({
+  data
+}) => {
+  const trimmedContent = (data?.tweet.content?.length ?? 0) > 20 ? data?.tweet.content?.slice(0, 20) + "..." : data?.tweet.content;
+  return [
+    { title: `${data?.tweet.name ?? data?.tweet.username ?? ""} on Twitter Clone: "${trimmedContent}"`, },
+  ];
 };
 
 const getTweetInfo = (tweet: TweetWithMeta, isLoggedIn: boolean) => {

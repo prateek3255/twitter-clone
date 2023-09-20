@@ -10,7 +10,7 @@ import {
   useLocation,
   useActionData,
 } from "@remix-run/react";
-import { type LoaderArgs, json, type ActionArgs, redirect } from "@remix-run/node";
+import { type LoaderArgs, json, type ActionArgs, redirect, type V2_MetaFunction } from "@remix-run/node";
 import { FloatingInput, FloatingTextArea } from "ui";
 import {
   getCurrentLoggedInUser,
@@ -36,6 +36,16 @@ export const loader = async ({ request, params }: LoaderArgs) => {
     );
   }
   return json({ user, currentLoggedInUser }, { status: 200 });
+};
+
+export const meta: V2_MetaFunction<typeof loader> = ({
+  data
+}) => {
+  return [
+    { title: `${
+      data?.user?.name ?? data?.user?.username ?? "Profile"
+    } (@${data?.user?.username})`, },
+  ];
 };
 
 export const action = async ({ request }: ActionArgs) => {
@@ -244,6 +254,7 @@ const FollowButton = ({
 };
 
 const FollowCount = ({ count, label }: { count: number; label: string }) => (
+  // eslint-disable-next-line jsx-a11y/anchor-is-valid
   <a href="#" className="hover:underline decoration-white">
     <span className="text-white font-bold text-sm">{count} </span>
     <span className="text-gray-500 text-sm">{label}</span>

@@ -1,4 +1,5 @@
-import { defer, type LoaderArgs } from "@remix-run/node";
+import { defer} from "@remix-run/node";
+import type { V2_MetaFunction, LoaderArgs } from "@remix-run/node";
 import { getTweetsByUsername } from "~/utils/tweets.server";
 import { getCurrentLoggedInUser } from "~/utils/user.server";
 import { SuspendedInfiniteTweets } from "./resource.infinite-tweets";
@@ -17,6 +18,18 @@ export const loader = async ({ request, params }: LoaderArgs) => {
     currentLoggedInUser: await getCurrentLoggedInUser(request),
     username,
   });
+};
+
+export const meta: V2_MetaFunction<typeof loader> = ({
+  matches
+}) => {
+  const parentMeta = matches.flatMap(
+    // @ts-expect-error
+    (match) => match.meta ?? []
+  )[0];
+  return [
+    { title: `${parentMeta?.title ?? ""} | Twitter Clone`, },
+  ];
 };
 
 export default function UserTweets() {

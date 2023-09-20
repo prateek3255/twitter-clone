@@ -236,14 +236,13 @@ export const getUserLikes = async (request: Request, username: string, cursor?: 
 
   const tweets = await prisma.tweet.findMany({
     where: {
-      author: {
-        username,
-      },
       likes: {
         some: {
-          userId: userId ?? undefined,
-        },
-      }
+          user: {
+            username,
+          }
+        }
+      },
     },
     ...getTweetFields(userId),
     take: 4,

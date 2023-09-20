@@ -6,8 +6,14 @@ import { Link, useActionData, Form, useNavigation } from "@remix-run/react";
 import bcrypt from "bcryptjs";
 import { prisma } from "~/utils/db.server";
 import { getFlattenedZodErrors } from "~/utils/common";
-import { json, type ActionArgs } from "@remix-run/node";
+import { json, type ActionArgs, type V2_MetaFunction } from "@remix-run/node";
 import { createUserSession } from "~/utils/auth.server";
+
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: "Sign Up | Twitter Clone", },
+  ];
+};
 
 export const action = async ({ request }: ActionArgs) => {
   const form = await request.formData();

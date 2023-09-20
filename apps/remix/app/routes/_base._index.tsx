@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 import { TwitterLogo, ThreeDots, ChevronDown } from "ui";
 import { Popover } from "@headlessui/react";
-import { type LoaderArgs, defer } from "@remix-run/node";
+import { defer } from "@remix-run/node";
+import type { V2_MetaFunction, LoaderArgs } from "@remix-run/node";
 import { Form, useLoaderData, useNavigation } from "@remix-run/react";
 import { DEFAULT_PROFILE_IMAGE } from "~/constants/user";
 import { ButtonOrLink } from "~/components/ButtonOrLink";
@@ -19,6 +20,12 @@ export const loader = async ({ request }: LoaderArgs) => {
       }))
     ),
   });
+};
+
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: "Home | Twitter Clone", },
+  ];
 };
 
 export default function Home() {

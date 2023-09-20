@@ -1,12 +1,17 @@
 import { FloatingInput } from "ui";
 import { Link, useActionData, Form, useNavigation } from "@remix-run/react";
 import bcrypt from "bcryptjs";
-import { json, type ActionArgs } from "@remix-run/node";
+import { json, type ActionArgs, type V2_MetaFunction } from "@remix-run/node";
 import { ButtonOrLink } from "~/components/ButtonOrLink";
 import {prisma} from "~/utils/db.server";
 import { isEmail } from "~/utils/common";
 import { createUserSession } from "~/utils/auth.server";
 
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: "Sign In | Twitter Clone", },
+  ];
+};
 
 export const action = async ({ request }: ActionArgs) => {
   const form = await request.formData();
