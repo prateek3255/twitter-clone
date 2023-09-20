@@ -1,4 +1,4 @@
-import type { LinksFunction, ActionArgs } from "@remix-run/node";
+import type { LinksFunction, ActionFunctionArgs } from "@remix-run/node";
 import { TwitterLogo } from "ui";
 import {
   Form,
@@ -45,7 +45,7 @@ const fonts = `
   }
 `;
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const form = await request.formData();
   const action = form.get("_action")?.toString() ?? "";
 

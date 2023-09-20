@@ -1,19 +1,18 @@
 import { FloatingInput } from "ui";
 import { Link, useActionData, Form, useNavigation } from "@remix-run/react";
-import bcrypt from "bcryptjs";
-import { json, type ActionArgs, type V2_MetaFunction } from "@remix-run/node";
+import { json, type ActionFunctionArgs, type MetaFunction } from "@remix-run/node";
 import { ButtonOrLink } from "~/components/ButtonOrLink";
 import {prisma} from "~/utils/db.server";
 import { isEmail } from "~/utils/common";
-import { createUserSession } from "~/utils/auth.server";
+import { createUserSession, comparePassword } from "~/utils/auth.server";
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [
     { title: "Sign In | Twitter Clone", },
   ];
 };
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const form = await request.formData();
   const usernameOrEmail = form.get("usernameOrEmail")?.toString() ?? "";
   const password = form.get("password")?.toString() ?? "";
@@ -45,7 +44,7 @@ export const action = async ({ request }: ActionArgs) => {
     })
   }
 
-  const isPasswordCorrect = bcrypt.compareSync(password, user.passwordHash);
+  const isPasswordCorrect = await comparePassword(password, user.passwordHash);
 
   if(!isPasswordCorrect) {
     return json({

@@ -12,11 +12,9 @@
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
     "@headlessui/react": "^1.7.15",
-    "@remix-run/css-bundle": "^1.19.3",
-    "@remix-run/node": "^1.19.3",
-    "@remix-run/react": "^1.19.3",
-    "@remix-run/vercel": "^1.19.3",
-    "@vercel/node": "^2.10.3",
+    "@remix-run/css-bundle": "^2.0.0",
+    "@remix-run/node": "^2.0.0",
+    "@remix-run/react": "^2.0.0",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.6.0",
     "database": "workspace:*",
@@ -29,9 +27,9 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@remix-run/dev": "^1.19.3",
-    "@remix-run/eslint-config": "^1.19.3",
-    "@remix-run/serve": "^1.19.3",
+    "@remix-run/dev": "^2.0.0",
+    "@remix-run/eslint-config": "^2.0.0",
+    "@remix-run/serve": "^2.0.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",

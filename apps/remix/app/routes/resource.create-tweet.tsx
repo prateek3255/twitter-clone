@@ -1,12 +1,12 @@
 import React from "react";
-import { redirect, type ActionArgs } from "@remix-run/node";
+import { redirect, type ActionFunctionArgs } from "@remix-run/node";
 import { Form, useNavigation } from "@remix-run/react";
 import { CreateTweetMobile } from "ui";
 import { ButtonOrLink } from "~/components/ButtonOrLink";
 import { DialogWithClose } from "~/components/DialogWithClose";
 import { createTweet } from "~/utils/tweet.server";
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const form = await request.formData();
   const tweet = form.get("tweet")?.toString() ?? "";
 

@@ -1,10 +1,10 @@
-import { defer, type LoaderArgs, type V2_MetaFunction } from "@remix-run/node";
+import { defer, type LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
 import { getUserLikes } from "~/utils/tweets.server";
 import { getCurrentLoggedInUser } from "~/utils/user.server";
 import { SuspendedInfiniteTweets } from "./resource.infinite-tweets";
 import { useLoaderData } from "@remix-run/react";
 
-export const loader = async ({ request, params }: LoaderArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const username = params.username as string;
 
   return defer({
@@ -19,13 +19,12 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   });
 };
 
-export const meta: V2_MetaFunction<typeof loader> = ({
+export const meta: MetaFunction<typeof loader> = ({
   matches
 }) => {
   const parentMeta = matches.flatMap(
-    // @ts-expect-error
     (match) => match.meta ?? []
-  )[0];
+  )[0] as { title: string };
   return [
     { title: `Tweeets liked by ${parentMeta?.title ?? ""} | Twitter Clone`, },
   ];

@@ -10,7 +10,7 @@ import {
   useLocation,
   useActionData,
 } from "@remix-run/react";
-import { type LoaderArgs, json, type ActionArgs, redirect, type V2_MetaFunction } from "@remix-run/node";
+import { type LoaderFunctionArgs, json, type ActionFunctionArgs, redirect, type MetaFunction } from "@remix-run/node";
 import { FloatingInput, FloatingTextArea } from "ui";
 import {
   getCurrentLoggedInUser,
@@ -23,7 +23,7 @@ import { BackButton } from "~/components/BackButton";
 import { ButtonOrLink } from "~/components/ButtonOrLink";
 import { DialogWithClose } from "~/components/DialogWithClose";
 
-export const loader = async ({ request, params }: LoaderArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const [user, currentLoggedInUser] = await Promise.all([
     getUserProfile(params.username as string, request),
     getCurrentLoggedInUser(request),
@@ -38,7 +38,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   return json({ user, currentLoggedInUser }, { status: 200 });
 };
 
-export const meta: V2_MetaFunction<typeof loader> = ({
+export const meta: MetaFunction<typeof loader> = ({
   data
 }) => {
   return [
@@ -48,7 +48,7 @@ export const meta: V2_MetaFunction<typeof loader> = ({
   ];
 };
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const form = await request.formData();
   const profileUserId = form.get("profileUserId")?.toString() ?? "";
   const action = form.get("_action")?.toString() ?? "";

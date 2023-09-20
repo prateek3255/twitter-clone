@@ -2,7 +2,7 @@ import { Retweet } from "ui";
 import { useState, useCallback } from "react";
 import { useLoaderData, Link, useNavigation, Form } from "@remix-run/react";
 import { format, parseISO } from "date-fns";
-import { json, type LoaderArgs, defer, type V2_MetaFunction } from "@remix-run/node";
+import { json, type LoaderFunctionArgs, defer, type MetaFunction } from "@remix-run/node";
 import { DEFAULT_PROFILE_IMAGE } from "~/constants/user";
 import {
   getTweetReplies,
@@ -22,7 +22,7 @@ const TweetStat = ({ label, count }: { label: string; count: number }) => (
   </div>
 );
 
-export const loader = async ({ request, params }: LoaderArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const [tweet, user] = await Promise.all([
     getTweetWithID(request, params.id as string),
     getCurrentLoggedInUser(request),
@@ -47,7 +47,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   });
 };
 
-export const meta: V2_MetaFunction<typeof loader> = ({
+export const meta: MetaFunction<typeof loader> = ({
   data
 }) => {
   const trimmedContent = (data?.tweet.content?.length ?? 0) > 20 ? data?.tweet.content?.slice(0, 20) + "..." : data?.tweet.content;

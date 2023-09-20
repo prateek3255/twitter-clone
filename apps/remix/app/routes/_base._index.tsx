@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { TwitterLogo, ThreeDots, ChevronDown } from "ui";
 import { Popover } from "@headlessui/react";
 import { defer } from "@remix-run/node";
-import type { V2_MetaFunction, LoaderArgs } from "@remix-run/node";
+import type { MetaFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, useLoaderData, useNavigation } from "@remix-run/react";
 import { DEFAULT_PROFILE_IMAGE } from "~/constants/user";
 import { ButtonOrLink } from "~/components/ButtonOrLink";
@@ -10,7 +10,7 @@ import { getCurrentLoggedInUser } from "~/utils/user.server";
 import { getHomeTweets } from "~/utils/tweets.server";
 import { SuspendedInfiniteTweets } from "./resource.infinite-tweets";
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   return defer({
     user: await getCurrentLoggedInUser(request),
     tweets: getHomeTweets(request).then((tweets) =>
@@ -22,7 +22,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   });
 };
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [
     { title: "Home | Twitter Clone", },
   ];

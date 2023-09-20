@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { json, redirect } from "@remix-run/node";
-import type { SerializeFrom, LoaderArgs, ActionArgs } from "@remix-run/node";
+import type { SerializeFrom, LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { Spinner, Retweet } from "ui";
 import { formatDistanceForTweet } from "~/utils/common";
 import { formatDistanceToNowStrict, parseISO } from "date-fns";
@@ -46,7 +46,7 @@ type InfiniteTweetType = InfiniteTweetsParams["type"];
 const getSearchParam = (url: string, param: string) =>
   new URL(url).searchParams.get(param);
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const cursor = getSearchParam(request.url, "cursor") ?? undefined;
   const type = getSearchParam(request.url, "type") as InfiniteTweetType;
   const username = getSearchParam(request.url, "username");
@@ -84,7 +84,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   );
 };
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const action = formData.get("_action");
   const userId = await getUserSession(request);

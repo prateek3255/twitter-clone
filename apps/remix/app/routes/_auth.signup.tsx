@@ -3,19 +3,18 @@ import { FloatingInput } from "ui";
 import { faker } from '@faker-js/faker';
 import { z } from "zod";
 import { Link, useActionData, Form, useNavigation } from "@remix-run/react";
-import bcrypt from "bcryptjs";
 import { prisma } from "~/utils/db.server";
 import { getFlattenedZodErrors } from "~/utils/common";
-import { json, type ActionArgs, type V2_MetaFunction } from "@remix-run/node";
-import { createUserSession } from "~/utils/auth.server";
+import { json, type ActionFunctionArgs, type MetaFunction } from "@remix-run/node";
+import { createUserSession, hashPassword } from "~/utils/auth.server";
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [
     { title: "Sign Up | Twitter Clone", },
   ];
 };
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const form = await request.formData();
   const action = form.get("_action")?.toString() ?? "";
 
@@ -43,7 +42,7 @@ export const action = async ({ request }: ActionArgs) => {
       return createUserSession(existingUser.id, "/");
     }
 
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await hashPassword(password);
     const newUser = await prisma.user.create({
       data: {
         name,
@@ -143,7 +142,7 @@ export const action = async ({ request }: ActionArgs) => {
   }
 
   const { password: _, ...rest } = parsedUser.data;
-  const passwordHash = await bcrypt.hash(password, 10);
+  const passwordHash = await hashPassword(password);
   const newUser = await prisma.user.create({
     data: {
       ...rest,
