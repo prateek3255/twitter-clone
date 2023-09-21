@@ -275,6 +275,7 @@ const TabItem = ({
     <Link
       to={href}
       role="tab"
+      prefetch="intent"
       aria-selected={isActive}
       className="min-w-[56px] w-full flex justify-center hover:bg-gray-100/10"
     >

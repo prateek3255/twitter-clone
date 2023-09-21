@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Link} from "@remix-run/react";
+import { Link, type LinkProps as RemixLinkProps } from "@remix-run/react";
 import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 
@@ -16,7 +16,7 @@ const buttonOrLink = cva(
         "tertiary-light":
           "text-white px-4 min-h-[36px] text-sm font-semibold border-white hover:bg-white/10",
         "tertiary-danger":
-           "text-red-500 px-4 min-h-[36px] text-sm font-semibold border-red-500 hover:bg-red-500/10",
+          "text-red-500 px-4 min-h-[36px] text-sm font-semibold border-red-500 hover:bg-red-500/10",
       },
       size: {
         large: "min-w-[52px] min-h-[52px] px-8 text-base",
@@ -29,7 +29,7 @@ const buttonOrLink = cva(
       stretch: {
         true: "w-full",
         false: "",
-      }
+      },
     },
     defaultVariants: {
       variant: "primary",
@@ -52,6 +52,7 @@ type LinkProps = ButtonOrLinkPropsBase &
   React.AnchorHTMLAttributes<HTMLAnchorElement> & {
     as: "link";
     to: string;
+    prefetch?: RemixLinkProps["prefetch"];
   };
 
 type ButtonOrLinkProps = ButtonProps | LinkProps;
@@ -64,7 +65,6 @@ export const ButtonOrLink = (props: ButtonOrLinkProps) => {
     stretch: props.stretch,
   })} ${props.className ?? ""}`;
 
-  
   if (props.as === "link") {
     const { as, variant, size, disabled, stretch, ...rest } = props;
     // eslint-disable-next-line jsx-a11y/anchor-has-content

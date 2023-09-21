@@ -138,6 +138,7 @@ export default function TweetStatus() {
           />
           <div className="flex flex-col w-full">
             <Link
+              prefetch="intent"
               to={`/${tweet.username}`}
               className="text-white font-bold text-sm hover:underline"
             >

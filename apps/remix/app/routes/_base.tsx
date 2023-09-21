@@ -38,6 +38,7 @@ const NavItem = ({
   return (
     <Link
       to={href}
+      prefetch="intent"
       className={`flex p-3 gap-5 items-center rounded-full text-xl text-white hover:bg-gray-100/10 w-fit px-4 sm:px-3 sm:pr-5 ${
         isActive ? "font-bold" : ""
       }`}
@@ -62,10 +63,10 @@ const LoggedOutFooter = () => (
           </span>
         </div>
         <div className="flex items-center gap-3">
-          <ButtonOrLink as="link" to="/signin" variant="tertiary-light">
+          <ButtonOrLink as="link" to="/signin" variant="tertiary-light" prefetch="intent">
             Log in
           </ButtonOrLink>
-          <ButtonOrLink as="link" to="/signup" variant="secondary">
+          <ButtonOrLink as="link" to="/signup" variant="secondary" prefetch="intent">
             Sign up
           </ButtonOrLink>
         </div>

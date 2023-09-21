@@ -509,6 +509,7 @@ export const Tweet = (props: TweetProps) => {
           <div className="flex flex-col w-full">
             <div className="flex items-center gap-1">
               <Link
+                prefetch="intent"
                 to={`/${username}`}
                 onClick={(event) => {
                   event.stopPropagation();
