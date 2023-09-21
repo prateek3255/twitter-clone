@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import { TwitterLogo, ThreeDots, ChevronDown } from "ui";
 import { Popover } from "@headlessui/react";
-import { defer } from "@remix-run/node";
-import type { MetaFunction, LoaderFunctionArgs } from "@remix-run/node";
+import { defer } from "@vercel/remix";
+import type { MetaFunction, LoaderFunctionArgs } from "@vercel/remix";
 import { Form, useLoaderData, useNavigation } from "@remix-run/react";
 import { DEFAULT_PROFILE_IMAGE } from "~/constants/user";
 import { ButtonOrLink } from "~/components/ButtonOrLink";

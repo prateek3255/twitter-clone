@@ -1,4 +1,4 @@
-import type { LinksFunction, ActionFunctionArgs } from "@remix-run/node";
+import type { LinksFunction, ActionFunctionArgs } from "@vercel/remix";
 import { TwitterLogo } from "ui";
 import {
   Form,

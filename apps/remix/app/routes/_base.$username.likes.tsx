@@ -1,4 +1,4 @@
-import { defer, type LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
+import { defer, type LoaderFunctionArgs, type MetaFunction } from "@vercel/remix";
 import { getUserLikes } from "~/utils/tweets.server";
 import { getCurrentLoggedInUser } from "~/utils/user.server";
 import { SuspendedInfiniteTweets } from "./resource.infinite-tweets";

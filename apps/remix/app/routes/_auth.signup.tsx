@@ -5,7 +5,7 @@ import { z } from "zod";
 import { Link, useActionData, Form, useNavigation } from "@remix-run/react";
 import { prisma } from "~/utils/db.server";
 import { getFlattenedZodErrors } from "~/utils/common";
-import { json, type ActionFunctionArgs, type MetaFunction } from "@remix-run/node";
+import { json, type ActionFunctionArgs, type MetaFunction } from "@vercel/remix";
 import { createUserSession, hashPassword } from "~/utils/auth.server";
 
 export const meta: MetaFunction = () => {

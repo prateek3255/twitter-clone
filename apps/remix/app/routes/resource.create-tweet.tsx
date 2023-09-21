@@ -1,5 +1,5 @@
 import React from "react";
-import { redirect, type ActionFunctionArgs } from "@remix-run/node";
+import { redirect, type ActionFunctionArgs } from "@vercel/remix";
 import { Form, useNavigation } from "@remix-run/react";
 import { CreateTweetMobile } from "ui";
 import { ButtonOrLink } from "~/components/ButtonOrLink";

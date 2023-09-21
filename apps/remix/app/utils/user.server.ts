@@ -1,6 +1,6 @@
 import { prisma } from "./db.server";
 import { getUserSession } from "./auth.server";
-import { json, redirect } from "@remix-run/node";
+import { json, redirect } from "@vercel/remix";
 
 export const getUser = async (userId: string) => {
   const user = await prisma.user.findUnique({

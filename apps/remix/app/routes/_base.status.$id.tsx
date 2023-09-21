@@ -2,7 +2,7 @@ import { Retweet } from "ui";
 import { useState, useCallback } from "react";
 import { useLoaderData, Link, useNavigation, Form } from "@remix-run/react";
 import { format, parseISO } from "date-fns";
-import { json, type LoaderFunctionArgs, defer, type MetaFunction } from "@remix-run/node";
+import { json, type LoaderFunctionArgs, defer, type MetaFunction } from "@vercel/remix";
 import { DEFAULT_PROFILE_IMAGE } from "~/constants/user";
 import {
   getTweetReplies,

@@ -1,6 +1,6 @@
 import { Outlet } from "@remix-run/react";
 import { TwitterLogo } from "ui";
-import { redirect, type LoaderFunctionArgs, json } from "@remix-run/node";
+import { redirect, type LoaderFunctionArgs, json } from "@vercel/remix";
 import { isAuthenticated } from "~/utils/auth.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

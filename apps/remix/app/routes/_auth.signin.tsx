@@ -1,6 +1,6 @@
 import { FloatingInput } from "ui";
 import { Link, useActionData, Form, useNavigation } from "@remix-run/react";
-import { json, type ActionFunctionArgs, type MetaFunction } from "@remix-run/node";
+import { json, type ActionFunctionArgs, type MetaFunction } from "@vercel/remix";
 import { ButtonOrLink } from "~/components/ButtonOrLink";
 import {prisma} from "~/utils/db.server";
 import { isEmail } from "~/utils/common";

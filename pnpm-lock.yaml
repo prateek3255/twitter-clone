@@ -97,6 +97,7 @@ importers:
       '@types/react': ^18.2.21
       '@types/react-dom': ^18.2.7
       '@types/source-map-support': ^0.5.6
+      '@vercel/remix': ^2.0.0
       autoprefixer: ^10.4.13
       bcryptjs: ^2.4.3
       class-variance-authority: ^0.6.0
@@ -121,6 +122,7 @@ importers:
       '@remix-run/css-bundle': 2.0.0
       '@remix-run/node': 2.0.0_typescript@5.2.2
       '@remix-run/react': 2.0.0_vegmnuvoswdxuttpuhvewcem44
+      '@vercel/remix': 2.0.0_vegmnuvoswdxuttpuhvewcem44
       bcryptjs: 2.4.3
       class-variance-authority: 0.6.0_typescript@5.2.2
       database: link:../../packages/database
@@ -2112,6 +2114,22 @@ packages:
   /@vanilla-extract/private/1.0.3:
     resolution: {integrity: sha512-17kVyLq3ePTKOkveHxXuIJZtGYs+cSoev7BlP+Lf4916qfDhk/HBjvlYDe8egrea7LNPHKwSZJK/bzZC+Q6AwQ==}
     dev: true
+
+  /@vercel/remix/2.0.0_vegmnuvoswdxuttpuhvewcem44:
+    resolution: {integrity: sha512-nwv1Z0ucVAARp399JOq/+Vf174E457P8BIJuDn63NAudgcKUWPVmqbfg1EP0jIa+FsjNQX1YXyExZ47k3sAfHg==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: '*'
+      react-dom: '*'
+    dependencies:
+      '@remix-run/node': 2.0.0_typescript@5.2.2
+      '@remix-run/server-runtime': 2.0.0_typescript@5.2.2
+      isbot: 3.6.13
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    transitivePeerDependencies:
+      - typescript
+    dev: false
 
   /@web3-storage/multipart-parser/1.0.0:
     resolution: {integrity: sha512-BEO6al7BYqcnfX15W2cnGR+Q566ACXAT9UQykORCWW80lmkpWsnEob6zJS1ZVBKsSJC8+7vJkHwlp+lXG1UCdw==}

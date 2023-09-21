@@ -10,7 +10,7 @@ import {
   useLocation,
   useActionData,
 } from "@remix-run/react";
-import { type LoaderFunctionArgs, json, type ActionFunctionArgs, redirect, type MetaFunction } from "@remix-run/node";
+import { type LoaderFunctionArgs, json, type ActionFunctionArgs, redirect, type MetaFunction } from "@vercel/remix";
 import { FloatingInput, FloatingTextArea } from "ui";
 import {
   getCurrentLoggedInUser,

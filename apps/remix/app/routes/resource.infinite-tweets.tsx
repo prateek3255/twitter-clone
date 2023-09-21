@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
-import { json, redirect } from "@remix-run/node";
-import type { SerializeFrom, LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
+import { json, redirect } from "@vercel/remix";
+import type { SerializeFrom, LoaderFunctionArgs, ActionFunctionArgs } from "@vercel/remix";
 import { Spinner, Retweet } from "ui";
 import { formatDistanceForTweet } from "~/utils/common";
 import { formatDistanceToNowStrict, parseISO } from "date-fns";

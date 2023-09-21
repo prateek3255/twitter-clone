@@ -14,7 +14,7 @@ import { ButtonOrLink } from "~/components/ButtonOrLink";
 import { TweetButton } from "./resource.create-tweet";
 import { getCurrentLoggedInUser } from "~/utils/user.server";
 import { DEFAULT_PROFILE_IMAGE } from "~/constants/user";
-import { type LoaderFunctionArgs, json } from "@remix-run/node";
+import { type LoaderFunctionArgs, json } from "@vercel/remix";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const currentLoggedInUser = await getCurrentLoggedInUser(request);
