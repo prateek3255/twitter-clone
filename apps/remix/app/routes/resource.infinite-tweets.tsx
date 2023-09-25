@@ -10,8 +10,6 @@ import {
   Link,
   useNavigate,
   Await,
-  Form,
-  useNavigation,
 } from "@remix-run/react";
 import type { TweetWithMeta } from "~/utils/tweets.server";
 import { useIntersectionObserver } from "~/hooks/useIntersectionObserver";
@@ -32,7 +30,6 @@ import {
   toggleTweetRetweet,
   replyToTweet,
 } from "~/utils/tweet.server";
-import { usePrevious } from "~/hooks/usePrevious";
 
 type InfiniteTweetsParams =
   | { type: "user_tweets"; username: string }
@@ -129,7 +126,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       break;
   }
 
-  return redirect(request.headers.get("Referer") ?? "/");
+  return json({ success: true });
 };
 
 export const shouldRevalidate = () => false;
@@ -441,36 +438,26 @@ export const Tweet = (props: TweetProps) => {
   const isRetweet = typeof props.originalTweetId === "string";
   const originalTweetId = props.originalTweetId ?? id;
   const navigate = useNavigate();
-  const navigation = useNavigation();
-  const [currentAction, setCurrentAction] = React.useState<
-    "like" | "retweet" | undefined
-  >(undefined);
-  const isLoading = navigation.state !== "idle";
-  const prevLoading = usePrevious(isLoading);
+  const fetcher = useFetcher();
+  const isLoading = fetcher.state !== "idle";
+
+  React.useEffect(() => {
+    if(isLoading) {
+      const action = fetcher.formData?.get("_action");
+      const tweetId = fetcher.formData?.get("tweetId") as string;
+      if (action === 'toggle_tweet_like') {
+        onLikeClick?.(tweetId);
+      } else if (action === 'toggle_tweet_retweet') {
+        onRetweetClick?.(tweetId);
+      }
+    }
+  }, [isLoading, fetcher.formData, onLikeClick, onRetweetClick]);
 
   const handleTweetClick = () => {
     const isTextSelected = window.getSelection()?.toString();
     if (isTextSelected) return;
     navigate(`/status/${id}`);
   };
-
-  // This is to trigger the client side update when the user
-  // clicks on the like or retweet button and the navigation
-  // is finished. Figure out if there's a better way to do this.
-  React.useEffect(() => {
-    if (
-      prevLoading !== isLoading &&
-      !isLoading &&
-      typeof currentAction === "string"
-    ) {
-      if (currentAction === "like") {
-        onLikeClick?.(id);
-      } else if (currentAction === "retweet") {
-        onRetweetClick?.(id);
-      }
-      setCurrentAction(undefined);
-    }
-  }, [currentAction, id, isLoading, onLikeClick, onRetweetClick, prevLoading]);
 
   const showRetweetedBy = showOwnRetweet
     ? hasRetweeted || isRetweet
@@ -540,7 +527,7 @@ export const Tweet = (props: TweetProps) => {
                   count={replies}
                   action={() => setIsReplyModalOpen(true)}
                 />
-                <Form method="post" action="/resource/infinite-tweets">
+                <fetcher.Form method="post" action="/resource/infinite-tweets">
                   <input type="hidden" name="tweetId" value={id} />
                   <input
                     type="hidden"
@@ -556,12 +543,9 @@ export const Tweet = (props: TweetProps) => {
                     submit
                     name="_action"
                     value="toggle_tweet_retweet"
-                    action={() => {
-                      setCurrentAction("retweet");
-                    }}
                   />
-                </Form>
-                <Form method="post" action="/resource/infinite-tweets">
+                </fetcher.Form>
+                <fetcher.Form method="post" action="/resource/infinite-tweets">
                   <input type="hidden" name="tweetId" value={id} />
                   <input
                     type="hidden"
@@ -577,11 +561,8 @@ export const Tweet = (props: TweetProps) => {
                     submit
                     name="_action"
                     value="toggle_tweet_like"
-                    action={() => {
-                      setCurrentAction("like");
-                    }}
                   />
-                </Form>
+                </fetcher.Form>
               </div>
             </div>
           </div>
