@@ -5,7 +5,6 @@ import { TweetAction } from "components/TweetAction";
 import {
   useTransition,
   useState,
-  experimental_useOptimistic as useOptimistic,
 } from "react";
 import { LoggedInUserBaseInfo, TweetBaseInfo } from "types/common";
 
@@ -20,13 +19,6 @@ const TweetActions = ({
   tweetInfo: TweetBaseInfo;
   currentLoggedInUser?: LoggedInUserBaseInfo;
 }) => {
-  // TODO: Figure out why this does not work
-  const [optimisticHasLiked, toggleOptimisticHasLiked] = useOptimistic(
-    hasLiked,
-    (_, newLiked: boolean) => {
-      return newLiked;
-    }
-  );
 
   const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
 
@@ -57,14 +49,13 @@ const TweetActions = ({
         <TweetAction
           size="normal"
           type="like"
-          active={optimisticHasLiked}
+          active={hasLiked}
           disabled={isPending}
           action={() => {
-            toggleOptimisticHasLiked(!optimisticHasLiked);
             startTransition(async () => {
               await toggleTweetLike({
                 tweetId: tweetInfo.id,
-                hasLiked: !optimisticHasLiked,
+                hasLiked: !hasLiked,
               });
             });
           }}
