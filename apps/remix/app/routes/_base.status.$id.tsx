@@ -1,6 +1,6 @@
 import { Retweet } from "ui";
 import { useState, useCallback } from "react";
-import { useLoaderData, Link, useNavigation, Form } from "@remix-run/react";
+import { useLoaderData, Link, useFetcher } from "@remix-run/react";
 import { format, parseISO } from "date-fns";
 import { json, type LoaderFunctionArgs, defer, type MetaFunction } from "@vercel/remix";
 import { DEFAULT_PROFILE_IMAGE } from "~/constants/user";
@@ -94,12 +94,12 @@ const getTweetInfo = (tweet: TweetWithMeta, isLoggedIn: boolean) => {
 export default function TweetStatus() {
   const { tweet, user, replies } = useLoaderData<typeof loader>();
   const originalTweetId = tweet?.originalTweetId ?? tweet?.id;
-  const navigation = useNavigation();
-  const isLoading = navigation.state === "loading";
   const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
   const closeReplyModal = useCallback(() => {
     setIsReplyModalOpen(false);
   }, []);
+  const fetcher = useFetcher();
+  const isLoading = fetcher.state !== "idle";
 
   const currentLoggedInUser = user
     ? {
@@ -166,7 +166,7 @@ export default function TweetStatus() {
             disabled={isLoading}
             action={() => setIsReplyModalOpen(true)}
           />
-          <Form method="post" action="/resource/infinite-tweets">
+          <fetcher.Form method="post" action="/resource/infinite-tweets">
             <input type="hidden" name="tweetId" value={originalTweetId} />
             <input
               type="hidden"
@@ -182,8 +182,8 @@ export default function TweetStatus() {
               name="_action"
               value="toggle_tweet_retweet"
             />
-          </Form>
-          <Form method="post" action="/resource/infinite-tweets">
+          </fetcher.Form>
+          <fetcher.Form method="post" action="/resource/infinite-tweets">
             <input type="hidden" name="tweetId" value={originalTweetId} />
             <input
               type="hidden"
@@ -199,7 +199,7 @@ export default function TweetStatus() {
               name="_action"
               value="toggle_tweet_like"
             />
-          </Form>
+          </fetcher.Form>
         </div>
         <ReplyModal
           isOpen={isReplyModalOpen}

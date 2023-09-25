@@ -2,13 +2,11 @@ import React from "react";
 import {
   Link,
   useLoaderData,
-  Form,
-  useNavigation,
   useRouteError,
   isRouteErrorResponse,
   Outlet,
   useLocation,
-  useActionData,
+  useFetcher,
 } from "@remix-run/react";
 import { type LoaderFunctionArgs, json, type ActionFunctionArgs, redirect, type MetaFunction } from "@vercel/remix";
 import { FloatingInput, FloatingTextArea } from "ui";
@@ -221,10 +219,11 @@ const FollowButton = ({
 }) => {
   const [isHoveringOnFollowing, setIsHoveringOnFollowing] =
     React.useState(false);
-  const navigation = useNavigation();
+  const fetcher = useFetcher();
+  const isLoading = fetcher.state !== "idle";
 
   return (
-    <Form method="post">
+    <fetcher.Form method="post">
       <input type="hidden" name="profileUserId" value={profileUserId} />
       {isFollowing ? (
         <ButtonOrLink
@@ -234,7 +233,7 @@ const FollowButton = ({
           name="_action"
           value="unfollow"
           type="submit"
-          disabled={navigation.state === "submitting"}
+          disabled={isLoading}
         >
           {isHoveringOnFollowing ? "Unfollow" : "Following"}
         </ButtonOrLink>
@@ -244,12 +243,12 @@ const FollowButton = ({
           name="_action"
           value="follow"
           type="submit"
-          disabled={navigation.state === "submitting"}
+          disabled={isLoading}
         >
           Follow
         </ButtonOrLink>
       )}
-    </Form>
+    </fetcher.Form>
   );
 };
 
@@ -334,24 +333,25 @@ const EditProfile = ({
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const actionData = useActionData<
-    | { success: true }
-    | {
-        success: false;
-        fields: {
-          name: string;
-          username: string;
-          bio: string;
-        };
-        fieldErrors: {
-          name: string | null;
-          username: string | null;
-          bio: string | null;
-        };
-      }
-  >();
-  const navigation = useNavigation();
-  const isLoading = navigation.state === "submitting";
+  const fetcher = useFetcher<
+  | { success: true }
+  | {
+      success: false;
+      fields: {
+        name: string;
+        username: string;
+        bio: string;
+      };
+      fieldErrors: {
+        name: string | null;
+        username: string | null;
+        bio: string | null;
+      };
+    }
+>();
+ 
+  const isLoading = fetcher.state !== "idle";
+  const fetcherData = fetcher.data;
 
   const closeModal = () => {
     setIsOpen(false);
@@ -362,10 +362,10 @@ const EditProfile = ({
   };
 
   React.useEffect(() => {
-    if (!isLoading && actionData?.success !== false) {
+    if (!isLoading && fetcherData?.success !== false) {
       closeModal();
     }
-  }, [isLoading, actionData?.success]);
+  }, [isLoading, fetcherData?.success]);
 
   return (
     <>
@@ -379,7 +379,7 @@ const EditProfile = ({
         title="Edit profile"
         isTitleVisible
       >
-        <Form method="post" className="flex flex-col gap-5 pt-5 pb-2 px-4">
+        <fetcher.Form method="post" className="flex flex-col gap-5 pt-5 pb-2 px-4">
           <FloatingInput
             autoFocus
             label="Name"
@@ -390,8 +390,8 @@ const EditProfile = ({
             maxLength={40}
             ref={inputRef}
             defaultValue={
-              actionData?.success === false
-                ? actionData?.fields?.name ?? ""
+              fetcherData?.success === false
+                ? fetcherData?.fields?.name ?? ""
                 : name ?? ""
             }
           />
@@ -405,23 +405,23 @@ const EditProfile = ({
             pattern="^[a-zA-Z0-9_]{1,15}$"
             required
             defaultValue={
-              actionData?.success === false
-                ? actionData?.fields?.username ?? ""
+              fetcherData?.success === false
+                ? fetcherData?.fields?.username ?? ""
                 : username ?? ""
             }
             error={
-              actionData?.success === false
-                ? actionData?.fieldErrors?.username ?? undefined
+              fetcherData?.success === false
+                ? fetcherData?.fieldErrors?.username ?? undefined
                 : undefined
             }
             aria-invalid={Boolean(
-              actionData?.success === false
-                ? actionData?.fieldErrors?.username
+              fetcherData?.success === false
+                ? fetcherData?.fieldErrors?.username
                 : undefined
             )}
             aria-errormessage={
-              actionData?.success === false
-                ? actionData?.fieldErrors?.username ?? undefined
+              fetcherData?.success === false
+                ? fetcherData?.fieldErrors?.username ?? undefined
                 : undefined
             }
           />
@@ -432,8 +432,8 @@ const EditProfile = ({
             maxLength={160}
             placeholder="I'm John..."
             defaultValue={
-              actionData?.success === false
-                ? actionData?.fields?.bio ?? ""
+              fetcherData?.success === false
+                ? fetcherData?.fields?.bio ?? ""
                 : bio ?? ""
             }
           />
@@ -449,7 +449,7 @@ const EditProfile = ({
               Save
             </ButtonOrLink>
           </div>
-        </Form>
+        </fetcher.Form>
       </DialogWithClose>
     </>
   );

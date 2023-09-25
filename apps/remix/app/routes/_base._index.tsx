@@ -3,7 +3,7 @@ import { TwitterLogo, ThreeDots, ChevronDown } from "ui";
 import { Popover } from "@headlessui/react";
 import { defer } from "@vercel/remix";
 import type { MetaFunction, LoaderFunctionArgs } from "@vercel/remix";
-import { Form, useLoaderData, useNavigation } from "@remix-run/react";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 import { DEFAULT_PROFILE_IMAGE } from "~/constants/user";
 import { ButtonOrLink } from "~/components/ButtonOrLink";
 import { getCurrentLoggedInUser } from "~/utils/user.server";
@@ -31,8 +31,8 @@ export const meta: MetaFunction = () => {
 export default function Home() {
   const { user, tweets } = useLoaderData<typeof loader>();
   const formRef = useRef<HTMLFormElement>(null);
-  const navigation = useNavigation();
-  const isLoading = navigation.state === "submitting";
+  const fetcher = useFetcher();
+  const isLoading = fetcher.state === "submitting";
 
   useEffect(() => {
     if (!isLoading) {
@@ -128,7 +128,7 @@ export default function Home() {
             alt={`${user.username}'s avatar`}
           />
           <div className="flex-1 ml-3 mt-2">
-            <Form ref={formRef} method="post" action="/resource/create-tweet">
+            <fetcher.Form ref={formRef} method="post" action="/resource/create-tweet">
               <textarea
                 name="tweet"
                 id="tweet"
@@ -142,12 +142,12 @@ export default function Home() {
                   variant="primary"
                   size="small"
                   type="submit"
-                  disabled={navigation.state === "submitting"}
+                  disabled={isLoading}
                 >
                   Tweet
                 </ButtonOrLink>
               </div>
-            </Form>
+            </fetcher.Form>
           </div>
         </div>
       )}

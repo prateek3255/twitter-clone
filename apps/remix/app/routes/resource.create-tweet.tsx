@@ -1,6 +1,6 @@
 import React from "react";
-import { redirect, type ActionFunctionArgs } from "@vercel/remix";
-import { Form, useNavigation } from "@remix-run/react";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { useFetcher } from "@remix-run/react";
 import { CreateTweetMobile } from "ui";
 import { ButtonOrLink } from "~/components/ButtonOrLink";
 import { DialogWithClose } from "~/components/DialogWithClose";
@@ -11,9 +11,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const tweet = form.get("tweet")?.toString() ?? "";
 
   await createTweet(request, tweet);
-  // This is required to redirect to the same page from which
-  // the request was made.
-  return redirect(request.headers.get("Referer") ?? '/');
+  return json({ success: true });
 };
 
 export const TweetButton = ({
@@ -25,8 +23,8 @@ export const TweetButton = ({
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
-  const navigation = useNavigation();
-  const isLoading = navigation.state === "submitting";
+  const fetcher = useFetcher();
+  const isLoading = fetcher.state !== "idle";
 
   React.useEffect(() => {
     if (!isLoading) {
@@ -66,7 +64,7 @@ export const TweetButton = ({
         initialFocus={textAreaRef}
         title="Create a tweet"
       >
-        <Form method="post" action="/resource/create-tweet">
+        <fetcher.Form method="post" action="/resource/create-tweet">
           <div className="flex mt-4">
             <img
               src={profileImage}
@@ -98,7 +96,7 @@ export const TweetButton = ({
               Tweet
             </ButtonOrLink>
           </div>
-        </Form>
+        </fetcher.Form>
       </DialogWithClose>
     </>
   );
