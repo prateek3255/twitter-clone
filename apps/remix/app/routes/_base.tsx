@@ -27,14 +27,16 @@ const NavItem = ({
   icon,
   href,
   activeIcon,
+  isExact = false,
 }: {
   children?: React.ReactNode;
   icon: React.ReactNode;
   activeIcon: React.ReactNode;
   href: string;
+  isExact?: boolean;
 }) => {
   const location = useLocation();
-  const isActive = location.pathname === href;
+  const isActive = isExact ? location.pathname === href : location.pathname.startsWith(href);
   return (
     <Link
       to={href}
@@ -142,7 +144,7 @@ export default function RootLayout() {
                 </a>
               </h1>
               <nav className="mt-1">
-                <NavItem href="/" icon={<Home />} activeIcon={<HomeFilled />}>
+                <NavItem href="/" icon={<Home />} activeIcon={<HomeFilled />} isExact>
                   Home
                 </NavItem>
                 {isLoggedIn && (

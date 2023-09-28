@@ -194,6 +194,7 @@ export const InfiniteTweets = ({
         <Tweet
           key={tweet.id}
           {...tweet}
+          id={tweet.originalTweetId ?? tweet.id}
           onRetweetClick={(tweetId) => {
             dispatch({
               type: "toggle_tweet_retweet",

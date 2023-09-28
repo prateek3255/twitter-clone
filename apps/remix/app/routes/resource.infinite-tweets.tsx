@@ -336,7 +336,6 @@ export const InfiniteTweets = ({
     lastTweetId,
     isLoading,
     isLastPage,
-    isLoggedIn,
     type,
     shouldFetch,
   ]);
@@ -368,6 +367,7 @@ export const InfiniteTweets = ({
         <Tweet
           key={tweet.id}
           {...tweet}
+          id={tweet.originalTweetId ?? tweet.id}
           onRetweetClick={handleRetweetClick}
           onLikeClick={handleLikeClick}
           onReplySuccess={handleReplySuccess}

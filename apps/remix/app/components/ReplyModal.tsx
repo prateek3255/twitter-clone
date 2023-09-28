@@ -5,7 +5,7 @@ import type { LoggedInUserBaseInfo, TweetBaseInfo } from "~/types/common";
 import { DEFAULT_PROFILE_IMAGE } from "~/constants/user";
 import { ButtonOrLink } from "./ButtonOrLink";
 import { DialogWithClose } from "./DialogWithClose";
-import { Form, useNavigation } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
 
 const ReplyModal = ({
   isOpen,
@@ -21,8 +21,8 @@ const ReplyModal = ({
   onReply?: () => void;
 }) => {
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
-  const navigation = useNavigation();
-  const isLoading = navigation.state === "submitting";
+  const fetcher = useFetcher();
+  const isLoading = fetcher.state !== "idle";
 
   useEffect(() => {
     if (!isLoading) {
@@ -73,7 +73,7 @@ const ReplyModal = ({
           </div>
         </div>
       </div>
-      <Form method="post" action="/resource/infinite-tweets">
+      <fetcher.Form method="post" action="/resource/infinite-tweets">
         <div className="flex mt-2">
           <img
             src={currentLoggedInUser?.profileImage ?? DEFAULT_PROFILE_IMAGE}
@@ -113,7 +113,7 @@ const ReplyModal = ({
             Tweet
           </ButtonOrLink>
         </div>
-      </Form>
+      </fetcher.Form>
     </DialogWithClose>
   );
 };
