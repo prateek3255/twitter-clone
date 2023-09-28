@@ -2,7 +2,7 @@
 import { useSelectedLayoutSegment } from "next/navigation";
 import Link from "next/link";
 
-const TabItem = ({
+export const TabItem = ({
   href,
   children,
 }: {
@@ -33,5 +33,3 @@ const TabItem = ({
     </Link>
   );
 };
-
-export { TabItem };

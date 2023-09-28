@@ -14,7 +14,7 @@ export async function generateMetadata(
   };
 }
 
-export default async function Profile({
+export default async function UserTweets({
   params: { username },
 }: {
   params: { username: string };

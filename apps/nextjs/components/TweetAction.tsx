@@ -51,7 +51,7 @@ interface TweetActionPropsNormal extends TweetActionPropsBase {
 
 export type TweetActionProps = TweetActionPropsCompact | TweetActionPropsNormal;
 
-const TweetAction = (props: TweetActionProps) => {
+export const TweetAction = (props: TweetActionProps) => {
   const { icon, hoverBg, activeColor, activeIcon } = TweetActionDetails[props.type];
   return (
     <button
@@ -80,5 +80,3 @@ const TweetAction = (props: TweetActionProps) => {
     </button>
   );
 };
-
-export { TweetAction };

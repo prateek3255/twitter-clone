@@ -30,32 +30,6 @@ const FollowCount = ({ count, label }: { count: number; label: string }) => (
   </a>
 );
 
-type UserProfile = NonNullable<Awaited<ReturnType<typeof getUserProfile>>>;
-
-const UserProfileDetails = ({ userProfile }: { userProfile: UserProfile }) => {
-  return (
-    <>
-      {/* Bio */}
-      <div>
-        <span className="text-white text-sm">{userProfile.bio}</span>
-      </div>
-      {/* Follower/Following count */}
-      <div className="flex gap-5 mt-3">
-        <FollowCount count={userProfile._count.following} label="Following" />
-        <FollowCount count={userProfile._count.followers} label="Followers" />
-      </div>
-      {/** Tab bars */}
-      <div
-        role="tablist"
-        className="flex mt-3 border-b border-solid border-gray-700 mx-[-16px]"
-      >
-        <TabItem href={`/${userProfile.username}`}>Tweets</TabItem>
-        <TabItem href={`/${userProfile.username}/replies`}>Replies</TabItem>
-        <TabItem href={`/${userProfile.username}/likes`}>Likes</TabItem>
-      </div>
-    </>
-  );
-};
 
 export default async function Profile({
   params: { username },
@@ -134,3 +108,30 @@ export default async function Profile({
     </>
   );
 }
+
+type UserProfile = NonNullable<Awaited<ReturnType<typeof getUserProfile>>>;
+
+const UserProfileDetails = ({ userProfile }: { userProfile: UserProfile }) => {
+  return (
+    <>
+      {/* Bio */}
+      <div>
+        <span className="text-white text-sm">{userProfile.bio}</span>
+      </div>
+      {/* Follower/Following count */}
+      <div className="flex gap-5 mt-3">
+        <FollowCount count={userProfile._count.following} label="Following" />
+        <FollowCount count={userProfile._count.followers} label="Followers" />
+      </div>
+      {/** Tab bars */}
+      <div
+        role="tablist"
+        className="flex mt-3 border-b border-solid border-gray-700 mx-[-16px]"
+      >
+        <TabItem href={`/${userProfile.username}`}>Tweets</TabItem>
+        <TabItem href={`/${userProfile.username}/replies`}>Replies</TabItem>
+        <TabItem href={`/${userProfile.username}/likes`}>Likes</TabItem>
+      </div>
+    </>
+  );
+};

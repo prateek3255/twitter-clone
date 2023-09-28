@@ -2,7 +2,7 @@
 import { BackButton as BackButtonIcon } from "ui/icons";
 import { useRouter } from "next/navigation";
 
-const BackButton = () => {
+export const BackButton = () => {
   const router = useRouter();
 
   const goBack = () => {
@@ -19,5 +19,3 @@ const BackButton = () => {
     </button>
   );
 };
-
-export { BackButton };

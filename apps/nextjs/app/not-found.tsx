@@ -1,7 +1,7 @@
 import { ButtonOrLink } from "components/ButtonOrLink";
 import { TwitterLogo } from "ui/icons";
 
-export default function Error() {
+export default function NotFound() {
   return (
     <main className="flex h-full w-full justify-center items-center">
       <div className="max-w-md w-full border border-solid border-gray-400 rounded-xl px-10 pt-5 pb-8">

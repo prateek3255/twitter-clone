@@ -7,7 +7,7 @@ import { createTweet } from "app/actions";
 import { TweetCTA } from "components/TweetCTA";
 import { DialogWithClose } from "components/DialogWithClose";
 
-export const TweetButton = ({
+export const TweetButtonWithModal = ({
   profileImage,
   loggedInUserName,
 }: {

@@ -6,7 +6,7 @@ import { FloatingInput, FloatingTextArea } from "ui";
 import { saveProfile } from "app/actions";
 import { DialogWithClose } from "components/DialogWithClose";
 
-const EditProfile = ({
+export const EditProfile = ({
   username,
   name,
   bio,
@@ -112,5 +112,3 @@ const SubmitButton = () => {
     </ButtonOrLink>
   );
 };
-
-export { EditProfile };

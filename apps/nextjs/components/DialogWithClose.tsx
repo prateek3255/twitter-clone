@@ -3,7 +3,7 @@ import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Cross } from "ui/icons";
 
-const DialogWithClose = ({
+export const DialogWithClose = ({
   isOpen,
   closeModal,
   initialFocus,
@@ -77,5 +77,3 @@ const DialogWithClose = ({
     </Transition>
   );
 };
-
-export { DialogWithClose };

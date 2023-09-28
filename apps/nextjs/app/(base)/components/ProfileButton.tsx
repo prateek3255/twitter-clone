@@ -5,7 +5,7 @@ import { ThreeDots, ChevronDown } from "ui/icons";
 import { Popover } from "@headlessui/react";
 import { logout } from "../../actions";
 
-const ProfileButton = ({
+export const ProfileButton = ({
   name,
   username,
   profileImage,
@@ -51,5 +51,3 @@ const ProfileButton = ({
     </Popover>
   );
 };
-
-export { ProfileButton };

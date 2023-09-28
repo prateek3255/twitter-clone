@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import 'server-only';
 
-const getFlattenedZodErrors = (error: ZodError): Record<string, string> => {
+export const getFlattenedZodErrors = (error: ZodError): Record<string, string> => {
   const fieldErrors = Object.entries(error.flatten().fieldErrors ?? {}).reduce(
     (acc, [field, fieldError]) => {
       if (Array.isArray(fieldError) && fieldError?.length > 0) {
@@ -18,7 +18,7 @@ const getFlattenedZodErrors = (error: ZodError): Record<string, string> => {
   return fieldErrors;
 };
 
-const encodeValueAndErrors = ({
+export const encodeValueAndErrors = ({
   fieldValues,
   fieldErrors,
 }: {
@@ -33,7 +33,7 @@ const encodeValueAndErrors = ({
   return qs.stringify(errorQuery);
 };
 
-const decodeValueAndErrors = ({
+export const decodeValueAndErrors = ({
   fieldValues,
   fieldErrors,
 }: {
@@ -55,17 +55,17 @@ const decodeValueAndErrors = ({
   }
 };
 
-const hashPassword = async (password: string) => {
+export const hashPassword = async (password: string) => {
   const hash = await bcrypt.hash(password, 10);
   return hash;
 };
 
-const comparePassword = async (password: string, hashedPassword: string) => {
+export const comparePassword = async (password: string, hashedPassword: string) => {
   const isValid = await bcrypt.compare(password, hashedPassword);
   return isValid;
 };
 
-const setAuthCookie = ({ userId }: { userId: string }) => {
+export const setAuthCookie = ({ userId }: { userId: string }) => {
   const signedToken = jwt.sign({ userId }, process.env.COOKIE_SECRET ?? "", {
     expiresIn: "7d",
   });
@@ -80,7 +80,7 @@ const setAuthCookie = ({ userId }: { userId: string }) => {
   });
 };
 
-const isAuthenticated = () => {
+export const isAuthenticated = () => {
   try {
     const cookie = cookies().get("auth")?.value ?? "";
     jwt.verify(cookie, process.env.COOKIE_SECRET ?? "");
@@ -90,7 +90,7 @@ const isAuthenticated = () => {
   }
 };
 
-const getUserId = () => {
+export const getUserId = () => {
   const cookie = cookies().get("auth")?.value ?? "";
   const decodedToken = jwt.decode(cookie);
   if (typeof decodedToken === "string" || typeof decodedToken?.userId !== 'string') {
@@ -99,7 +99,7 @@ const getUserId = () => {
   return decodedToken?.userId;
 }
 
-const clearAuthCookie = () => {
+export const clearAuthCookie = () => {
   cookies().set({
     name: "auth",
     value: "",
@@ -107,16 +107,4 @@ const clearAuthCookie = () => {
     path: "/",
     expires: new Date('2016-10-05')
   });
-};
-
-export {
-  getFlattenedZodErrors,
-  encodeValueAndErrors,
-  decodeValueAndErrors,
-  hashPassword,
-  setAuthCookie,
-  isAuthenticated,
-  comparePassword,
-  getUserId,
-  clearAuthCookie
 };

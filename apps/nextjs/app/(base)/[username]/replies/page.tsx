@@ -16,7 +16,7 @@ export async function generateMetadata(
   };
 }
 
-export default async function Profile({
+export default async function UserReplies({
   params: { username },
 }: {
   params: { username: string };

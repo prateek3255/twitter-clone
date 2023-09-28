@@ -8,7 +8,7 @@ import {
 } from "react";
 import { LoggedInUserBaseInfo, TweetBaseInfo } from "types/common";
 
-const TweetActions = ({
+export const TweetActions = ({
   hasLiked,
   hasRetweeted,
   tweetInfo,
@@ -72,5 +72,3 @@ const TweetActions = ({
     </>
   );
 };
-
-export { TweetActions };

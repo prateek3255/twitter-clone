@@ -3,7 +3,7 @@ import React from "react";
 import { ButtonOrLink } from "components/ButtonOrLink";
 import { toggleFollowUser } from "app/actions";
 
-const FollowButton = ({
+export const FollowButton = ({
   isFollowing,
   profileUserId,
 }: {
@@ -60,4 +60,3 @@ const FollowButton = ({
   );
 };
 
-export { FollowButton };

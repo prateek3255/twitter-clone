@@ -8,35 +8,10 @@ import {
 import { ButtonOrLink } from "components/ButtonOrLink";
 import { getCurrentLoggedInUser } from "utils/user";
 import { DEFAULT_PROFILE_IMAGE } from "constants/user";
-import { TweetButton } from "./components/TweetButtonWithModal";
+import { TweetButtonWithModal } from "./components/TweetButtonWithModal";
 import { ProfileButton } from "./components/ProfileButton";
 import { NavItem } from "./components/NavItem";
 
-const LoggedOutFooter = () => (
-  <div className="fixed hidden px-4 sm:flex bottom-0 left-0 right-0 h-[4.5rem] bg-primary-blue">
-    <div className="md:flex-[4]" />
-    <div className="md:flex-[8] w-full py-3">
-      <div className="max-w-[850px] w-full flex justify-between">
-        <div className="flex flex-col">
-          <span className="text-white text-2xl font-bold">
-            Don’t miss what’s happening
-          </span>
-          <span className="text-white text-sm">
-            People on Twitter are the first to know.
-          </span>
-        </div>
-        <div className="flex items-center gap-3">
-          <ButtonOrLink as="link" href="/signin" variant="tertiary-light">
-            Log in
-          </ButtonOrLink>
-          <ButtonOrLink as="link" href="/signup" variant="secondary">
-            Sign up
-          </ButtonOrLink>
-        </div>
-      </div>
-    </div>
-  </div>
-);
 
 export default async function RootLayout({
   children,
@@ -78,7 +53,7 @@ export default async function RootLayout({
               </nav>
               <div className="w-[90%]">
                 {isLoggedIn && (
-                  <TweetButton
+                  <TweetButtonWithModal
                     profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE}
                     loggedInUserName={user.name ?? user.username}
                   />
@@ -98,7 +73,7 @@ export default async function RootLayout({
         {isLoggedIn && (
           <>
           <div className="block sm:hidden fixed right-4 z-10 bottom-[4.5rem]">
-            <TweetButton profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE} loggedInUserName={user.name ?? user.username} />
+            <TweetButtonWithModal profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE} loggedInUserName={user.name ?? user.username} />
           </div>
           <nav className=" z-10 flex sm:hidden fixed left-0 bottom-0 right-0 h-[3.5rem] justify-around border-t border-solid border-gray-700 bg-black">
             <NavItem href="/" icon={<Home />} activeIcon={<HomeFilled />} />
@@ -121,3 +96,29 @@ export default async function RootLayout({
     </>
   );
 }
+
+const LoggedOutFooter = () => (
+  <div className="fixed hidden px-4 sm:flex bottom-0 left-0 right-0 h-[4.5rem] bg-primary-blue">
+    <div className="md:flex-[4]" />
+    <div className="md:flex-[8] w-full py-3">
+      <div className="max-w-[850px] w-full flex justify-between">
+        <div className="flex flex-col">
+          <span className="text-white text-2xl font-bold">
+            Don’t miss what’s happening
+          </span>
+          <span className="text-white text-sm">
+            People on Twitter are the first to know.
+          </span>
+        </div>
+        <div className="flex items-center gap-3">
+          <ButtonOrLink as="link" href="/signin" variant="tertiary-light">
+            Log in
+          </ButtonOrLink>
+          <ButtonOrLink as="link" href="/signup" variant="secondary">
+            Sign up
+          </ButtonOrLink>
+        </div>
+      </div>
+    </div>
+  </div>
+);

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
 
-const NavItem = ({
+export const NavItem = ({
   children,
   icon,
   href,
@@ -26,4 +26,3 @@ const NavItem = ({
   );
 };
 
-export { NavItem };

@@ -8,7 +8,7 @@ import { replyToTweet } from "../app/actions";
 import { TweetCTA } from "./TweetCTA";
 import { DialogWithClose } from "./DialogWithClose";
 
-const ReplyModal = ({
+export const ReplyModal = ({
   isOpen,
   closeModal,
   originalTweet,
@@ -106,4 +106,3 @@ const ReplyModal = ({
   );
 };
 
-export { ReplyModal };
