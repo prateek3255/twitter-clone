@@ -21,6 +21,88 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json({ user: currentLoggedInUser }, { status: 200 });
 };
 
+export default function RootLayout() {
+  const { user } = useLoaderData<typeof loader>();
+  const isLoggedIn = !!user;
+
+  return (
+    <>
+      <div className="w-full min-h-full block sm:grid sm:grid-cols-[4fr_8fr]">
+        {/* Desktop Sidebar */}
+        <header className="hidden sm:flex w-full h-full flex-col items-end text-white pb-3 pt-2 px-2 border-r border-solid border-gray-700">
+          <div className="w-full max-w-[256px] h-full flex flex-col justify-between">
+            <div>
+              <h1>
+                <a
+                  href="/"
+                  className=" h-[50px] w-[50px] rounded-full flex justify-center items-center hover:bg-gray-100/10"
+                >
+                  <TwitterLogo aria-label="Twitter logo" />
+                  <span className="sr-only">Go to home</span>
+                </a>
+              </h1>
+              <nav className="mt-1">
+                <NavItem href="/" icon={<Home />} activeIcon={<HomeFilled />} isExact>
+                  Home
+                </NavItem>
+                {isLoggedIn && (
+                  <NavItem
+                    href={`/${user.username}`}
+                    icon={<Profile />}
+                    activeIcon={<ProfileFilled />}
+                  >
+                    Profile
+                  </NavItem>
+                )}
+              </nav>
+              <div className="w-[90%]">
+                {isLoggedIn && (
+                  <TweetButton
+                    profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE}
+                    loggedInUserName={user.name ?? user.username}
+                  />
+                )}
+              </div>
+            </div>
+            {isLoggedIn && (
+              <ProfileButton
+                name={user.name ?? ""}
+                username={user.username}
+                profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE}
+              />
+            )}
+          </div>
+        </header>
+        {/* Mobile Bottom Navbar */}
+        {isLoggedIn && (
+          <>
+            <div className="block sm:hidden fixed right-4 z-10 bottom-[4.5rem]">
+              <TweetButton
+                profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE}
+                loggedInUserName={user.name ?? user.username}
+              />
+            </div>
+            <nav className=" z-10 flex sm:hidden fixed left-0 bottom-0 right-0 h-[3.5rem] justify-around border-t border-solid border-gray-700 bg-black">
+              <NavItem href="/" icon={<Home />} activeIcon={<HomeFilled />} />
+              <NavItem
+                href={`/${user.username}`}
+                icon={<Profile />}
+                activeIcon={<ProfileFilled />}
+              />
+            </nav>
+          </>
+        )}
+        {/* Main Content */}
+        <main className="flex-[8] w-full overflow-y-auto max-h-screen">
+          <div className="w-full min-h-full max-w-[600px] border-r border-solid border-gray-700">
+            <Outlet />
+          </div>
+        </main>
+      </div>
+      {!isLoggedIn && <LoggedOutFooter />}
+    </>
+  );
+}
 
 const NavItem = ({
   children,
@@ -122,86 +204,3 @@ const ProfileButton = ({
     </Popover>
   );
 };
-
-export default function RootLayout() {
-  const { user } = useLoaderData<typeof loader>();
-  const isLoggedIn = !!user;
-
-  return (
-    <>
-      <div className="w-full min-h-full block sm:grid sm:grid-cols-[4fr_8fr]">
-        {/* Desktop Sidebar */}
-        <header className="hidden sm:flex w-full h-full flex-col items-end text-white pb-3 pt-2 px-2 border-r border-solid border-gray-700">
-          <div className="w-full max-w-[256px] h-full flex flex-col justify-between">
-            <div>
-              <h1>
-                <a
-                  href="/"
-                  className=" h-[50px] w-[50px] rounded-full flex justify-center items-center hover:bg-gray-100/10"
-                >
-                  <TwitterLogo aria-label="Twitter logo" />
-                  <span className="sr-only">Go to home</span>
-                </a>
-              </h1>
-              <nav className="mt-1">
-                <NavItem href="/" icon={<Home />} activeIcon={<HomeFilled />} isExact>
-                  Home
-                </NavItem>
-                {isLoggedIn && (
-                  <NavItem
-                    href={`/${user.username}`}
-                    icon={<Profile />}
-                    activeIcon={<ProfileFilled />}
-                  >
-                    Profile
-                  </NavItem>
-                )}
-              </nav>
-              <div className="w-[90%]">
-                {isLoggedIn && (
-                  <TweetButton
-                    profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE}
-                    loggedInUserName={user.name ?? user.username}
-                  />
-                )}
-              </div>
-            </div>
-            {isLoggedIn && (
-              <ProfileButton
-                name={user.name ?? ""}
-                username={user.username}
-                profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE}
-              />
-            )}
-          </div>
-        </header>
-        {/* Mobile Bottom Navbar */}
-        {isLoggedIn && (
-          <>
-            <div className="block sm:hidden fixed right-4 z-10 bottom-[4.5rem]">
-              <TweetButton
-                profileImage={user.profileImage ?? DEFAULT_PROFILE_IMAGE}
-                loggedInUserName={user.name ?? user.username}
-              />
-            </div>
-            <nav className=" z-10 flex sm:hidden fixed left-0 bottom-0 right-0 h-[3.5rem] justify-around border-t border-solid border-gray-700 bg-black">
-              <NavItem href="/" icon={<Home />} activeIcon={<HomeFilled />} />
-              <NavItem
-                href={`/${user.username}`}
-                icon={<Profile />}
-                activeIcon={<ProfileFilled />}
-              />
-            </nav>
-          </>
-        )}
-        {/* Main Content */}
-        <main className="flex-[8] w-full overflow-y-auto max-h-screen">
-          <div className="w-full min-h-full max-w-[600px] border-r border-solid border-gray-700">
-            <Outlet />
-          </div>
-        </main>
-      </div>
-      {!isLoggedIn && <LoggedOutFooter />}
-    </>
-  );
-}

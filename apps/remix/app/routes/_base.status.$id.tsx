@@ -15,12 +15,6 @@ import { TweetAction } from "~/components/TweetAction";
 import { ReplyModal } from "~/components/ReplyModal";
 import { SuspendedInfiniteTweets } from "./resource.infinite-tweets";
 
-const TweetStat = ({ label, count }: { label: string; count: number }) => (
-  <div className="flex gap-1">
-    <span className="text-white font-bold text-sm">{count}</span>
-    <span className="text-gray-500 text-sm">{label}</span>
-  </div>
-);
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const [tweet, user] = await Promise.all([
@@ -237,3 +231,10 @@ export default function TweetStatus() {
     </>
   );
 }
+
+const TweetStat = ({ label, count }: { label: string; count: number }) => (
+  <div className="flex gap-1">
+    <span className="text-white font-bold text-sm">{count}</span>
+    <span className="text-gray-500 text-sm">{label}</span>
+  </div>
+);

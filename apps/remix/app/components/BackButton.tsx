@@ -1,7 +1,7 @@
 import { useNavigate } from "@remix-run/react";
 import { BackButton as BackButtonIcon } from "ui";
 
-const BackButton = () => {
+export const BackButton = () => {
   const navigate = useNavigate();
 
   const goBack = () => {
@@ -18,5 +18,3 @@ const BackButton = () => {
     </button>
   );
 };
-
-export { BackButton };

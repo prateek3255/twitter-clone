@@ -12,7 +12,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function AuthLayout() {
-
   return (
     <main className="flex h-full w-full justify-center items-center">
       <div className="max-w-md w-full sm:border sm:border-solid sm:border-gray-400 rounded-xl px-10 pt-5 pb-8">

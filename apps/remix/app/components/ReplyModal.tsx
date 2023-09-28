@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect } from "react";
 import { format, parseISO } from "date-fns";
 import type { LoggedInUserBaseInfo, TweetBaseInfo } from "~/types/common";
@@ -7,7 +6,7 @@ import { ButtonOrLink } from "./ButtonOrLink";
 import { DialogWithClose } from "./DialogWithClose";
 import { useFetcher } from "@remix-run/react";
 
-const ReplyModal = ({
+export const ReplyModal = ({
   isOpen,
   closeModal,
   originalTweet,
@@ -117,5 +116,3 @@ const ReplyModal = ({
     </DialogWithClose>
   );
 };
-
-export { ReplyModal };
