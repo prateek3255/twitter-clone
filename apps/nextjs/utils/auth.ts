@@ -75,7 +75,7 @@ export const setAuthCookie = ({ userId }: { userId: string }) => {
     value: signedToken,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    sameSite: "lax",
     path: "/",
   });
 };
