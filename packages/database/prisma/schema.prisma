@@ -6,9 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  directUrl    = env("DIRECT_URL")
 }
 
 model User {
@@ -40,10 +40,6 @@ model Tweet {
   retweetOfId String?
   retweetOf Tweet? @relation("TweetRetweets", fields: [retweetOfId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   retweets Tweet[] @relation("TweetRetweets")
-
-  @@index([authorId])
-  @@index([replyToId])
-  @@index([retweetOfId])
 }
 
 model TweetLike {
@@ -53,7 +49,4 @@ model TweetLike {
   tweet Tweet @relation(fields: [tweetId], references: [id])
   tweetId String
   @@id([userId, tweetId])
-
-  @@index([userId])
-  @@index([tweetId])
 }
